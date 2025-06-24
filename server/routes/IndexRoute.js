@@ -12,7 +12,13 @@ app.use(cors())
 // Start routes
 
 const UserRoutes = require('./UserRoutes.js')
-app.use('/api/UserRoutes', UserRoutes)
+app.use('/api/user', UserRoutes)
+
+const PartsRoutes = require('./PartsRoutes.js')
+app.use('/api/parts', PartsRoutes)
+
+const BuildsRoutes = require('./BuildsRoutes.js')
+app.use('/api/builds', BuildsRoutes)
 
 // End routers
 
