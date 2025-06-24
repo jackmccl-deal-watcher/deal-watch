@@ -1,7 +1,9 @@
 // Start imports and setup
 const express = require('express')
 const app = express()
-const PORT = 3000
+
+require('dotenv').config()
+const PORT = process.env.PORT
 
 const cors = require('cors')
 // Enable CORS for all routes
@@ -11,13 +13,13 @@ app.use(cors())
 
 // Start routes
 
-const UserRoutes = require('./UserRoutes.js')
+const UserRoutes = require('./routes/UserRoutes.js')
 app.use('/api/user', UserRoutes)
 
-const PartsRoutes = require('./PartsRoutes.js')
+const PartsRoutes = require('./routes/PartsRoutes.js')
 app.use('/api/parts', PartsRoutes)
 
-const BuildsRoutes = require('./BuildsRoutes.js')
+const BuildsRoutes = require('./routes/BuildsRoutes.js')
 app.use('/api/builds', BuildsRoutes)
 
 // End routers
