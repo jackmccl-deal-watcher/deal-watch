@@ -1,31 +1,23 @@
 const mongoose = require('../Mongoose.js')
 const UserModel = require('../models/UserModel.js')
 
+// Returns user by username, otherwise returns null
 const getUser = async (username) => {
-    try {
-        let user = await UserModel.findOne({ 'username': username }, 'username password')
-        return user
-    } catch (error) {
-        console.error(error)
-    }
+    let user = await UserModel.findOne({ 'username': username }, 'username password')
+    return user
 }
 
+// Creates user, throws error if username already taken
 const createUser = async (username, password) => {
-    try {
-        let user = await UserModel.findOne({ 'username': username }, 'username password')
-        if (user) {
-            console.error(`User ${username} already exists!`)
-            return false
-        }
-        const newUser = new UserModel()
-        newUser.username = username
-        newUser.password = password
-        await newUser.save()
-        return newUser
-    } catch (error) {
-        console.error(error)
-        return false
+    let user = await UserModel.findOne({ 'username': username }, 'username password')
+    if (user) {
+        throw new Error(`User ${username} already exists!`)
     }
+    const newUser = new UserModel()
+    newUser.username = username
+    newUser.password = password
+    await newUser.save()
+    return newUser
 }
 
 module.exports = { createUser, getUser}

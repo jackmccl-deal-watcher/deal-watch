@@ -5,9 +5,29 @@ const app = express()
 require('dotenv').config()
 const PORT = process.env.PORT
 
+const bodyParser = require('body-parser')
+app.use(bodyParser.json())
+
 const cors = require('cors')
 // Enable CORS for all routes
 app.use(cors())
+
+const session = require('express-session')
+let sessionConfig = {
+    name: 'sessionId',
+    secret: process.env.SESSION_SECRET,
+    cookie: {
+    maxAge: 1000 * 60 * 5,
+    secure: process.env.RENDER ? true : false,
+    httpOnly: false,
+},
+    resave: false,
+    saveUninitialized: false,
+}
+// Attach session middlewar to app
+app.use(session(sessionConfig))
+
+app.set('trust proxy', 1)
 
 // End imports and setup
 
@@ -38,10 +58,14 @@ app.listen(PORT, () => {
 
 app.get('/', (req, res) => {
     try {
-        res.send('Welcome to deal watch!')
+        if (req.session.user) {
+            res.send(`Welcome to deal watch ${req.session.user}!`)
+        } else {
+            res.send("Welcome to deal watch! Please login!")
+        }
     } catch (error) {
         console.error(error)
-        res.status(500).json(error)
+        res.status(500).json({ "error": error.message.toString() })
     }
 })
 
