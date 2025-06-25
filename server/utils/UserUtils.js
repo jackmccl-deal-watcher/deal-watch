@@ -7,6 +7,7 @@ const getUser = async (username) => {
         return user
     } catch (error) {
         console.error(error)
+        return false
     }
 }
 
