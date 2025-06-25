@@ -25,6 +25,8 @@ const mongoose_getUser_test = async () => {
     const test_username = "test_user1"
     const test_password = "test_password1"
 
+    await UserModel.findOneAndDelete({ 'username': test_username })
+
     const newUser = new UserModel()
     
     newUser.username = test_username
@@ -33,9 +35,6 @@ const mongoose_getUser_test = async () => {
     await newUser.save()
 
     const user = await getUser(test_username)
-
-    console.log(user)
-
     if (user.username && user.username === test_username 
         && user.password && user.password == test_password) {
         console.log("mongoose_getUser_test: Passed")
@@ -70,7 +69,9 @@ const mongoose_createUser_test = async () => {
 }
 
 const running_tests = async () => {
+    await mongoose_connection_test()
     await mongoose_getUser_test()
+    await mongoose_createUser_test()
     process.exit(0)
 }
 
