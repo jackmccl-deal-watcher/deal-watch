@@ -1,4 +1,4 @@
 server/node_modules/
-server/server_env/
-client/client_env/
+server/server_venv/
+client/client_venv/
 client/deal-watch-app/node_modules/
