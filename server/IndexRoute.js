@@ -14,19 +14,6 @@ app.use(cors())
 // DB Setup
 
 const mongoose = require('./Mongoose.js')
-const UserSchema = new mongoose.Schema({
-    username: String,
-    password: String,
-})
-
-const UserModel = mongoose.model('User', UserSchema)
-
-const newUser = new UserModel()
-
-newUser.username = "first user!"
-newUser.password = "test password"
-
-newUser.save()
 
 // End DB Setup
 
