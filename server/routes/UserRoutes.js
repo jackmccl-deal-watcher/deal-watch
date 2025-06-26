@@ -51,8 +51,12 @@ router.post('/logout', async (req, res, next) => {
     try {
         if (req.session.user) {
             const user = req.session.user
-            req.session.user = null
-            res.status(200).json({ 'status': 'success', 'message': `${user} successfully logged out` })
+            req.session.destroy( (error) => {
+                if (error) {
+                    throw new UserLogoutError('Failed to logout user')
+                }
+                res.status(200).json({ 'status': 'success', 'message': `${user} successfully logged out` })
+            })
         } else {
             throw new UserLogoutError('No user logged in')
         }
