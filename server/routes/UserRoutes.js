@@ -33,9 +33,11 @@ router.post('/login', async (req, res) => {
     try {
         const { username, password } = req.body
         const user = await getUser(username)
-        if (verifyPassword(password, user.password)) {
+        if (await verifyPassword(password, user.password)) {
             req.session.user = username
             res.status(200).send()
+        } else {
+            res.status(401).send()
         }
     } catch (error) {
         console.error(error)
