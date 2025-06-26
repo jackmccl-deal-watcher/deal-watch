@@ -1,7 +1,7 @@
 class UserCreateError extends Error {
     constructor(message) {
         super(message)
-        this.name = 'CreateUserError'
+        this.name = 'UserCreateError'
         this.statusCode = 400
     }
 }
@@ -9,7 +9,7 @@ class UserCreateError extends Error {
 class UserLoginError extends Error {
     constructor(message) {
         super(message)
-        this.name = 'LoginUserError'
+        this.name = 'UserLoginError'
         this.statusCode = 401
     }
 }
