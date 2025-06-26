@@ -1,7 +1,8 @@
 // Start imports and setup
 const express = require('express')
-const { hashPassword, verifyPassword } = require('../utils/argon.js')
+const { verifyPassword } = require('../utils/argon.js')
 const { createUser, getUser} = require('../utils/UserUtils.js')
+const { UserLoginError, UserLogoutError } = require('../errors/UserErrors.js')
 const router = express.Router()
 
 const cors = require('cors')
@@ -15,45 +16,49 @@ const mongoose = require('../Mongoose.js')
 // Start user routes
 
 // Create user
-router.post('/signup', async (req, res) => {
+router.post('/signup', async (req, res, next) => {
     try {
         const { username, password } = req.body
-        const hashedPassword = await hashPassword(password)
-        await createUser(username, hashedPassword)
+        await createUser(username, password)
         req.session.user = username
-        res.status(201).json(`${username} user successfully created`)
+        res.status(201).json({ 'status': 'success', 'message': `${username} user successfully created` })
     } catch (error) {
-        console.error(error)
-        res.status(500).json({ "error": error.message.toString() })
+        next(error)
     }
 })
 
 // User login
-router.post('/login', async (req, res) => {
+router.post('/login', async (req, res, next) => {
     try {
         const { username, password } = req.body
         const user = await getUser(username)
+        if (!user) {
+            throw new UserLoginError('Invalid username or password!')
+        }
         if (await verifyPassword(password, user.password)) {
             req.session.user = username
-            res.status(200).send()
+            res.status(200).json({ 'status': 'success', 'message': `${username} successfully logged in` })
         } else {
-            res.status(401).send()
+            throw new UserLoginError('Invalid username or password!')
         }
     } catch (error) {
-        console.error(error)
-        res.status(500).json({ "error": error.message.toString() })
+        next(error)
     }
 })
 
 // Log user out
 
-router.post('/logout', async (req, res) => {
+router.post('/logout', async (req, res, next) => {
     try {
-        req.session.user = null
-        res.status(200).send()
+        if (req.session.user) {
+            const user = req.session.user
+            req.session.user = null
+            res.status(200).json({ 'status': 'success', 'message': `${user} successfully logged out` })
+        } else {
+            throw new UserLogoutError('No user logged in')
+        }
     } catch (error) {
-        console.error(error)
-        res.status(500).json({ "error": error.message.toString() })
+        next(error)
     }
 })
 
