@@ -38,6 +38,7 @@ const Login = () => {
         <div className='login'>
             <div className='login-content'>
                 <form className='login-content-form' onSubmit={handleLogin}>
+                    <h1>Login</h1>
                     <p>Username:</p>
                     <input type='text' name='username' value={username} onChange={updateUsername}></input>
                     <p>Password:</p>

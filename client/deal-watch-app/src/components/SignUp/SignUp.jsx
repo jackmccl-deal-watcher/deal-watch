@@ -38,6 +38,7 @@ const Signup = () => {
         <div className='signup'>
             <div className='signup-content'>
                 <form className='signup-content-form' onSubmit={handleSignup}>
+                    <h1>Signup</h1>
                     <p>Username:</p>
                     <input type='text' name='username' value={username} onChange={updateUsername}></input>
                     <p>Password:</p>
