@@ -5,10 +5,6 @@ const { createUser, getUser} = require('../utils/UserUtils.js')
 const { UserLoginError, UserLogoutError } = require('../errors/UserErrors.js')
 const router = express.Router()
 
-const cors = require('cors')
-// Enable CORS for all routes
-router.use(cors())
-
 const mongoose = require('../Mongoose.js')
 
 // End imports and setup

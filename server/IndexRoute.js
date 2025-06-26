@@ -29,7 +29,12 @@ const PORT = process.env.PORT
 
 // Start routes and middlewares
 
-app.use(cors())
+const cors_options = {
+    origin: 'http://localhost:5173',
+    credentials: true,
+}
+
+app.use(cors(cors_options))
 app.use(bodyParser.json())
 app.use(session(sessionConfig))
 app.set('trust proxy', 1)
