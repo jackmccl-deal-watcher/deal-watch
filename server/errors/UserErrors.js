@@ -14,4 +14,12 @@ class UserLoginError extends Error {
     }
 }
 
-module.exports = { UserCreateError, UserLoginError }
+class UserLogoutError extends Error {
+    constructor(message) {
+        super(message)
+        this.name = 'UserLogoutError'
+        this.statusCode = 400
+    }
+}
+
+module.exports = { UserCreateError, UserLoginError, UserLogoutError }

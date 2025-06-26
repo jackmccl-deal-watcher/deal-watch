@@ -2,7 +2,7 @@
 const express = require('express')
 const { verifyPassword } = require('../utils/argon.js')
 const { createUser, getUser} = require('../utils/UserUtils.js')
-const { UserLoginError } = require('../errors/UserErrors.js')
+const { UserLoginError, UserLogoutError } = require('../errors/UserErrors.js')
 const router = express.Router()
 
 const cors = require('cors')
@@ -21,7 +21,7 @@ router.post('/signup', async (req, res, next) => {
         const { username, password } = req.body
         await createUser(username, password)
         req.session.user = username
-        res.status(201).json(`${username} user successfully created`)
+        res.status(201).json({ 'status': 'success', 'message': `${username} user successfully created` })
     } catch (error) {
         next(error)
     }
@@ -37,7 +37,7 @@ router.post('/login', async (req, res, next) => {
         }
         if (await verifyPassword(password, user.password)) {
             req.session.user = username
-            res.status(200).send()
+            res.status(200).json({ 'status': 'success', 'message': `${username} successfully logged in` })
         } else {
             throw new UserLoginError('Invalid username or password!')
         }
@@ -50,8 +50,13 @@ router.post('/login', async (req, res, next) => {
 
 router.post('/logout', async (req, res, next) => {
     try {
-        req.session.user = null
-        res.status(200).send()
+        if (req.session.user) {
+            const user = req.session.user
+            req.session.user = null
+            res.status(200).json({ 'status': 'success', 'message': `${user} successfully logged out` })
+        } else {
+            throw new UserLogoutError('No user logged in')
+        }
     } catch (error) {
         next(error)
     }
