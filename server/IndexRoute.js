@@ -12,14 +12,14 @@ const cors = require('cors')
 // Enable CORS for all routes
 app.use(cors())
 
-const session_max_age = 1000 * 60 * 5
+const SESSION_MAX_AGE = 1000 * 60 * 5
 
 const session = require('express-session')
 let sessionConfig = {
     name: 'sessionId',
     secret: process.env.SESSION_SECRET,
     cookie: {
-    maxAge: session_max_age,
+    maxAge: SESSION_MAX_AGE,
     secure: process.env.RENDER ? true : false,
     httpOnly: false,
 },
