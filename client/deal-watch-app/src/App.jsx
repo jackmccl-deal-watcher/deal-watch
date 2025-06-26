@@ -4,6 +4,7 @@ import NoMatch from './components/NoMatch/NoMatch.jsx'
 import NavBar from './components/NavBar/NavBar.jsx'
 import './App.css'
 import { UserProvider } from './components/UserProvider/UserProvider.jsx'
+import Login from './components/Login/Login.jsx'
 
 function App() {
 
@@ -14,6 +15,7 @@ function App() {
           <NavBar></NavBar>
           <Routes>
             <Route path='/' element={<HomePage/>} />
+            <Route path='/login' element={<Login/>} />
             <Route path='*' element={<NoMatch/>} />
           </Routes>
         </BrowserRouter>

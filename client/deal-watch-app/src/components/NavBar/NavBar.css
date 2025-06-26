@@ -8,10 +8,13 @@
     padding: 20px;
 }
 
+
 .navbar-pages {
     display: flex;
     flex-direction: row;
     gap: 45px;
+    align-items: center;
+    text-decoration: underline;
 }
 
 .navbar-user {
@@ -20,6 +23,14 @@
     margin-left: auto;
     position: relative;
     right: 0;
+}
+
+.navbar-user-loggedout {
+    display: flex;
+    flex-direction: row;
+    gap: 15px;
+    align-items: center;
+    text-decoration: underline;
 }
 
 /* Dropdown Button */

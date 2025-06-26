@@ -1,9 +1,11 @@
+import { useUser } from '../UserProvider/UserProvider'
 import './NavBar.css'
 import { useState } from 'react'
 
 const NavBar = () => {
     const [showUserDropdown, setShowUserDropdown] = useState(false)
-    const [testLogin, setTestLogin] = useState(true)
+    console.log(useUser())
+    const { user, setUser } = useUser()
 
     const toggleUserDropdown = () => {
         setShowUserDropdown(prev => !prev)
@@ -17,9 +19,9 @@ const NavBar = () => {
                 <a href='/builds'>Builds</a>
             </div>
             <div className='navbar-user'>
-                { testLogin ? 
+                { user ? 
                 <div id='navbar-user-loggedin' className='dropdown'>
-                    <button onClick={toggleUserDropdown} class="dropdown-button">username</button>
+                    <button onClick={toggleUserDropdown} class="dropdown-button">{user}</button>
                     { showUserDropdown ?
                     <div id="user-dropdown-options" class="dropdown-content">
                         <a href="/">Link 1</a>
@@ -30,8 +32,8 @@ const NavBar = () => {
                 </div>
                 : 
                 <div className='navbar-user-loggedout'>
-                    <button className='navbar-user-login'>Login</button>
-                    <button className='navbar-user-signup'>Sign Up</button>
+                    <a href='login'>Login</a>
+                    <a href='/signup'>Sign Up</a>
                 </div> }
             </div>
         </div>
