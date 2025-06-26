@@ -1,0 +1,4 @@
+server/node_modules/
+server/server_venv/
+client/client_venv/
+client/deal-watch-app/node_modules/
