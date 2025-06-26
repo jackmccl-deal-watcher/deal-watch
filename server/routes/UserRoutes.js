@@ -55,6 +55,7 @@ router.post('/logout', async (req, res, next) => {
                 if (error) {
                     throw new UserLogoutError('Failed to logout user')
                 }
+                res.clearCookie("connect.sid");
                 res.status(200).json({ 'status': 'success', 'message': `${user} successfully logged out` })
             })
         } else {
