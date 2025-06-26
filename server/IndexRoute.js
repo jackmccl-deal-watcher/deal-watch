@@ -1,20 +1,14 @@
 // Start imports and setup
 const express = require('express')
-const app = express()
-
-require('dotenv').config()
-const PORT = process.env.PORT
-
-const bodyParser = require('body-parser')
-app.use(bodyParser.json())
-
 const cors = require('cors')
-// Enable CORS for all routes
-app.use(cors())
+const bodyParser = require('body-parser')
+const session = require('express-session')
+const mongoose = require('./Mongoose.js')
+const { ErrorMiddleware } = require('./middleware/ErrorMiddleware.js')
+require('dotenv').config()
 
 const SESSION_MAX_AGE = 1000 * 60 * 5
 
-const session = require('express-session')
 let sessionConfig = {
     name: 'sessionId',
     secret: process.env.SESSION_SECRET,
@@ -26,18 +20,16 @@ let sessionConfig = {
     resave: false,
     saveUninitialized: false,
 }
-// Attach session middlewar to app
-app.use(session(sessionConfig))
 
+const app = express()
+const PORT = process.env.PORT
+app.use(cors())
+app.use(bodyParser.json())
+app.use(session(sessionConfig))
 app.set('trust proxy', 1)
+app.use(ErrorMiddleware)
 
 // End imports and setup
-
-// DB Setup
-
-const mongoose = require('./Mongoose.js')
-
-// End DB Setup
 
 // Start routes
 
@@ -58,7 +50,7 @@ app.listen(PORT, () => {
     console.log(`Server is running on http://localhost:${PORT}`)
 })
 
-app.get('/', (req, res) => {
+app.get('/', (req, res, next) => {
     try {
         if (req.session.user) {
             res.send(`Welcome to deal watch ${req.session.user}!`)
@@ -66,8 +58,7 @@ app.get('/', (req, res) => {
             res.send("Welcome to deal watch! Please login!")
         }
     } catch (error) {
-        console.error(error)
-        res.status(500).json({ "error": error.message.toString() })
+        next(error)
     }
 })
 
