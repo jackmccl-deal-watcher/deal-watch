@@ -47,7 +47,6 @@ router.post('/login', async (req, res, next) => {
 })
 
 // Log user out
-
 router.post('/logout', async (req, res, next) => {
     try {
         if (req.session.user) {
@@ -56,6 +55,19 @@ router.post('/logout', async (req, res, next) => {
             res.status(200).json({ 'status': 'success', 'message': `${user} successfully logged out` })
         } else {
             throw new UserLogoutError('No user logged in')
+        }
+    } catch (error) {
+        next(error)
+    }
+})
+
+// Check user (me)
+router.get('/me', async (req, res, next) => {
+    try {
+        if (req.session.user) {
+            res.status(200).json({ 'status': 'success', 'loggedin': true, 'username': req.session.user })
+        } else {
+            res.status(200).json({ 'status': 'success', 'loggedin': false })
         }
     } catch (error) {
         next(error)

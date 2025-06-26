@@ -36,3 +36,14 @@ export const logoutUser = async () => {
         console.error(error)
     }
 }
+
+export const checkUser = async () => {
+    try {
+        const response = await fetch(`${API_URL}/user/me`, {
+            method: 'GET',
+        })
+        return await response.json()
+    } catch (error) {
+        console.error(error)
+    }
+}
