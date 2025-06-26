@@ -8,6 +8,7 @@ export const useUser = () => useContext(UserContext);
 
 export const UserProvider = ({ children }) => {
     const [user, setUser] = useState("")
+    const [loading, setLoading] = useState(true)
 
     const handleCheckUser = async () => {
         const checkUserResult = await checkUser()
@@ -16,6 +17,7 @@ export const UserProvider = ({ children }) => {
         } else {
             setUser('')
         }
+        setLoading(false)
     }
     
     useEffect( () => {
@@ -24,7 +26,7 @@ export const UserProvider = ({ children }) => {
 
     return (
             <UserContext.Provider value={{ user, setUser }}>
-                {children}
+                { !loading ? children : "loading..." }
             </UserContext.Provider>
         );
 };

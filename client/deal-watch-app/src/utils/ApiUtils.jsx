@@ -5,6 +5,7 @@ export const loginUser = async ({ username, password }) => {
         const response = await fetch(`${API_URL}/user/login`, {
             method: 'POST',
             body: JSON.stringify({ username, password }),
+            credentials: 'include',
             headers: { 'Content-Type': 'application/json' },
         })
         return await response.json()
@@ -18,6 +19,7 @@ export const signupUser = async ({ username, password }) => {
         const response = await fetch(`${API_URL}/user/signup`, {
             method: 'POST',
             body: JSON.stringify({ username, password }),
+            credentials: 'include',
             headers: { 'Content-Type': 'application/json' },
         })
         return await response.json()
@@ -28,8 +30,9 @@ export const signupUser = async ({ username, password }) => {
 
 export const logoutUser = async () => {
     try {
-        const response = await fetch(`${API_URL}/user/signup`, {
+        const response = await fetch(`${API_URL}/user/logout`, {
             method: 'POST',
+            credentials: 'include',
         })
         return await response.json()
     } catch (error) {
@@ -41,6 +44,7 @@ export const checkUser = async () => {
     try {
         const response = await fetch(`${API_URL}/user/me`, {
             method: 'GET',
+            credentials: 'include',
         })
         return await response.json()
     } catch (error) {
