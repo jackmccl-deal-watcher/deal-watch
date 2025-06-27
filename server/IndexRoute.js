@@ -23,15 +23,16 @@ let sessionConfig = {
 
 const app = express()
 const PORT = process.env.PORT
+
+
+// End imports and setup
+
+// Start routes and middlewares
+
 app.use(cors())
 app.use(bodyParser.json())
 app.use(session(sessionConfig))
 app.set('trust proxy', 1)
-app.use(ErrorMiddleware)
-
-// End imports and setup
-
-// Start routes
 
 const UserRoutes = require('./routes/UserRoutes.js')
 app.use('/api/user', UserRoutes)
@@ -42,9 +43,12 @@ app.use('/api/parts', PartsRoutes)
 const BuildsRoutes = require('./routes/BuildsRoutes.js')
 app.use('/api/builds', BuildsRoutes)
 
-// End routers
+app.use(ErrorMiddleware)
+
+// End routes and middlewares
 
 // Start index functions
+
 
 app.listen(PORT, () => {
     console.log(`Server is running on http://localhost:${PORT}`)

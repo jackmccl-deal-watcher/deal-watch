@@ -21,7 +21,7 @@ router.post('/signup', async (req, res, next) => {
         const { username, password } = req.body
         await createUser(username, password)
         req.session.user = username
-        res.status(201).json({ 'status': 'success', 'message': `${username} user successfully created` })
+        res.status(201).json({ 'status': 'success', 'message': `${username} user successfully created`, 'username': username })
     } catch (error) {
         next(error)
     }
@@ -37,7 +37,7 @@ router.post('/login', async (req, res, next) => {
         }
         if (await verifyPassword(password, user.password)) {
             req.session.user = username
-            res.status(200).json({ 'status': 'success', 'message': `${username} successfully logged in` })
+            res.status(200).json({ 'status': 'success', 'message': `${username} successfully logged in`, 'username': username })
         } else {
             throw new UserLoginError('Invalid username or password!')
         }
