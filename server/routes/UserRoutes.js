@@ -5,10 +5,6 @@ const { createUser, getUser} = require('../utils/UserUtils.js')
 const { UserLoginError, UserLogoutError } = require('../errors/UserErrors.js')
 const router = express.Router()
 
-const cors = require('cors')
-// Enable CORS for all routes
-router.use(cors())
-
 const mongoose = require('../Mongoose.js')
 
 // End imports and setup
@@ -47,15 +43,32 @@ router.post('/login', async (req, res, next) => {
 })
 
 // Log user out
-
 router.post('/logout', async (req, res, next) => {
     try {
         if (req.session.user) {
             const user = req.session.user
-            req.session.user = null
-            res.status(200).json({ 'status': 'success', 'message': `${user} successfully logged out` })
+            req.session.destroy( (error) => {
+                if (error) {
+                    throw new UserLogoutError('Failed to logout user')
+                }
+                res.clearCookie("connect.sid");
+                res.status(200).json({ 'status': 'success', 'message': `${user} successfully logged out` })
+            })
         } else {
             throw new UserLogoutError('No user logged in')
+        }
+    } catch (error) {
+        next(error)
+    }
+})
+
+// Check user (me)
+router.get('/me', async (req, res, next) => {
+    try {
+        if (req.session.user) {
+            res.status(200).json({ 'status': 'success', 'loggedin': true, 'username': req.session.user })
+        } else {
+            res.status(200).json({ 'status': 'success', 'loggedin': false })
         }
     } catch (error) {
         next(error)

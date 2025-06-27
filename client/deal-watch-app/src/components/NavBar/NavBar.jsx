@@ -15,7 +15,6 @@ const NavBar = () => {
     }
 
     const handleLogout = async () => {
-        e.preventDefault()
         const serverResponse = await logoutUser()
         if (serverResponse.status === 'success') {
             setUser('')
@@ -38,7 +37,7 @@ const NavBar = () => {
                     <div id="user-dropdown-options" className="dropdown-content">
                         <a href="/parts/favorites">Favorite Parts</a>
                         <a href="/builds/saved">Saved Builds</a>
-                        <a href="/" onClick={handleLogout}>Logout</a>
+                        <a onClick={handleLogout}>Logout</a>
                     </div>
                     : null }
                 </div>
