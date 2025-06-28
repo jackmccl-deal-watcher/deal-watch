@@ -23,6 +23,6 @@ from ebay_api import views as ebay_api_views
 
 urlpatterns = [
     path("admin/", admin.site.urls),
-    path('/api/ebay_notif', ebay_notifs_views.ebay_notif_handler),
-    path('/api/ebay_api/get_listings', ebay_api_views.get_listings)
+    path('api/ebay_notif', ebay_notifs_views.ebay_notif_handler),
+    path('api/ebay_api/get_listings', ebay_api_views.get_listings)
 ]

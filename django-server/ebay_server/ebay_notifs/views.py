@@ -6,6 +6,6 @@ from rest_framework.decorators import api_view
 # Create your views here.
 
 # Endpoint to recieve challenge response and response 200 OK to deletion requests
-@api_view('GET')
+@api_view(['GET'])
 def ebay_notif_handler():
     return
