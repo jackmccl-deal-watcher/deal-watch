@@ -1,4 +1,5 @@
-server/node_modules/
-server/server_venv/
+express-server/node_modules/
+express-server/express_venv/
 client/client_venv/
 client/deal-watch-app/node_modules/
+django-server/django_venv/
