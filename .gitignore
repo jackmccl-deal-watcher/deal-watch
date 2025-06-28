@@ -1,5 +1,8 @@
 express-server/node_modules/
 express-server/express_venv/
+express-server/.env
 client/client_venv/
 client/deal-watch-app/node_modules/
+client/deal-watch-app/.env
 django-server/django_venv/
+django-server/ebay_server/.env
