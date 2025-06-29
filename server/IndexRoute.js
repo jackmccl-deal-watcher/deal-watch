@@ -48,6 +48,9 @@ app.use('/api/parts', PartsRoutes)
 const BuildsRoutes = require('./routes/BuildsRoutes.js')
 app.use('/api/builds', BuildsRoutes)
 
+const EbayRoutes = require('./routes/EbayRoutes.js')
+app.use('/api/ebay', EbayRoutes)
+
 app.use(ErrorMiddleware)
 
 // End routes and middlewares
