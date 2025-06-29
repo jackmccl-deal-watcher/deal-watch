@@ -1,12 +1,12 @@
 const express = require('express')
-const { generateClientAccessToken } = require('../utils/ebay/EbayUtils')
+const { generateClientAccessToken, getListings } = require('../utils/ebay/EbayUtils')
 
 const router = express.Router()
 
-router.get('/client_token', async (req, res, next) => {
+router.get('/get_listings', async (req, res, next) => {
     try {
-        const clientAccessToken = await generateClientAccessToken()
-                
+        const { keyword, limit } = req.query
+        const listings = await getListings(keyword, limit)
     } catch (error) {
         next(error)
     }

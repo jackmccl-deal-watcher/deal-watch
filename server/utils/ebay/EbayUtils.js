@@ -2,6 +2,8 @@ const { json } = require('body-parser')
 const EbayAuthToken = require('ebay-oauth-nodejs-client')
 require('dotenv').config()
 
+const EBAY_API_BROWSE_URL = process.env.EBAY_API_BROWSE_URL
+
 const generateClientAccessToken = async () => {
     try {
         const ebayAuthToken = new EbayAuthToken({
@@ -20,4 +22,16 @@ const generateClientAccessToken = async () => {
     }
 }
 
-module.exports = { generateClientAccessToken }
+const getListings = async (keyword, limit) => {
+    const clientAccessToken = await generateClientAccessToken()
+    const response = await fetch(`${EBAY_API_BROWSE_URL}/item_summary/search?q=${keyword}&limit=${limit}`, {
+        method: 'GET',
+        headers: {
+            'Authorization': `Bearer ${clientAccessToken}`
+        }
+    })
+    return await response.json()
+}
+
+
+module.exports = { getListings }
