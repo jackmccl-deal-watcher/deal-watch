@@ -34,6 +34,8 @@ SECRET_KEY = env('SECRET_KEY')
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = env('DEBUG')
 
+EBAY_APP_ID = env('EBAY_APP_ID')
+
 ALLOWED_HOSTS = []
 
 
