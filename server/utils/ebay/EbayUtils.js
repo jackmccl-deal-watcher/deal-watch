@@ -7,9 +7,9 @@ const EBAY_API_BROWSE_URL = process.env.EBAY_API_BROWSE_URL
 const generateClientAccessToken = async () => {
     try {
         const ebayAuthToken = new EbayAuthToken({
-            clientId: "JackMcCl-dealwatc-PRD-b471a0ddf-d3b0b60f",
-            clientSecret: "PRD-471a0ddf9400-6b0d-48fb-800e-3d90",
-            redirectUri: "Jack_McClure-JackMcCl-dealwa-sfags",
+            clientId: process.env.EBAY_CLIENT_ID,
+            clientSecret: process.env.EBAY_CLIENT_SECRET,
+            redirectUri: process.env.EBAY_REDIRECT_URL,
         })
         const environment = 'PRODUCTION'
         const scopes = ['https://api.ebay.com/oauth/api_scope']
