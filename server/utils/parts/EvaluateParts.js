@@ -18,8 +18,11 @@ const grabNRandomItems = (items, N) => {
     return selectedItems
 }
 
+
 const evaluateComparablePart = async (part) => {
     const listings = getListings(part.model, 10)
+
+    // Insert analysis of listing prices to find trends
 
 }
 
@@ -30,8 +33,8 @@ const evaluatePart = async (part) => {
 
     const randomComparablePartsSample = grabNRandomItems(comparableParts, NUM_COMPARABLES)
 
-    
 
+    // Combine trend analysis results from evaluateComparableParts into trend prediction for input part
 
 }
 
