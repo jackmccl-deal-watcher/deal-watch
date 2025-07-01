@@ -6,6 +6,7 @@ const ComponentTypes = Object.freeze({
     INTERNAL_HARD_DRIVE: 'internal-hard-drive',
     POWER_SUPPLY: 'power-supply',
     CASE: 'case',
+    UNKNOWN: 'uknown',
 });
 
 module.exports = ComponentTypes

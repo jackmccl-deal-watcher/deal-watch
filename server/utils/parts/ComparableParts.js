@@ -108,6 +108,9 @@ const getComparableParts = async (part) => {
             return await getComparableMotherboards(part, margin)
         case ComponentTypes.MEMORY:
             return await getComparableMemorys(part, margin)
+        case ComponentTypes.UNKNOWN:
+            console.log("ComponentType: UKNOWN in get comparable parts")
+            return []
     }
     return []
 }
