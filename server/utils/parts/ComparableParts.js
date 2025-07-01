@@ -83,12 +83,6 @@ const getComparableMemorys = async (memory, margin) => {
 
     const comparableTotalSizeLow = getLow(memory.total_size, margin)
     const comparableTotalSizeHigh = getHigh(memory.total_size, margin)
-
-    console.log(comparableSpeedLow)
-    console.log(comparableSpeedHigh)
-
-    console.log(comparableTotalSizeLow)
-    console.log(comparableTotalSizeHigh)
     
     const comparableMemorys = await MemoryModel.find( { 
         $and: [
