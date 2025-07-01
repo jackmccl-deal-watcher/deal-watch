@@ -136,3 +136,5 @@ def populate_parts_database():
     populate_videocards()
     populate_motherboards()
     populate_memorys()
+
+populate_parts_database()
