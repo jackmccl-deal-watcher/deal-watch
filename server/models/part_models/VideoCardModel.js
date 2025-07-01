@@ -4,11 +4,10 @@ const VideoCardSchema = new mongoose.Schema({
     type: String,
     model: String,
     brand: String,
-    cores: Number,
     base_clock: Number,
     boost_clock: Number,
-    integrated_graphics: Boolean,
-    multithreading: Boolean,
+    vram: Number,
+    chipset: String,
 })
 
 const VideoCardModel = mongoose.model('VideoCard', VideoCardSchema, 'video-card')
