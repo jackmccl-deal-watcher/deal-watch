@@ -161,14 +161,14 @@ const getComparableParts = async (part) => {
             return await getComparableMotherboards(part, margin)
         case ComponentTypes.MEMORY:
             return await getComparableMemorys(part, margin)
-        case 'hard-drive':
+        case ComponentTypes.HARD_DRIVE:
             return await getComparableHardDrives(part, margin)
-        case 'power-supply':
+        case ComponentTypes.POWER_SUPPLY:
             return await getComparablePowerSupplys(part, margin)
-        case 'case':
+        case ComponentTypes.CASE:
             return await getComparableCases(part, margin)
         case ComponentTypes.UNKNOWN:
-            console.log("ComponentType: UKNOWN in get comparable parts")
+            console.log("ComponentType: UNKNOWN in get comparable parts")
             return []
     }
     return []
