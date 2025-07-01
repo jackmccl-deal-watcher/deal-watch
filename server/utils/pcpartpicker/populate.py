@@ -46,7 +46,7 @@ def populate_cpus():
         print(f'cpu_id: {cpu_id} inserted into cpu collection')
     print(f'{cpu_count} cpu parts added to database')
 
-def populate_videocards():
+def populate_video_cards():
     api = API()
     videocard_data = api.retrieve("video-card")["video-card"]
 
@@ -131,10 +131,104 @@ def populate_memorys():
         print(f'memory_id: {memory_id} inserted into memory collection')
     print(f'{memory_count} memory parts added to database')
 
+def populate_hard_drives():
+    api = API()
+    hard_drive_data = api.retrieve("internal-hard-drive")["internal-hard-drive"]
+
+    hard_drive_collection = remakeCollection("hard-drive")
+    hard_drive_count = 0
+    
+    for hard_drive in hard_drive_data:
+        hard_drive_doc = {
+            "type": "hard-drive",
+            "model": hard_drive.model,
+            "brand": hard_drive.brand,
+            "capacity": hard_drive.capacity.total,
+            "price_per_gb": float(hard_drive.price_per_gb.amount),
+            "storage_type": hard_drive.storage_type,
+            "form_factor": hard_drive.form_factor,
+            "interface": hard_drive.interface,
+        }
+
+        if hard_drive.platter_rpm:
+            hard_drive_doc["platter_rpm"] = hard_drive.platter_rpm
+        else:
+            hard_drive_doc["platter_rpm"] = "none"
+
+        if hard_drive.cache_amount:
+            hard_drive_doc["cache_amount"] = hard_drive.cache_amount.total
+        else:
+            hard_drive_doc["cache_amount"] = "none"
+
+
+        hard_drive_count += 1
+        hard_drive_id = hard_drive_collection.insert_one(hard_drive_doc).inserted_id
+        print(f'hard_drive_id: {hard_drive_id} inserted into hard_drive collection')
+    print(f'{hard_drive_count} hard_drive parts added to database')
+
+def populate_power_supplys():
+    api = API()
+    power_supply_data = api.retrieve("power-supply")["power-supply"]
+
+    power_supply_collection = remakeCollection("power-supply")
+    power_supply_count = 0
+
+    for power_supply in power_supply_data:
+        power_supply_doc = {
+            "type": "power-supply",
+            "model": power_supply.model,
+            "brand": power_supply.brand,
+            "form_factor": power_supply.form_factor,
+            "efficiency_rating": power_supply.efficiency_rating,
+            "wattage": power_supply.wattage,
+            "modular": power_supply.modular,
+        }
+
+        power_supply_count += 1
+        power_supply_id = power_supply_collection.insert_one(power_supply_doc).inserted_id
+        print(f'power_supply_id: {power_supply_id} inserted into power_supply collection')
+    print(f'{power_supply_count} power_supply parts added to database')
+
+def populate_cases():
+    api = API()
+    case_data = api.retrieve("case")["case"]
+
+    case_collection = remakeCollection("case")
+    case_count = 0
+
+    for case in case_data:
+        case_doc = {
+            "type": "case",
+            "model": case.model,
+            "brand": case.brand,
+            "form_factor": case.form_factor,
+            "color": case.color,
+            "external_bays": case.external_bays,
+            "internal_bays": case.internal_bays,
+        }
+
+        if case.psu_wattage:
+            case_doc["psu_wattage"] = case.psu_wattage
+        else:
+            case_doc["psu_wattage"] = 0
+        
+        if case.side_panel:
+            case_doc["side_panel"] = case.side_panel
+        else:
+            case_doc["side_panel"] = "none"
+
+        case_count += 1
+        case_id = case_collection.insert_one(case_doc).inserted_id
+        print(f'case_id: {case_id} inserted into case collection')
+    print(f'{case_count} case parts added to database')
+
 def populate_parts_database():
     populate_cpus()
-    populate_videocards()
+    populate_video_cards()
     populate_motherboards()
     populate_memorys()
+    populate_hard_drives()
+    populate_power_supplys()
+    populate_cases()
 
 populate_parts_database()

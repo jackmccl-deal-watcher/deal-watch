@@ -55,4 +55,50 @@ const test_memory = {
 "price_per_gb": 0
 }
 
-module.exports = { test_cpu, test_videocard, test_motherboard, test_memory }
+const test_hard_drive = {
+"_id": {
+"$oid": "6864135c5e0e2c0734003763"
+},
+"type": "hard-drive",
+"model": "Premier SP550",
+"brand": "ADATA",
+"capacity":240000000000,
+"price_per_gb": 0,
+"storage_type": "SSD",
+"form_factor": "M.2-2280",
+"interface": "M.2 (B+M)",
+"platter_rpm": "none",
+"cache_amount": "none"
+}
+
+const test_power_supply = {
+"_id": {
+"$oid": "68641802e6f7d23c9a87e6df"
+},
+"type": "power-supply",
+"model": "XPG CORE Reactor",
+"brand": "ADATA",
+"form_factor": "ATX",
+"efficiency_rating": "80+ Gold",
+"wattage": 850,
+"modular": "Full"
+}
+
+const test_case = {
+"_id": {
+"$oid": "68641b49f77b006649fd92a2"
+},
+"type": "case",
+"model": "400C",
+"brand": "Corsair",
+"form_factor": "ATX Mid Tower",
+"color": "White",
+"external_bays": 0,
+"internal_bays": 2,
+"psu_wattage": 0,
+"side_panel": "none"
+}
+
+
+
+module.exports = { test_cpu, test_videocard, test_motherboard, test_memory, test_hard_drive, test_power_supply, test_case }

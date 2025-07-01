@@ -1,4 +1,4 @@
-const { test_cpu, test_videocard, test_motherboard, test_memory } = require('../../utils/parts/test_parts.js')
+const { test_cpu, test_videocard, test_motherboard, test_memory, test_hard_drive, test_power_supply, test_case } = require('./test_parts.js')
 const { getComparableParts } = require('../../utils/parts/ComparableParts.js')
 
 const getComparableCPUs_test = async () => {
@@ -45,11 +45,47 @@ const getComparableMemorys_test = async () => {
     }
 }
 
+const getComparableHardDrives_test = async () => {
+    const comparableHardDrives = await getComparableParts(test_hard_drive)
+    if (comparableHardDrives.length > 0) {
+        console.log("getComparableParts_test-HardDrive: Passed")
+        return true
+    } else {
+        console.log("getComparableParts_test-HardDrive: Failed")
+        return false
+    }
+}
+
+const getComparablePowerSupplys_test = async () => {
+    const comparablePowerSupplys = await getComparableParts(test_power_supply)
+    if (comparablePowerSupplys.length > 0) {
+        console.log("getComparableParts_test-PowerSupply: Passed")
+        return true
+    } else {
+        console.log("getComparableParts_test-PowerSupply: Failed")
+        return false
+    }
+}
+
+const getComparableCases_test = async () => {
+    const comparableCases = await getComparableParts(test_case)
+    if (comparableCases.length > 0) {
+        console.log("getComparableParts_test-Case: Passed")
+        return true
+    } else {
+        console.log("getComparableParts_test-Case: Failed")
+        return false
+    }
+}
+
 const getComparableParts_test = async () => {
     await getComparableCPUs_test()
     await getComparableVideoCards_test()
     await getComparableMotherboards_test()
     await getComparableMemorys_test()
+    await getComparableHardDrives_test()
+    await getComparablePowerSupplys_test()
+    await getComparableCases_test()
 }
 
 const running_tests = async () => {

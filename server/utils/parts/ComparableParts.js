@@ -2,24 +2,28 @@ const CPUModel = require('../../models/part_models/CPUModel.js')
 const VideoCardModel = require('../../models/part_models/VideoCardModel.js')
 const MotherboardModel = require('../../models/part_models/MotherboardModel.js')
 const MemoryModel = require('../../models/part_models/MemoryModel.js')
+const HardDriveModel = require('../../models/part_models/HardDriveModel.js')
+const PowerSupplyModel = require('../../models/part_models/PowerSupplyModel.js')
+const CaseModel = require('../../models/part_models/CaseModel.js')
 
-const getLow = (value, margin) => {
+
+const calcLow = (value, margin) => {
     return Number(Math.floor(value - value * margin))
 }
 
-const getHigh = (value, margin) => {
+const calcHigh = (value, margin) => {
     return Number(Math.ceil(value + value * margin))
 }
 
 const getComparableCPUs = async (cpu, margin) => {
-    const comparableCoresLow = getLow(cpu.cores, margin)
-    const comparableCoresHigh = getHigh(cpu.cores, margin)
+    const comparableCoresLow = calcLow(cpu.cores, margin)
+    const comparableCoresHigh = calcHigh(cpu.cores, margin)
     
-    const comparableBaseClockLow = getLow(cpu.base_clock, margin)
-    const comparableBaseClockHigh = getHigh(cpu.base_clock, margin)
+    const comparableBaseClockLow = calcLow(cpu.base_clock, margin)
+    const comparableBaseClockHigh = calcHigh(cpu.base_clock, margin)
 
-    const comparableBoostClockLow = getLow(cpu.boost_clock, margin)
-    const comparableBoostClockHigh = getHigh(cpu.boost_clock, margin)
+    const comparableBoostClockLow = calcLow(cpu.boost_clock, margin)
+    const comparableBoostClockHigh = calcHigh(cpu.boost_clock, margin)
     
     const comparableCPUs = await CPUModel.find( { 
         $and: [
@@ -31,18 +35,19 @@ const getComparableCPUs = async (cpu, margin) => {
             { boost_clock: {$gte: comparableBoostClockLow} },
         ]
     } )
+
     return comparableCPUs
 }
 
 const getComparableVideoCards = async (videocard, margin) => {
-    const comparableVramLow = getLow(videocard.vram, margin)
-    const comparableVramHigh = getHigh(videocard.vram, margin)
+    const comparableVramLow = calcLow(videocard.vram, margin)
+    const comparableVramHigh = calcHigh(videocard.vram, margin)
     
-    const comparableBaseClockLow = getLow(videocard.base_clock, margin)
-    const comparableBaseClockHigh = getHigh(videocard.base_clock, margin)
+    const comparableBaseClockLow = calcLow(videocard.base_clock, margin)
+    const comparableBaseClockHigh = calcHigh(videocard.base_clock, margin)
     
-    const comparableBoostClockLow = getLow(videocard.boost_clock, margin)
-    const comparableBoostClockHigh = getHigh(videocard.boost_clock, margin)
+    const comparableBoostClockLow = calcLow(videocard.boost_clock, margin)
+    const comparableBoostClockHigh = calcHigh(videocard.boost_clock, margin)
     
     const comparableVideoCards = await VideoCardModel.find( { 
         $and: [
@@ -58,11 +63,11 @@ const getComparableVideoCards = async (videocard, margin) => {
 }
 
 const getComparableMotherboards = async (motherboard, margin) => {
-    const comparableRamSlotsLow = getLow(motherboard.ram_slots, margin)
-    const comparableRamSlotsHigh = getHigh(motherboard.ram_slots, margin)
+    const comparableRamSlotsLow = calcLow(motherboard.ram_slots, margin)
+    const comparableRamSlotsHigh = calcHigh(motherboard.ram_slots, margin)
     
-    const comparableMaxRamLow = getLow(motherboard.max_ram, margin)
-    const comparableMaxRamHigh = getHigh(motherboard.max_ram, margin)
+    const comparableMaxRamLow = calcLow(motherboard.max_ram, margin)
+    const comparableMaxRamHigh = calcHigh(motherboard.max_ram, margin)
     
     const comparableMotherboards = await MotherboardModel.find( { 
         $and: [
@@ -78,17 +83,11 @@ const getComparableMotherboards = async (motherboard, margin) => {
 }
 
 const getComparableMemorys = async (memory, margin) => {
-    const comparableSpeedLow = getLow(memory.speed, margin)
-    const comparableSpeedHigh = getHigh(memory.speed, margin)
+    const comparableSpeedLow = calcLow(memory.speed, margin)
+    const comparableSpeedHigh = calcHigh(memory.speed, margin)
 
-    const comparableTotalSizeLow = getLow(memory.total_size, margin)
-    const comparableTotalSizeHigh = getHigh(memory.total_size, margin)
-
-    console.log(comparableSpeedLow)
-    console.log(comparableSpeedHigh)
-
-    console.log(comparableTotalSizeLow)
-    console.log(comparableTotalSizeHigh)
+    const comparableTotalSizeLow = calcLow(memory.total_size, margin)
+    const comparableTotalSizeHigh = calcHigh(memory.total_size, margin)
     
     const comparableMemorys = await MemoryModel.find( { 
         $and: [
@@ -102,6 +101,54 @@ const getComparableMemorys = async (memory, margin) => {
     return comparableMemorys
 }
 
+const getComparableHardDrives = async (hard_drive, margin) => {
+    const comparableCapacityLow = calcLow(hard_drive.capacity, margin)
+    const comparableCapacityHigh = calcHigh(hard_drive.capacity, margin)
+    
+    const comparableHardDrives = await HardDriveModel.find( { 
+        $and: [
+            { capacity: {$lte: comparableCapacityHigh} },
+            { capacity: {$gte: comparableCapacityLow} },
+            { storage_type: hard_drive.storage_type },
+            { form_factor: hard_drive.form_factor },
+            { interface: hard_drive.interface },
+        ]
+    } )
+    return comparableHardDrives
+}
+
+const getComparablePowerSupplys = async (power_supply, margin) => {
+    const comparableWattageLow = calcLow(power_supply.wattage, margin)
+    const comparableWattageHigh = calcHigh(power_supply.wattage, margin)
+    
+    const comparablePowerSupplys = await PowerSupplyModel.find( { 
+        $and: [
+            { wattage: {$lte: comparableWattageHigh} },
+            { wattage: {$gte: comparableWattageLow} },
+            { form_factor: power_supply.form_factor },
+            { efficiency_rating: power_supply.efficiency_rating },
+            { modular: power_supply.modular },
+        ]
+    } )
+    return comparablePowerSupplys
+}
+
+const getComparableCases = async (input_case, margin) => {    
+    const comparableInternalBaysLow = calcLow(input_case.internal_bays, margin)
+    const comparableInternalBaysHigh = calcHigh(input_case.internal_bays, margin)
+
+    const comparableCases = await CaseModel.find( { 
+        $and: [
+            { internal_bays: {$lte: comparableInternalBaysHigh} },
+            { internal_bays: {$gte: comparableInternalBaysLow} },
+            { form_factor: input_case.form_factor },
+            { color: input_case.color },
+        ]
+    } )
+    return comparableCases
+}
+
+
 const getComparableParts = async (part) => {
     const margin = 0.1
     switch (part.type) {
@@ -113,12 +160,14 @@ const getComparableParts = async (part) => {
             return await getComparableMotherboards(part, margin)
         case 'memory':
             return await getComparableMemorys(part, margin)
+        case 'hard-drive':
+            return await getComparableHardDrives(part, margin)
+        case 'power-supply':
+            return await getComparablePowerSupplys(part, margin)
+        case 'case':
+            return await getComparableCases(part, margin)
     }
     return []
 }
-
-const { test_cpu, test_videocard, test_motherboard, test_memory } = require('./test_parts.js')
-
-getComparableParts(test_memory)
 
 module.exports = { getComparableParts }
