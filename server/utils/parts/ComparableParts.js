@@ -1,3 +1,4 @@
+const ComponentTypes = require('../../models/part_models/ComponentTypesEnum.js')
 const CPUModel = require('../../models/part_models/CPUModel.js')
 const VideoCardModel = require('../../models/part_models/VideoCardModel.js')
 const MotherboardModel = require('../../models/part_models/MotherboardModel.js')
@@ -99,13 +100,13 @@ const getComparableMemorys = async (memory, margin) => {
 const getComparableParts = async (part) => {
     const margin = 0.1
     switch (part.type) {
-        case 'cpu':
+        case ComponentTypes.CPU:
             return await getComparableCPUs(part, margin)
-        case 'video-card':
+        case ComponentTypes.VIDEOCARD:
             return await getComparableVideoCards(part, margin)
-        case 'motherboard':
+        case ComponentTypes.MOTHERBOARD:
             return await getComparableMotherboards(part, margin)
-        case 'memory':
+        case ComponentTypes.MEMORY:
             return await getComparableMemorys(part, margin)
     }
     return []
