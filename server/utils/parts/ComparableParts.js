@@ -1,3 +1,4 @@
+const ComponentTypes = require('../../models/part_models/ComponentTypesEnum.js')
 const CPUModel = require('../../models/part_models/CPUModel.js')
 const VideoCardModel = require('../../models/part_models/VideoCardModel.js')
 const MotherboardModel = require('../../models/part_models/MotherboardModel.js')
@@ -152,13 +153,13 @@ const getComparableCases = async (input_case, margin) => {
 const getComparableParts = async (part) => {
     const margin = 0.1
     switch (part.type) {
-        case 'cpu':
+        case ComponentTypes.CPU:
             return await getComparableCPUs(part, margin)
-        case 'video-card':
+        case ComponentTypes.VIDEOCARD:
             return await getComparableVideoCards(part, margin)
-        case 'motherboard':
+        case ComponentTypes.MOTHERBOARD:
             return await getComparableMotherboards(part, margin)
-        case 'memory':
+        case ComponentTypes.MEMORY:
             return await getComparableMemorys(part, margin)
         case 'hard-drive':
             return await getComparableHardDrives(part, margin)
@@ -166,6 +167,9 @@ const getComparableParts = async (part) => {
             return await getComparablePowerSupplys(part, margin)
         case 'case':
             return await getComparableCases(part, margin)
+        case ComponentTypes.UNKNOWN:
+            console.log("ComponentType: UKNOWN in get comparable parts")
+            return []
     }
     return []
 }
