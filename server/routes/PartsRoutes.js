@@ -1,5 +1,5 @@
 const express = require('express')
-const { generateClientAccessToken, getListings } = require('../utils/ebay/EbayUtils')
+const { getListings } = require('../utils/ebay/EbayUtils')
 
 const router = express.Router()
 
