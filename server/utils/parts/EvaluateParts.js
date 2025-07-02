@@ -21,7 +21,7 @@ const grabNRandomItems = (items, N) => {
 
 const evaluateComparablePart = async (part) => {
     const PAGE_LIMIT = 5
-    const listings = getRecentlySoldListings(part.title, PAGE_LIMIT)
+    const recentlySoldListings = await getRecentlySoldListings(part.model, PAGE_LIMIT)
 
     // Insert analysis of listing prices to find trends
 
