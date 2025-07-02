@@ -1,3 +1,4 @@
+const { TestError } = require("../../errors/TestError")
 const getRecentlySoldListings = require("../../utils/ebay/EbayScraper")
 
 const getRecentlySoldListings_test = async () => {
@@ -7,12 +8,16 @@ const getRecentlySoldListings_test = async () => {
         return true
     } else {
         console.log("getRecentlySoldListings_test: Failed")
-        return false
+        throw new TestError("getRecentlySoldListings_test: Failed")
     }
 }
 
 const running_tests = async () => {
-    await getRecentlySoldListings_test()
+    try {
+        await getRecentlySoldListings_test()
+    } catch (error) {
+        console.error(error)
+    }
     process.exit(0)
 }
 

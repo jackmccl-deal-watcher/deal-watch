@@ -1,3 +1,6 @@
+const { TestError } = require('../errors/TestError.js')
+const { verifyPassword } = require('../utils/argon.js')
+
 const mongoose_connection_test = async () => {
     try {
         const mongoose = require('../Mongoose.js')
@@ -13,8 +16,8 @@ const mongoose_connection_test = async () => {
         console.log("mongoose_connection_test: Passed")
         return true
     } catch (error) {
-        console.error("mongoose_connection_test: Failed")
-        return false
+        console.log("mongoose_connection_test: Failed")
+        throw new TestError("mongoose_connection_test: Failed")
     }
 }
 
@@ -40,8 +43,8 @@ const getUser_test = async () => {
         console.log("getUser_test: Passed")
         return true
     } else {
-        console.error("getUser_test: Failed")
-        return false
+        console.log("getUser_test: Failed")
+        throw new TestError("getUser_test: Failed")
     }
 }
 
@@ -59,19 +62,23 @@ const createUser_test = async () => {
     const user = await UserModel.findOne({ 'username': test_username }, 'username password')
 
     if (user.username && user.username === test_username 
-        && user.password && user.password == test_password) {
+        && user.password && verifyPassword(test_password, user.password)) {
         console.log("createUser_test: Passed")
         return true
     } else {
-        console.error("createUser_test: Failed")
-        return false
+        console.log("createUser_test: Failed")
+        throw new TestError("createUser_test: Failed")
     }
 }
 
 const running_tests = async () => {
-    await mongoose_connection_test()
-    await getUser_test()
-    await createUser_test()
+    try {
+        await mongoose_connection_test()
+        await getUser_test()
+        await createUser_test()
+    } catch (error) {
+        console.error(error)
+    }
     process.exit(0)
 }
 

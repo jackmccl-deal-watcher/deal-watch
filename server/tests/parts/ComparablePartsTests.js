@@ -1,5 +1,6 @@
 const { test_cpu, test_videocard, test_motherboard, test_memory, test_hard_drive, test_power_supply, test_case } = require('./test_parts.js')
 const { getComparableParts } = require('../../utils/parts/ComparableParts.js')
+const { TestError } = require('../../errors/TestError.js')
 
 const getComparableCPUs_test = async () => {
     const comparableCPUs = await getComparableParts(test_cpu)
@@ -8,7 +9,7 @@ const getComparableCPUs_test = async () => {
         return true
     } else {
         console.log("getComparableParts_test-CPU: Failed")
-        return false
+        throw new TestError("getComparableParts_test-CPU: Failed")
     }
 }
 
@@ -19,7 +20,7 @@ const getComparableVideoCards_test = async () => {
         return true
     } else {
         console.log("getComparableParts_test-VideoCard: Failed")
-        return false
+        throw new TestError("getComparableParts_test-VideoCard: Failed")
     }
 }
 
@@ -30,7 +31,7 @@ const getComparableMotherboards_test = async () => {
         return true
     } else {
         console.log("getComparableParts_test-Motherboard: Failed")
-        return false
+        throw new TestError("getComparableParts_test-Motherboard: Failed")
     }
 }
 
@@ -41,7 +42,7 @@ const getComparableMemorys_test = async () => {
         return true
     } else {
         console.log("getComparableParts_test-Memory: Failed")
-        return false
+        throw new TestError("getComparableParts_test-Memory: Failed")
     }
 }
 
@@ -52,7 +53,7 @@ const getComparableHardDrives_test = async () => {
         return true
     } else {
         console.log("getComparableParts_test-HardDrive: Failed")
-        return false
+        throw new TestError("getComparableParts_test-HardDrive: Failed")
     }
 }
 
@@ -63,7 +64,7 @@ const getComparablePowerSupplys_test = async () => {
         return true
     } else {
         console.log("getComparableParts_test-PowerSupply: Failed")
-        return false
+        throw new TestError("getComparableParts_test-PowerSupply: Failed")
     }
 }
 
@@ -74,7 +75,7 @@ const getComparableCases_test = async () => {
         return true
     } else {
         console.log("getComparableParts_test-Case: Failed")
-        return false
+        throw new TestError("getComparableParts_test-Case: Failed")
     }
 }
 
@@ -89,7 +90,11 @@ const getComparableParts_test = async () => {
 }
 
 const running_tests = async () => {
-    await getComparableParts_test()
+    try {
+        await getComparableParts_test()
+    } catch (error) {
+        console.error(error)
+    }
     process.exit(0)
 }
 
