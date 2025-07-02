@@ -33,15 +33,4 @@ const getListings = async (keyword, limit) => {
     return await response.json()
 }
 
-const getPastListings = async () => {
-    const clientAccessToken = await generateClientAccessToken()
-    const response = await fetch(`https://api.ebay.com/buy/marketplace_insights/v1_beta/item_sales/search?q=iphone&category_ids=9355&limit=3`, {
-        method: 'GET',
-        headers: {
-            'Authorization': `Bearer ${clientAccessToken}`
-        }
-    })
-    return await response.json()
-}
-
 module.exports = { getListings, getPastListings }
