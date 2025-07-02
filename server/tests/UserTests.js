@@ -17,7 +17,7 @@ const mongoose_connection_test = async () => {
         return true
     } catch (error) {
         console.log("mongoose_connection_test: Failed")
-        throw new TestError("mongoose_connection_test: Failed")
+        throw error
     }
 }
 
