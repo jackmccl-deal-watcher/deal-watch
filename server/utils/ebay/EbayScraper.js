@@ -1,10 +1,23 @@
 const JSSoup = require('jssoup').default;
-const getRecentlySoldListings = async (keyword) => {
+
+const ebayPriceToNumber = (price) => {
+    return Number(price.slice(1))
+}
+
+const ebayDateToJSDate = (ebay_date) => {
+    const split_ebay_date = ebay_date.split(" ")
+    const month = split_ebay_date[2]
+    const day = split_ebay_date[3].split(',')[0]
+    const year = split_ebay_date[4]
+    return Date(`${month} ${day}, ${year}`)
+}
+
+const getRecentlySoldListings = async (keyword, page_limit) => {
     let page_number = 1
 
     let recentlySoldListingsData = []
 
-    while (page_number < 100) {
+    while (page_number < page_limit) {
         const url = `https://www.ebay.com/sch/i.html?_nkw=${keyword}&_sacat=0&_from=R40&rt=nc&LH_Sold=1&LH_Complete=1&_pgn=${page_number}`
         const response = await fetch(url, {method: 'GET',})
         const html_text = await response.text()
@@ -21,19 +34,22 @@ const getRecentlySoldListings = async (keyword) => {
             
             recentlySoldListings.forEach( (listing) => {
                 const title = listing.find('div', 's-item__title').find('span').text
-                const sold_date = listing.find('span', 's-item__caption--signal').text
-                const sold_price = listing.find('span', 's-item__price').text
+                const ebay_sold_date = listing.find('span', 's-item__caption--signal').text
+                const ebay_sold_price = listing.find('span', 's-item__price').text
                 const listing_data = {
                     'title': title,
-                    'sold_date': sold_date,
-                    'sold_price': sold_price,
+                    'sold_date': ebayDateToJSDate(ebay_sold_date),
+                    'sold_price': ebayPriceToNumber(ebay_sold_price),
                 }
                 recentlySoldListingsData.push(listing_data)
+                console.log(listing_data)
             })
         }
         page_number++
     }
     return recentlySoldListingsData
 }
+
+getRecentlySoldListings("2070super", 2)
 
 module.exports = getRecentlySoldListings

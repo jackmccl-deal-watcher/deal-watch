@@ -1,12 +1,12 @@
 import requests
 from bs4 import BeautifulSoup
 
-def getRecentlySold(keyword, max_pages):
+def getRecentlySold(keyword, page_limit):
     page_number = 1
 
     recentlySoldListingsData = []
 
-    while page_number < max_pages:
+    while page_number < page_limit:
         url = f'https://www.ebay.com/sch/i.html?_nkw={keyword}&_sacat=0&_from=R40&rt=nc&LH_Sold=1&LH_Complete=1&_pgn={page_number}'
         response = requests.get(url=url)
         html_content = response.text
