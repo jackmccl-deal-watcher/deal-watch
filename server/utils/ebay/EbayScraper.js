@@ -1,6 +1,9 @@
 const JSSoup = require('jssoup').default;
 
 const ebayPriceToNumber = (price) => {
+    if (price.includes("to")) {
+        return (Number(price.split(" ")[0].slice(1)) + Number(price.split(" ")[2].slice(1)) / 2)
+    }
     return Number(price.slice(1))
 }
 
@@ -9,7 +12,7 @@ const ebayDateToJSDate = (ebay_date) => {
     const month = split_ebay_date[2]
     const day = split_ebay_date[3].split(',')[0]
     const year = split_ebay_date[4]
-    return Date(`${month} ${day}, ${year}`)
+    return new Date(`${month} ${day}, ${year}`)
 }
 
 const getRecentlySoldListings = async (keyword, page_limit) => {
@@ -26,24 +29,25 @@ const getRecentlySoldListings = async (keyword, page_limit) => {
 
         const next_page_btn = soup.findAll('a', 'pagination__next')
 
+        const recentlySoldListings = soup.findAll('div', 's-item__info').slice(2)
+        
+        recentlySoldListings.forEach( (listing) => {
+            const title = listing.find('div', 's-item__title').find('span').text
+            const ebay_sold_date = listing.find('span', 's-item__caption--signal').text
+            const ebay_sold_price = listing.find('span', 's-item__price').text
+            const listing_data = {
+                'title': title,
+                'sold_date': ebayDateToJSDate(ebay_sold_date),
+                'sold_price': ebayPriceToNumber(ebay_sold_price),
+            }
+            recentlySoldListingsData.push(listing_data)
+        })
+
         if (next_page_btn.length === 0) {
             console.log(`Ran out of pages, pages pulled: ${page_number}`)
             break
-        } else {
-            const recentlySoldListings = soup.findAll('div', 's-item__info').slice(2)
-            
-            recentlySoldListings.forEach( (listing) => {
-                const title = listing.find('div', 's-item__title').find('span').text
-                const ebay_sold_date = listing.find('span', 's-item__caption--signal').text
-                const ebay_sold_price = listing.find('span', 's-item__price').text
-                const listing_data = {
-                    'title': title,
-                    'sold_date': ebayDateToJSDate(ebay_sold_date),
-                    'sold_price': ebayPriceToNumber(ebay_sold_price),
-                }
-                recentlySoldListingsData.push(listing_data)
-            })
         }
+
         page_number++
     }
     return recentlySoldListingsData
