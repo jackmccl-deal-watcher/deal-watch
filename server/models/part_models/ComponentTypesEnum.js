@@ -3,7 +3,7 @@ const ComponentTypes = Object.freeze({
     VIDEOCARD: 'video-card',
     MOTHERBOARD: 'motherboard',
     MEMORY: 'memory',
-    INTERNAL_HARD_DRIVE: 'internal-hard-drive',
+    HARD_DRIVE: 'hard-drive',
     POWER_SUPPLY: 'power-supply',
     CASE: 'case',
     UNKNOWN: 'uknown',
