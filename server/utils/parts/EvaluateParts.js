@@ -33,7 +33,6 @@ const evaluatePart = async (part) => {
 
     const comparablePartsWithComparabilityScores = getComparabilityScores(comparableParts, part)
 
-    
 
     // Combine trend analysis results from evaluateComparableParts into trend prediction for input part
 

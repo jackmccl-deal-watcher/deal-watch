@@ -1,30 +1,55 @@
 const ComponentTypes = require('../../models/part_models/ComponentTypesEnum.js')
+const { copy } = require('../../routes/UserRoutes.js')
 
 const calcComparabilityScore = (comparable_parts, input_part, specs) => {
-    specs.forEach( (spec) => {
+    let working_comparable_parts = comparable_parts.map(part => part["_doc"])
+    specs.map( (spec) => {
         let spec_total_comparability_score = 0
-        comparable_parts.forEach( (comparable_part) => {
-            comparable_part[spec]["comparability_score"] = Math.abs(input_part[spec] - comparable_part[spec])
-            console.log(comparable_part)
-            spec_total_comparability_score += comparable_part[spec]["comparability_score"]
+        const scored_comparable_parts = working_comparable_parts.map( (comparable_part) => {
+            const input_spec_value = input_part[spec]
+            const comparable_spec_value = comparable_part[spec]
+            const comparability_score = 1-(Math.abs(input_spec_value - comparable_spec_value) / input_spec_value)
+            let copy_comparable_part = {...comparable_part}
+            if (!copy_comparable_part["comparability_scores"]) {
+                copy_comparable_part["comparability_scores"] = {}
+                copy_comparable_part["comparability_scores"][spec] = comparability_score
+            } else {
+                copy_comparable_part["comparability_scores"][spec] = comparability_score
+            }
+
+            spec_total_comparability_score += comparability_score
+            return copy_comparable_part
         })
-        comparable_parts.forEach( (comparable_part) => {
-            comparable_part[spec]["normalized_comparability_score"] = comparable_part[spec]["comparability_score"] / spec_total_comparability_score
+        const normalized_comparable_parts = scored_comparable_parts.map( (comparable_part) => {
+            const comparability_score = comparable_part["comparability_scores"][spec]
+            const normalized_comparability_score = comparability_score / spec_total_comparability_score
+            let copy_comparable_part = {...comparable_part}
+            if (!copy_comparable_part["normalized_comparability_scores"]) {
+                copy_comparable_part["normalized_comparability_scores"] = {}
+                copy_comparable_part["normalized_comparability_scores"][spec] = normalized_comparability_score
+            } else {
+                copy_comparable_part["normalized_comparability_scores"][spec] = normalized_comparability_score
+            }
+            return copy_comparable_part
         })
+        working_comparable_parts = normalized_comparable_parts
     })
-    comparable_parts.forEach( (comparable_part) => {
-        let part_total_comparability_score = 0
-        specs.forEach( (spec) => {
-            part_total_comparability_score += comparable_part[spec]["comparability_score"]
+    const averaged_comparable_parts = working_comparable_parts.map( (comparable_part) => {
+        let copy_comparable_part = {...comparable_part}
+        let part_total_normalized_comparability_score = 0
+        specs.map( (spec) => {
+            const normalized_comparability_score = copy_comparable_part["normalized_comparability_scores"][spec]
+            part_total_normalized_comparability_score += normalized_comparability_score
         })
-        comparable_part["average_comparability_score"] = part_total_comparability_score / specs.length
+        copy_comparable_part["average_comparability_score"] = part_total_normalized_comparability_score / specs.length
+        return copy_comparable_part
     })
+    return averaged_comparable_parts
 }
 
 const getComparabilityScoresCPUs = (comparable_cpus, input_cpu) => {
     const specs = ['cores', 'base_clock', 'boost_clock']
-    calcComparabilityScore(comparable_cpus, input_cpu, specs)
-    return comparable_cpus
+    return calcComparabilityScore(comparable_cpus, input_cpu, specs)
 }
 
 const getComparabilityScores = (comparable_parts, input_part) => {
