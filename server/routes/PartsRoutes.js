@@ -13,16 +13,4 @@ router.get('/get_listings', async (req, res, next) => {
     }
 })
 
-router.get('/get_past_listings', async (req, res, next) => {
-    try {
-        // const { keyword, limit } = req.query
-        const listings = await getPastListings()
-        res.status(200).json(listings)
-    } catch (error) {
-        next(error)
-    }
-})
-
-
-
 module.exports = router
