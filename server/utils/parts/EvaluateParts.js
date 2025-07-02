@@ -1,5 +1,5 @@
 const { test_cpu } = require('../../tests/parts/test_parts.js')
-const { getListings } = require('../ebay/EbayUtils.js')
+const getRecentlySoldListings = require('../ebay/EbayScraper.js')
 const { getComparableParts } = require('./ComparableParts.js')
 
 const grabNRandomItems = (items, N) => {
@@ -20,7 +20,8 @@ const grabNRandomItems = (items, N) => {
 
 
 const evaluateComparablePart = async (part) => {
-    const listings = getListings(part.model, 10)
+    const PAGE_LIMIT = 5
+    const listings = getRecentlySoldListings(part.title, PAGE_LIMIT)
 
     // Insert analysis of listing prices to find trends
 
