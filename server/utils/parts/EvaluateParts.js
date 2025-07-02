@@ -1,5 +1,6 @@
 const { test_cpu } = require('../../tests/parts/test_parts.js')
 const getRecentlySoldListings = require('../ebay/EbayScraper.js')
+const { getComparabilityScores } = require('./ComparabilityScores.js')
 const { getComparableParts } = require('./ComparableParts.js')
 
 const grabNRandomItems = (items, N) => {
@@ -30,10 +31,9 @@ const evaluateComparablePart = async (part) => {
 const evaluatePart = async (part) => {
     const comparableParts = await getComparableParts(part)
 
-    const NUM_COMPARABLES = 10
+    const comparablePartsWithComparabilityScores = getComparabilityScores(comparableParts, part)
 
-    const randomComparablePartsSample = grabNRandomItems(comparableParts, NUM_COMPARABLES)
-
+    
 
     // Combine trend analysis results from evaluateComparableParts into trend prediction for input part
 
