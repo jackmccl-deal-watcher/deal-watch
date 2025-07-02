@@ -42,14 +42,11 @@ const getRecentlySoldListings = async (keyword, page_limit) => {
                     'sold_price': ebayPriceToNumber(ebay_sold_price),
                 }
                 recentlySoldListingsData.push(listing_data)
-                console.log(listing_data)
             })
         }
         page_number++
     }
     return recentlySoldListingsData
 }
-
-getRecentlySoldListings("2070super", 2)
 
 module.exports = getRecentlySoldListings
