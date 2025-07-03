@@ -2,7 +2,7 @@ const JSSoup = require('jssoup').default;
 
 const ebayPriceToNumber = (price) => {
     if (price.includes("to")) {
-        return (Number(price.split(" ")[0].slice(1)) + Number(price.split(" ")[2].slice(1)) / 2)
+        return ((Number(price.split(" ")[0].slice(1)) + Number(price.split(" ")[2].slice(1))) / 2)
     }
     return Number(price.slice(1))
 }
@@ -60,4 +60,4 @@ const getRecentlySoldListings = async (keyword, page_limit) => {
     return recentlySoldListingsData
 }
 
-module.exports = getRecentlySoldListings
+module.exports = { getRecentlySoldListings, ebayDateToJSDate, ebayPriceToNumber }

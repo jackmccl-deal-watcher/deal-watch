@@ -1,5 +1,5 @@
 const { test_cpu } = require('../../tests/parts/test_parts.js')
-const getRecentlySoldListings = require('../ebay/EbayScraper.js')
+const { getRecentlySoldListings } = require('../ebay/EbayScraper.js')
 const { getComparabilityScores } = require('./ComparabilityScores.js')
 const { getComparableParts } = require('./ComparableParts.js')
 
@@ -123,4 +123,4 @@ const evaluatePart = async (part) => {
     }
 }
 
-module.exports = { evaluatePart }
+module.exports = { evaluatePart, removePriceOutliers }
