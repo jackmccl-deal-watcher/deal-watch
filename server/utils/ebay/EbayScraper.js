@@ -20,7 +20,7 @@ const getRecentlySoldListings = async (keyword, page_limit) => {
 
     let recentlySoldListingsData = []
 
-    while (page_number < page_limit) {
+    while (page_number <= page_limit) {
         const url = `https://www.ebay.com/sch/i.html?_nkw=${keyword}&_sacat=0&_from=R40&rt=nc&LH_Sold=1&LH_Complete=1&_pgn=${page_number}`
         const response = await fetch(url, {method: 'GET',})
         const html_text = await response.text()
