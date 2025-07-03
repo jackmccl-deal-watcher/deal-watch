@@ -43,12 +43,8 @@ const getRecentlySoldListings = async (keyword, page_limit) => {
                 'sold_date': ebayDateToJSDate(ebay_sold_date),
                 'sold_price': ebayPriceToNumber(ebay_sold_price),
             }
-            if (next_page_btn.length === 0) {
+            if (next_page_btn.length > 0 || title.includes(keyword)) {
                 // If less than a full page of listings, could be related listings, only include title matches
-                if (title.includes(keyword)) {
-                    recentlySoldListingsData.push(listing_data)
-                }
-            } else {
                 recentlySoldListingsData.push(listing_data)
             }
         })
