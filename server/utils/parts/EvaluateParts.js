@@ -55,7 +55,7 @@ const getListingData = async (part) => {
     const sortedByDateListingData = listingData.sort( (a, b) => {
         return b.sold_date-a.sold_date
     })
-    return listingData
+    return sortedByDateListingData
 }
 
 const grabNMostComparableParts = (comparable_parts, N) => {
