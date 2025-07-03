@@ -37,38 +37,34 @@ const removePriceOutliers = (listings) => {
     return listingsOutliersRemoved
 }
 
-const evaluateComparablePart = async (part) => {
+const getListingData = async (part) => {
     const PAGE_LIMIT = 5
     const recentlySoldListings = await getRecentlySoldListings(part.model, PAGE_LIMIT)
-    const recentlySoldListingsOutliersRemoved = removePriceOutliers(recentlySoldListings)
-    console.log(recentlySoldListingsOutliersRemoved)
-
-
-
-    if (recentlySoldListings.length < 10) {
-        return false
+    if (!recentlySoldListings || recentlySoldListings.length < 3) {
+        return []
     }
-
-
-
-
+    const recentlySoldListingsOutliersRemoved = removePriceOutliers(recentlySoldListings)
+    const listing_data = recentlySoldListingsOutliersRemoved.map( (listing) => {
+        const titleRemovedListing = {
+            "sold_date": listing.sold_date,
+            "sold_price": listing.sold_price,
+        }
+        return titleRemovedListing
+    })
+    return listing_data
 }
 
 const evaluatePart = async (part) => {
     const comparableParts = await getComparableParts(part)
     const comparablePartsWithComparabilityScores = getComparabilityScores(comparableParts, part)
 
-    const evaluatedComparablePartsPromises = [comparablePartsWithComparabilityScores[0]].map( async (comparable_part) => {
-        const evaluated_comparable_part = await evaluateComparablePart(comparable_part)
-        if (evaluated_comparable_part) {
-
-        }
+    const comparablePartsWithListingDataPromises = comparablePartsWithComparabilityScores.map( async (comparable_part) => {
+        let copy_comparable_part = {...comparable_part}
+        copy_comparable_part["listing_data"] = await getListingData(comparable_part)
+        return copy_comparable_part
     })
 
-    const resolvedEvaluatedComparablePartsPromises = await Promise.all(evaluatedComparablePartsPromises)
-
-
-
+    const comparablePartsWithListingData = await Promise.all(comparablePartsWithListingDataPromises)
 
     // Combine trend analysis results from evaluateComparableParts into trend prediction for input part
 
