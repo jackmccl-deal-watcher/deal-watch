@@ -72,6 +72,7 @@ const grabNMostComparableParts = (comparable_parts, N) => {
 
 const evaluatePart = async (part) => {
     const MINIMUM_LISTINGS = 10
+    const NUM_COMPARABLE_PARTS = 10
     try {
         const comparableParts = await getComparableParts(part)
         if (!comparableParts) {
@@ -95,7 +96,7 @@ const evaluatePart = async (part) => {
 
         const comparablePartsWithListingData = await Promise.all(comparablePartsWithListingDataPromises)
 
-        const mostComparableParts = grabNMostComparableParts(comparablePartsWithListingData, 10)
+        const mostComparableParts = grabNMostComparableParts(comparablePartsWithListingData, NUM_COMPARABLE_PARTS)
 
         // Combine trend analysis results from evaluateComparableParts into trend prediction for input part
     } catch (error) {
