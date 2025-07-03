@@ -97,7 +97,6 @@ const evaluatePart = async (part) => {
 
         const mostComparableParts = grabNMostComparableParts(comparablePartsWithListingData, 10)
 
-        // Combine trend analysis results from evaluateComparableParts into trend prediction for input part
     } catch (error) {
         console.log(error)
     }
