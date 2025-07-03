@@ -1,5 +1,5 @@
 const ComponentTypes = require('../../models/part_models/ComponentTypesEnum.js')
-const { copy } = require('../../routes/UserRoutes.js')
+const { CPU_PROPERTIES, VIDEOCARD_PROPERTIES, MOTHERBOARD_PROPERTIES, MEMORY_PROPERTIES, HARD_DRIVE_PROPERTIES, POWER_SUPPLY_PROPERTIES, CASE_PROPERTIES} = require('../../models/part_models/ComponentPropertiesEnums.js')
 
 const calcComparabilityScore = (comparable_parts, input_part, specs) => {
     let working_comparable_parts = comparable_parts.map(part => part["_doc"])
@@ -48,37 +48,37 @@ const calcComparabilityScore = (comparable_parts, input_part, specs) => {
 }
 
 const getComparabilityScoresCPUs = (comparable_cpus, input_cpu) => {
-    const specs = ['cores', 'base_clock', 'boost_clock']
+    const specs = [CPU_PROPERTIES.CORES, CPU_PROPERTIES.BASE_CLOCK, CPU_PROPERTIES.BOOST_CLOCK]
     return calcComparabilityScore(comparable_cpus, input_cpu, specs)
 }
 
 const getComparabilityScoresVideoCards = (comparable_videocards, input_videocard) => {
-    const specs = ['vram', 'base_clock', 'boost_clock']
+    const specs = [VIDEOCARD_PROPERTIES.VRAM, VIDEOCARD_PROPERTIES.BASE_CLOCK, VIDEOCARD_PROPERTIES.BOOST_CLOCK]
     return calcComparabilityScore(comparable_videocards, input_videocard, specs)
 }
 
 const getComparabilityScoresMotherboards = (comparable_motherboards, input_motherboard) => {
-    const specs = ['ram_slots', 'max_ram']
+    const specs = [MOTHERBOARD_PROPERTIES.RAM_SLOTS, MOTHERBOARD_PROPERTIES.MAX_RAM]
     return calcComparabilityScore(comparable_motherboards, input_motherboard, specs)
 }
 
 const getComparabilityScoresMemorys = (comparable_memorys, input_memory) => {
-    const specs = ['speed', 'total_size']
+    const specs = [MEMORY_PROPERTIES.SPEED, MEMORY_PROPERTIES.TOTAL_SIZE]
     return calcComparabilityScore(comparable_memorys, input_memory, specs)
 }
 
 const getComparabilityScoresHardDrives = (comparable_hard_drives, input_hard_drive) => {
-    const specs = ['capacity']
+    const specs = [HARD_DRIVE_PROPERTIES.CAPACITY]
     return calcComparabilityScore(comparable_hard_drives, input_hard_drive, specs)
 }
 
 const getComparabilityScoresPowerSupplys = (comparable_power_supplys, input_power_supply) => {
-    const specs = ['wattage']
+    const specs = [POWER_SUPPLY_PROPERTIES.WATTAGE]
     return calcComparabilityScore(comparable_power_supplys, input_power_supply, specs)
 }
 
 const getComparabilityScoresCases = (comparable_cases, input_case) => {
-    const specs = ['internal_bays']
+    const specs = [CASE_PROPERTIES.INTERNAL_BAYS]
     return calcComparabilityScore(comparable_cases, input_case, specs)
 }
 
