@@ -24,8 +24,8 @@ const removePriceOutliers = (listings) => {
         return a.sold_price - b.sold_price
     })
 
-    const lower_quartile_index = Math.round(listingsSortedByPrice.length * 0.25)
-    const upper_quartile_index = Math.round(listingsSortedByPrice.length * 0.75)
+    const lower_quartile_index = Math.floor(listingsSortedByPrice.length * 0.25)
+    const upper_quartile_index = Math.floor(listingsSortedByPrice.length * 0.75)
     const lower_quartile_price = listingsSortedByPrice[lower_quartile_index].sold_price
     const upper_quartile_price = listingsSortedByPrice[upper_quartile_index].sold_price
     const interquartile_range = upper_quartile_price - lower_quartile_price
@@ -40,36 +40,67 @@ const removePriceOutliers = (listings) => {
 const getListingData = async (part) => {
     const PAGE_LIMIT = 5
     const recentlySoldListings = await getRecentlySoldListings(part.model, PAGE_LIMIT)
-    if (!recentlySoldListings || recentlySoldListings.length < 3) {
+    if (recentlySoldListings.length === 0) {
         return []
     }
     const recentlySoldListingsOutliersRemoved = removePriceOutliers(recentlySoldListings)
-    const listing_data = recentlySoldListingsOutliersRemoved.map( (listing) => {
+    const listingData = recentlySoldListingsOutliersRemoved.map( (listing) => {
         const titleRemovedListing = {
             "sold_date": listing.sold_date,
             "sold_price": listing.sold_price,
         }
         return titleRemovedListing
     })
-    return listing_data
+    // Newest to oldest
+    const sortedByDateListingData = listingData.sort( (a, b) => {
+        return b.sold_date-a.sold_date
+    })
+    return listingData
+}
+
+const grabNMostComparableParts = (comparable_parts, N) => {
+    const sortedComparableParts = comparable_parts.sort((a, b) => {
+        return a.average_comparability_score - b.average_comparability_score
+    })
+
+    if (sortedComparableParts.length < N) {
+        return sortedComparableParts
+    } else {
+        return sortedComparableParts.slice(0, N)
+    }
 }
 
 const evaluatePart = async (part) => {
-    const comparableParts = await getComparableParts(part)
-    const comparablePartsWithComparabilityScores = getComparabilityScores(comparableParts, part)
+    const MINIMUM_LISTINGS = 10
+    try {
+        const comparableParts = await getComparableParts(part)
+        if (!comparableParts) {
+            throw new Error("No comparable parts found!")
+        }
+        const comparablePartsWithComparabilityScores = getComparabilityScores(comparableParts, part)
 
-    const comparablePartsWithListingDataPromises = comparablePartsWithComparabilityScores.map( async (comparable_part) => {
-        let copy_comparable_part = {...comparable_part}
-        copy_comparable_part["listing_data"] = await getListingData(comparable_part)
-        return copy_comparable_part
-    })
+        const comparablePartsWithListingDataPromises = comparablePartsWithComparabilityScores.map( async (comparable_part) => {
+            let copy_comparable_part = {...comparable_part}
+            const listingData = await getListingData(comparable_part)
 
-    const comparablePartsWithListingData = await Promise.all(comparablePartsWithListingDataPromises)
+            if (listingData.length > MINIMUM_LISTINGS) {
+                copy_comparable_part["listing_data"] = listingData
+                return copy_comparable_part
+            }
+        })
 
-    // Combine trend analysis results from evaluateComparableParts into trend prediction for input part
+        if (comparablePartsWithListingDataPromises.length === 0) {
+            throw new Error(`No comparable parts with enough listing data!`)
+        }
 
+        const comparablePartsWithListingData = await Promise.all(comparablePartsWithListingDataPromises)
+
+        const mostComparableParts = grabNMostComparableParts(comparablePartsWithListingData, 10)
+
+        // Combine trend analysis results from evaluateComparableParts into trend prediction for input part
+    } catch (error) {
+        console.log(error)
+    }
 }
-
-evaluatePart(test_cpu)
 
 module.exports = { evaluatePart }

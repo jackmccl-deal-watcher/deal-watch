@@ -51,7 +51,7 @@ const getRecentlySoldListings = async (keyword, page_limit) => {
         })
 
         if (next_page_btn.length === 0) {
-            console.log(`Ran out of pages, pages pulled: ${page_number}`)
+            console.log(`Ran out of pages for ${keyword}, pages pulled: ${page_number}, listings pulled: ${recentlySoldListingsData.length}`)
             break
         }
 

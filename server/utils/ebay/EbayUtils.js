@@ -33,4 +33,4 @@ const getListings = async (keyword, limit) => {
     return await response.json()
 }
 
-module.exports = { getListings, getPastListings }
+module.exports = { getListings }
