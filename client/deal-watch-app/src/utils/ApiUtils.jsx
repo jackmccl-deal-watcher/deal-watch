@@ -51,3 +51,19 @@ export const checkUser = async () => {
         console.error(error)
     }
 }
+
+export const evaluatePart = async (part) => {
+    try {
+        const response = await fetch(`${API_URL}/parts/evaluate_part`, {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json',
+            },
+            credentials: 'include',
+            body: JSON.stringify(part),
+        });
+        return await response.json()
+    } catch (error) {
+        console.error(error)
+    }
+}

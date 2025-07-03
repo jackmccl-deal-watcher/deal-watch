@@ -96,7 +96,12 @@ const evaluatePart = async (part) => {
         const comparablePartsWithListingData = await Promise.all(comparablePartsWithListingDataPromises)
 
         const mostComparableParts = grabNMostComparableParts(comparablePartsWithListingData, 10)
+        
+        const evaluation = {
+            'comparable_parts': mostComparableParts
+        }
 
+        return evaluation
     } catch (error) {
         console.log(error)
     }
