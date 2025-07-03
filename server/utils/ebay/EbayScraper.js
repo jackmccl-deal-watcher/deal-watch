@@ -29,12 +29,15 @@ const getRecentlySoldListings = async (keyword, page_limit) => {
 
         const next_page_btn = soup.findAll('a', 'pagination__next')
 
-        const recentlySoldListings = soup.findAll('div', 's-item__info').slice(2)
+        const recentlySoldListings = soup.findAll('div', 's-item__info')?.slice(2)
         
-        recentlySoldListings.forEach( (listing) => {
-            const title = listing.find('div', 's-item__title').find('span').text
-            const ebay_sold_date = listing.find('span', 's-item__caption--signal').text
-            const ebay_sold_price = listing.find('span', 's-item__price').text
+        recentlySoldListings?.forEach( (listing) => {
+            const title = listing?.find('div', 's-item__title')?.find('span')?.text
+            const ebay_sold_date = listing?.find('span', 's-item__caption--signal')?.text
+            const ebay_sold_price = listing?.find('span', 's-item__price')?.text
+            if (!title || !ebay_sold_date || !ebay_sold_price) {
+                return
+            }
             const listing_data = {
                 'title': title,
                 'sold_date': ebayDateToJSDate(ebay_sold_date),

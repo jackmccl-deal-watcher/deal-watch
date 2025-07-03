@@ -79,8 +79,8 @@ const calcWeightedLineOfBestFit = (comparable_parts) => {
         comparable_part.listing_data.map( (listing) => {
             sum_prices += listing.sold_price * comparable_part.average_comparability_score
             sum_times += listing.sold_date * comparable_part.average_comparability_score
-            num_prices += 1 * comparable_part.average_comparability_score
-            num_times += 1 * comparable_part.average_comparability_score
+            num_prices += comparable_part.average_comparability_score
+            num_times += comparable_part.average_comparability_score
         })
     })
     const weighted_avg_price = sum_prices / num_prices
