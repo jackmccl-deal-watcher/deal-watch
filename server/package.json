@@ -13,5 +13,8 @@
     "node-html-parser": "^7.0.1",
     "nodemon": "^3.1.10"
   },
-  "type": "commonjs"
+  "type": "commonjs",
+  "devDependencies": {
+    "jest": "^30.0.4"
+  }
 }

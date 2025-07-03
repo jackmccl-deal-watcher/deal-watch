@@ -7,7 +7,7 @@ const CPUSchema = new mongoose.Schema({
     cores: Number,
     base_clock: Number,
     boost_clock: Number,
-    integrated_graphics: Boolean,
+    integrated_graphics: String,
     multithreading: Boolean,
 })
 
