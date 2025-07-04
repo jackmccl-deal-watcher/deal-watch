@@ -68,6 +68,13 @@ const getUniqueTimes = (time_data) => {
     return [...X_Times.map(time => new Date(time))]
 }
 
+const makeDataPoints = (comparable_part) => {
+    const dataPoints = comparable_part.listing_data.map( (listing) => {
+        return {'x': listing.sold_date, 'y': listing.sold_price, 'id':comparable_part.brand + ': ' + comparable_part.model + ' - ' + listing.sold_date}
+    })
+    return dataPoints
+}
+
 const makeGraphData = (evaluation) => {
     evaluation.comparable_parts = evaluation.comparable_parts.map( (comparable_part) => {
         comparable_part['listing_dict'] = makeListingDict(comparable_part)
@@ -76,12 +83,38 @@ const makeGraphData = (evaluation) => {
 
     const allDataPoints = getAllDataPoints(evaluation.comparable_parts)
 
-    const X_Times = getUniqueTimes(allDataPoints.all_time_data).reverse()
+    const X_Times = getUniqueTimes(allDataPoints.all_time_data).sort((a, b) => {
+        return b - a
+    })
+
+    const Y_Prices = []
 
     evaluation.comparable_parts = evaluation.comparable_parts.map( (comparable_part) => {
         comparable_part['price_data'] = makePriceDataArray(comparable_part, X_Times)
+        Y_Prices.push({
+            'data': comparable_part['price_data'],
+            'label': comparable_part.brand + ': ' + comparable_part.model,
+            'connectNulls': true,
+        })
         return comparable_part
     })
-    return evaluation.comparable_parts
+
+
+
+    const X_Y_Points = []
+    evaluation.comparable_parts = evaluation.comparable_parts.map( (comparable_part) => {
+        comparable_part['price_data'] = makePriceDataArray(comparable_part, X_Times)
+        X_Y_Points.push({
+            'data': makeDataPoints(comparable_part),
+            'label': comparable_part.brand + ': ' + comparable_part.model,
+        })
+        return comparable_part
+    })
+
+    evaluation.X_Data = X_Times
+    evaluation.Y_Data = Y_Prices
+    evaluation.X_Y_Points = X_Y_Points
+
+    return evaluation
 }
 module.exports = { makeGraphData }
