@@ -17,6 +17,7 @@ const ebayDateToJSDate = (ebay_date) => {
 
 const getRecentlySoldListings = async (keyword, page_limit) => {
     let page_number = 1
+    const THREE_MONTHS_IN_MILLISECONDS = 3 * 30 * 24 * 60 * 60 * 1000
 
     let recentlySoldListingsData = []
 
@@ -43,8 +44,10 @@ const getRecentlySoldListings = async (keyword, page_limit) => {
                 'sold_date': ebayDateToJSDate(ebay_sold_date),
                 'sold_price': ebayPriceToNumber(ebay_sold_price),
             }
-            if (next_page_btn.length > 0 || title.includes(keyword)) {
-                // If less than a full page of listings, could be related listings, only include title matches
+            // Skip listing if it's more than 3 months old
+            // If less than a full page of listings, could be related listings, only include title matches
+            if (!(ebayDateToJSDate(ebay_sold_date) < ((new Date()).getTime() - THREE_MONTHS_IN_MILLISECONDS))
+                && (next_page_btn.length > 0 || title.includes(keyword))) {
                 recentlySoldListingsData.push(listing_data)
             }
         })

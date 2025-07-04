@@ -42,8 +42,7 @@ def populate_cpus():
             cpu_doc["integrated_graphics"] = "none"
 
         cpu_count += 1
-        cpu_id = cpu_collection.insert_one(cpu_doc).inserted_id
-        print(f'cpu_id: {cpu_id} inserted into cpu collection')
+        cpu_collection.replace_one(filter={"model": cpu.model}, replacement=cpu_doc, upsert=True)
     print(f'{cpu_count} cpu parts added to database')
 
 def populate_video_cards():
@@ -76,8 +75,7 @@ def populate_video_cards():
             videocard_doc["boost_clock"] = videocard_doc["base_clock"]
 
         videocard_count += 1
-        videocard_id = videocard_collection.insert_one(videocard_doc).inserted_id
-        print(f'videocard_id: {videocard_id} inserted into video-card collection')
+        videocard_collection.replace_one(filter={"model": videocard.model}, replacement=videocard_doc, upsert=True)
     print(f'{videocard_count} video-card parts added to database')
 
 def populate_motherboards():
@@ -100,8 +98,7 @@ def populate_motherboards():
         }
 
         motherboard_count += 1
-        motherboard_id = motherboard_collection.insert_one(motherboard_doc).inserted_id
-        print(f'motherboard_id: {motherboard_id} inserted into motherboard collection')
+        motherboard_collection.replace_one(filter={"model": motherboard.model}, replacement=motherboard_doc, upsert=True)
     print(f'{motherboard_count} motherboard parts added to database')
 
 def populate_memorys():
@@ -127,8 +124,7 @@ def populate_memorys():
         }
 
         memory_count += 1
-        memory_id = memory_collection.insert_one(memory_doc).inserted_id
-        print(f'memory_id: {memory_id} inserted into memory collection')
+        memory_collection.replace_one(filter={"model": memory.model}, replacement=memory_doc, upsert=True)
     print(f'{memory_count} memory parts added to database')
 
 def populate_hard_drives():
@@ -162,8 +158,7 @@ def populate_hard_drives():
 
 
         hard_drive_count += 1
-        hard_drive_id = hard_drive_collection.insert_one(hard_drive_doc).inserted_id
-        print(f'hard_drive_id: {hard_drive_id} inserted into hard_drive collection')
+        hard_drive_collection.replace_one(filter={"model": hard_drive.model}, replacement=hard_drive_doc, upsert=True)
     print(f'{hard_drive_count} hard_drive parts added to database')
 
 def populate_power_supplys():
@@ -185,8 +180,7 @@ def populate_power_supplys():
         }
 
         power_supply_count += 1
-        power_supply_id = power_supply_collection.insert_one(power_supply_doc).inserted_id
-        print(f'power_supply_id: {power_supply_id} inserted into power_supply collection')
+        power_supply_collection.replace_one(filter={"model": power_supply.model}, replacement=power_supply_doc, upsert=True)
     print(f'{power_supply_count} power_supply parts added to database')
 
 def populate_cases():
@@ -218,8 +212,7 @@ def populate_cases():
             case_doc["side_panel"] = "none"
 
         case_count += 1
-        case_id = case_collection.insert_one(case_doc).inserted_id
-        print(f'case_id: {case_id} inserted into case collection')
+        case_collection.replace_one(filter={"model": case.model}, replacement=case_doc, upsert=True)
     print(f'{case_count} case parts added to database')
 
 def populate_parts_database():

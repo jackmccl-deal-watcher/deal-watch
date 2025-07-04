@@ -1,34 +1,30 @@
-const { test_cpu } = require('../../tests/parts/test_parts.js')
 const { getRecentlySoldListings } = require('../ebay/EbayScraper.js')
 const { getComparabilityScores } = require('./ComparabilityScores.js')
 const { getComparableParts } = require('./ComparableParts.js')
 
-const grabNRandomItems = (items, N) => {
-    let selectedItems = []
-    let count = 0
-    while (count < N) {
-        const index = Math.floor(Math.random() * items.length)
-        const randomItem = items[index]
-        if (selectedItems && selectedItems.includes(randomItem)) {
-            continue
-        } else {
-            count++;
-            selectedItems.push(randomItem)
-        }
-    }
-    return selectedItems
-}
-
-const removePriceOutliers = (listings) => {
+const calcQuartileInfo = (listings) => {
     const listingsSortedByPrice = listings.sort((a, b) => {
         return a.sold_price - b.sold_price
     })
-
     const lower_quartile_index = Math.floor(listingsSortedByPrice.length * 0.25)
     const upper_quartile_index = Math.floor(listingsSortedByPrice.length * 0.75)
     const lower_quartile_price = listingsSortedByPrice[lower_quartile_index].sold_price
     const upper_quartile_price = listingsSortedByPrice[upper_quartile_index].sold_price
     const interquartile_range = upper_quartile_price - lower_quartile_price
+
+    return {
+        lower_quartile_price,
+        upper_quartile_price,
+        interquartile_range
+    }
+}
+
+const removeIntraPriceOutliers = (listings) => {
+    const listingsSortedByPrice = listings.sort((a, b) => {
+        return a.sold_price - b.sold_price
+    })
+
+    const { lower_quartile_price, upper_quartile_price, interquartile_range } = calcQuartileInfo(listingsSortedByPrice)
 
     const listingsOutliersRemoved = listingsSortedByPrice.filter((listing) => {
         return !(listing.sold_price > upper_quartile_price + 1.5 * interquartile_range || listing.sold_price < lower_quartile_price - 1.5 * interquartile_range)
@@ -37,17 +33,45 @@ const removePriceOutliers = (listings) => {
     return listingsOutliersRemoved
 }
 
+const removeInterPriceOutliers = (comparable_parts) => {
+    let listings = []
+    comparable_parts.map( (comparable_part) => {
+        comparable_part.listing_data.map( (listing) => {
+            listings.push(listing)
+        })
+    })
+    
+    const listingsSortedByPrice = listings.sort((a, b) => {
+        return a.sold_price - b.sold_price
+    })
+
+    const { lower_quartile_price, upper_quartile_price, interquartile_range } = calcQuartileInfo(listingsSortedByPrice)
+
+    const comparablePartsOutlierListingsRemoved = comparable_parts.map( (comparable_part) => {
+        let copy_comparable_part = comparable_part
+        const listingsOutliersRemoved = comparable_part.listing_data.filter( (listing) => {
+            return !(listing.sold_price > upper_quartile_price + 1.5 * interquartile_range || listing.sold_price < lower_quartile_price - 1.5 * interquartile_range)
+        })
+        copy_comparable_part.listing_data = listingsOutliersRemoved
+        return copy_comparable_part
+    })
+
+    return comparablePartsOutlierListingsRemoved
+}
+
 const getListingData = async (part) => {
     const PAGE_LIMIT = 5
     const recentlySoldListings = await getRecentlySoldListings(part.model, PAGE_LIMIT)
     if (recentlySoldListings.length === 0) {
         return []
     }
-    const recentlySoldListingsOutliersRemoved = removePriceOutliers(recentlySoldListings)
+    const recentlySoldListingsOutliersRemoved = removeIntraPriceOutliers(recentlySoldListings)
+
     const listingData = recentlySoldListingsOutliersRemoved.map( (listing) => {
         const titleRemovedListing = {
             "sold_date": listing.sold_date,
             "sold_price": listing.sold_price,
+            "avg_comparability_score": part.average_comparability_score,
         }
         return titleRemovedListing
     })
@@ -55,7 +79,7 @@ const getListingData = async (part) => {
     const sortedByDateListingData = listingData.sort( (a, b) => {
         return b.sold_date-a.sold_date
     })
-    return listingData
+    return sortedByDateListingData
 }
 
 const grabNMostComparableParts = (comparable_parts, N) => {
@@ -70,27 +94,8 @@ const grabNMostComparableParts = (comparable_parts, N) => {
     }
 }
 
-const calcWeightedLineOfBestFit = (comparable_parts) => {
-    let sum_prices = 0
-    let sum_times = 0
-    let num_prices = 0
-    let num_times = 0
-    comparable_parts.map( (comparable_part) => {
-        comparable_part.listing_data.map( (listing) => {
-            sum_prices += listing.sold_price * comparable_part.average_comparability_score
-            sum_times += listing.sold_date * comparable_part.average_comparability_score
-            num_prices += comparable_part.average_comparability_score
-            num_times += comparable_part.average_comparability_score
-        })
-    })
-    const weighted_avg_price = sum_prices / num_prices
-    const weighted_avg_time = sum_times / num_times
-
-}
-
 const evaluatePart = async (part) => {
     const MINIMUM_LISTINGS = 10
-    const NUM_COMPARABLE_PARTS = 10
     try {
         const comparableParts = await getComparableParts(part)
         if (!comparableParts) {
@@ -112,15 +117,24 @@ const evaluatePart = async (part) => {
             throw new Error(`No comparable parts with enough listing data!`)
         }
 
-        const comparablePartsWithListingData = await Promise.all(comparablePartsWithListingDataPromises)
+        const comparablePartsWithListingData = (await Promise.all(comparablePartsWithListingDataPromises)).filter(value => value !== undefined)
 
-        const mostComparableParts = grabNMostComparableParts(comparablePartsWithListingData, NUM_COMPARABLE_PARTS)
+        const comparablePartsWithInterPartListingOutliersRemoved = removeInterPriceOutliers(comparablePartsWithListingData)
 
+        const comparablePartsFewListingsRemoved = comparablePartsWithInterPartListingOutliersRemoved.filter( (comparable_part) => {
+            return comparable_part.listing_data.length >= MINIMUM_LISTINGS
+        })
 
+        const mostComparableParts = grabNMostComparableParts(comparablePartsFewListingsRemoved, 10)
+        
+        const evaluation = {
+            'comparable_parts': mostComparableParts
+        }
 
+        return evaluation
     } catch (error) {
         console.log(error)
     }
 }
 
-module.exports = { evaluatePart, removePriceOutliers }
+module.exports = { evaluatePart, removeIntraPriceOutliers, removeInterPriceOutliers }
