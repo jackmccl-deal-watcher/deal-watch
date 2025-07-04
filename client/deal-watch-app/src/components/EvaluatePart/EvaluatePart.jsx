@@ -35,7 +35,6 @@ const EvaluatePart = () => {
             })
             X_Y_Point.data = data
             X_Y_Point.valueFormatter = (data) => {
-                const date = new Date(data.x)
                 return `(${convertDateToMonthDayYear(data.x)}, ${convertPriceToDollar(data.y)})`
             }
             return X_Y_Point

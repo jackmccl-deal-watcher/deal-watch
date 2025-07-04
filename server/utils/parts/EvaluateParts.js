@@ -3,22 +3,6 @@ const getRecentlySoldListings = require('../ebay/EbayScraper.js')
 const { getComparabilityScores } = require('./ComparabilityScores.js')
 const { getComparableParts } = require('./ComparableParts.js')
 
-const grabNRandomItems = (items, N) => {
-    let selectedItems = []
-    let count = 0
-    while (count < N) {
-        const index = Math.floor(Math.random() * items.length)
-        const randomItem = items[index]
-        if (selectedItems && selectedItems.includes(randomItem)) {
-            continue
-        } else {
-            count++;
-            selectedItems.push(randomItem)
-        }
-    }
-    return selectedItems
-}
-
 const calcQuartileInfo = (listings) => {
     const listingsSortedByPrice = listings.sort((a, b) => {
         return a.sold_price - b.sold_price
@@ -114,7 +98,6 @@ const evaluatePart = async (part) => {
     const MINIMUM_LISTINGS = 10
     try {
         const comparableParts = await getComparableParts(part)
-        console.log(comparableParts)
         if (!comparableParts) {
             throw new Error("No comparable parts found!")
         }
@@ -136,9 +119,9 @@ const evaluatePart = async (part) => {
 
         const comparablePartsWithListingData = (await Promise.all(comparablePartsWithListingDataPromises)).filter(value => value !== undefined)
 
-        const comparablePartsWithListingOutliersRemoved = removeInterPriceOutliers(comparablePartsWithListingData)
+        const comparablePartsWithInterPartListingOutliersRemoved = removeInterPriceOutliers(comparablePartsWithListingData)
 
-        const comparablePartsFewListingsRemoved = comparablePartsWithListingOutliersRemoved.filter( (comparable_part) => {
+        const comparablePartsFewListingsRemoved = comparablePartsWithInterPartListingOutliersRemoved.filter( (comparable_part) => {
             return comparable_part.listing_data.length >= MINIMUM_LISTINGS
         })
 
