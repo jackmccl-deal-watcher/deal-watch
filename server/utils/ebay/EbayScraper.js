@@ -2,7 +2,7 @@ const JSSoup = require('jssoup').default;
 
 const ebayPriceToNumber = (price) => {
     if (price.includes("to")) {
-        return (Number(price.split(" ")[0].slice(1)) + Number(price.split(" ")[2].slice(1)) / 2)
+        return ((Number(price.split(" ")[0].slice(1)) + Number(price.split(" ")[2].slice(1))) / 2)
     }
     return Number(price.slice(1))
 }
@@ -20,7 +20,7 @@ const getRecentlySoldListings = async (keyword, page_limit) => {
 
     let recentlySoldListingsData = []
 
-    while (page_number < page_limit) {
+    while (page_number <= page_limit) {
         const url = `https://www.ebay.com/sch/i.html?_nkw=${keyword}&_sacat=0&_from=R40&rt=nc&LH_Sold=1&LH_Complete=1&_pgn=${page_number}`
         const response = await fetch(url, {method: 'GET',})
         const html_text = await response.text()
@@ -29,27 +29,24 @@ const getRecentlySoldListings = async (keyword, page_limit) => {
 
         const next_page_btn = soup.findAll('a', 'pagination__next')
 
-        const recentlySoldListings = soup.findAll('div', 's-item__info').slice(2)
+        const recentlySoldListings = soup.findAll('div', 's-item__info')?.slice(2)
         
-        recentlySoldListings.forEach( (listing) => {
-            const title = listing.find('div', 's-item__title').find('span').text
-            const ebay_sold_date = listing.find('span', 's-item__caption--signal').text
-            const ebay_sold_price = listing.find('span', 's-item__price').text
+        recentlySoldListings?.forEach( (listing) => {
+            const title = listing?.find('div', 's-item__title')?.find('span')?.text
+            const ebay_sold_date = listing?.find('span', 's-item__caption--signal')?.text
+            const ebay_sold_price = listing?.find('span', 's-item__price')?.text
+            if (!title || !ebay_sold_date || !ebay_sold_price) {
+                return
+            }
             const listing_data = {
                 'title': title,
                 'sold_date': ebayDateToJSDate(ebay_sold_date),
                 'sold_price': ebayPriceToNumber(ebay_sold_price),
             }
             // Skip listing if it's more than 3 months old
-            if (ebayDateToJSDate(ebay_sold_date) < ((new Date()).getTime() - 3 * 30 * 24 * 60 * 60 * 1000)) {
-                return
-            }
-            if (next_page_btn.length === 0) {
-                // If less than a full page of listings, could be related listings, only include title matches
-                if (title.includes(keyword)) {
-                    recentlySoldListingsData.push(listing_data)
-                }
-            } else {
+            // If less than a full page of listings, could be related listings, only include title matches
+            if (!ebayDateToJSDate(ebay_sold_date) < ((new Date()).getTime() - 3 * 30 * 24 * 60 * 60 * 1000)
+                && (next_page_btn.length > 0 || title.includes(keyword))) {
                 recentlySoldListingsData.push(listing_data)
             }
         })
@@ -64,4 +61,4 @@ const getRecentlySoldListings = async (keyword, page_limit) => {
     return recentlySoldListingsData
 }
 
-module.exports = getRecentlySoldListings
+module.exports = { getRecentlySoldListings, ebayDateToJSDate, ebayPriceToNumber }

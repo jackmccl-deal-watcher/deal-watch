@@ -1,5 +1,5 @@
 const { TestError } = require("../../errors/TestError")
-const getRecentlySoldListings = require("../../utils/ebay/EbayScraper")
+const { getRecentlySoldListings } = require("../../utils/ebay/EbayScraper")
 
 const getRecentlySoldListings_test = async () => {
     const recentlySoldListings = await getRecentlySoldListings("2070super", 3)
