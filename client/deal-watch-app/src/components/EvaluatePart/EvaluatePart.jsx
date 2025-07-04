@@ -6,6 +6,37 @@ import { LineChart } from '@mui/x-charts/LineChart';
 import { useEffect } from 'react';
 import { ScatterChart } from '@mui/x-charts';
 
+import { useScatterSeries, useXScale, useYScale } from '@mui/x-charts/hooks';
+
+function LinkPoints({ seriesId, close }) {
+    const scatter = useScatterSeries(seriesId);
+    const xScale = useXScale();
+    const yScale = useYScale();
+
+
+    if (!scatter) {
+        return null;
+    }
+    const { color, data } = scatter;
+
+    if (!data) {
+        return null;
+    }
+
+    return (
+        <path
+            fill="none"
+            stroke={color}
+            strokeWidth={10}
+            d={`M ${data.map(({ x, y }) => `${xScale(x)}, ${yScale(y)}`).join(' L')}${
+            close ? 'Z' : ''
+            }`}
+        />
+        );
+}
+
+
+
 const EvaluatePart = () => {
     const [evaluationData, setEvaluationData] = useState([])
     const [loading, setLoading] = useState(true)
@@ -26,7 +57,10 @@ const EvaluatePart = () => {
     }
 
     const fixPointDates = () => {
-        const fixedPoints = evaluationData.X_Y_Points.map((X_Y_Point) => {
+        const allPoints = [...evaluationData.X_Y_Points, evaluationData.M_A_Points]
+        console.log(evaluationData.X_Y_Points)
+        console.log(evaluationData.M_A_Points)
+        const fixedPoints = allPoints.map((X_Y_Point) => {
             const data = X_Y_Point.data.map( (X_Y_Point_data) => {
                 return {
                     x: new Date(X_Y_Point_data.x), 
@@ -74,10 +108,13 @@ const EvaluatePart = () => {
                     valueFormatter: convertDateToMonthDay,
                     tickInterval: WEEK_IN_MILLISECONDS,
                     tickLabelInterval: MONTH_IN_MILLSECONDS,
+                    domainLimit: 'strict',
                 }]}
                 series={fixPointDates()}
                 grid={{ vertical: true, horizontal: true }}
-            />
+            >
+                <LinkPoints seriesId="7-day-moving-average" />
+            </ScatterChart>
         )
     }
 
@@ -89,7 +126,7 @@ const EvaluatePart = () => {
         <div className='evaluatepart'>
             <button onClick={updateGraph}>Reload evaluation</button>
             <div className='evaluation'>
-                { !loading && evaluationData.X_Data && evaluationData.Y_Data && evaluationData.X_Y_Points ?
+                { !loading && evaluationData.X_Y_Points && evaluationData.M_A_Points ?
                     displayScatterChart() :   <div>Loading evaluation...</div>
                 }
             </div>

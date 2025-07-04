@@ -72,6 +72,7 @@ const getListingData = async (part) => {
         const titleRemovedListing = {
             "sold_date": listing.sold_date,
             "sold_price": listing.sold_price,
+            "avg_comparability_score": part.average_comparability_score,
         }
         return titleRemovedListing
     })
@@ -94,27 +95,8 @@ const grabNMostComparableParts = (comparable_parts, N) => {
     }
 }
 
-const calcWeightedLineOfBestFit = (comparable_parts) => {
-    let sum_prices = 0
-    let sum_times = 0
-    let num_prices = 0
-    let num_times = 0
-    comparable_parts.map( (comparable_part) => {
-        comparable_part.listing_data.map( (listing) => {
-            sum_prices += listing.sold_price * comparable_part.average_comparability_score
-            sum_times += listing.sold_date * comparable_part.average_comparability_score
-            num_prices += comparable_part.average_comparability_score
-            num_times += comparable_part.average_comparability_score
-        })
-    })
-    const weighted_avg_price = sum_prices / num_prices
-    const weighted_avg_time = sum_times / num_times
-
-}
-
 const evaluatePart = async (part) => {
     const MINIMUM_LISTINGS = 10
-    const NUM_COMPARABLE_PARTS = 10
     try {
         const comparableParts = await getComparableParts(part)
         if (!comparableParts) {
