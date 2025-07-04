@@ -8,6 +8,7 @@ import { ScatterChart } from '@mui/x-charts';
 
 import { useScatterSeries, useXScale, useYScale } from '@mui/x-charts/hooks';
 
+// LinkPoints function from MUIX example
 function LinkPoints({ seriesId, close }) {
     const scatter = useScatterSeries(seriesId);
     const xScale = useXScale();
