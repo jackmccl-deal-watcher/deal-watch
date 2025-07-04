@@ -59,8 +59,6 @@ const EvaluatePart = () => {
 
     const fixPointDates = () => {
         const allPoints = [...evaluationData.X_Y_Points, evaluationData.M_A_Points]
-        console.log(evaluationData.X_Y_Points)
-        console.log(evaluationData.M_A_Points)
         const fixedPoints = allPoints.map((X_Y_Point) => {
             const data = X_Y_Point.data.map( (X_Y_Point_data) => {
                 return {

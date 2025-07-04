@@ -1,4 +1,3 @@
-const { test_cpu } = require('../../tests/parts/test_parts.js')
 const { getRecentlySoldListings } = require('../ebay/EbayScraper.js')
 const { getComparabilityScores } = require('./ComparabilityScores.js')
 const { getComparableParts } = require('./ComparableParts.js')

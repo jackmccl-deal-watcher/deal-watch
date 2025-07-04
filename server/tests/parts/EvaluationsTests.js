@@ -1,5 +1,5 @@
 const { ebayDateToJSDate, ebayPriceToNumber } = require('../../utils/ebay/EbayScraper.js')
-const { evaluatePart, removePriceOutliers } = require('../../utils/parts/EvaluateParts.js')
+const { evaluatePart, removeIntraPriceOutliers } = require('../../utils/parts/EvaluateParts.js')
 const { TestError } = require('../../errors/TestError.js')
 const outlier_test_listings = [
     {
@@ -150,13 +150,13 @@ const ebayDateToJSDate_test = () => {
 
 
 const removePriceOutliers_test = () => {
-    const result = removePriceOutliers(outlier_test_listings)
+    const result = removeIntraPriceOutliers(outlier_test_listings)
     if (result.every) {
-        console.log("removePriceOutliers_test: Passed")
+        console.log("removeIntraPriceOutliers_test: Passed")
         return true
     } else {
-        console.log("removePriceOutliers_test: Failed")
-        throw new TestError("removePriceOutliers_test: Failed")
+        console.log("removeIntraPriceOutliers_test: Failed")
+        throw new TestError("removeIntraPriceOutliers_test: Failed")
     }
 }
 
