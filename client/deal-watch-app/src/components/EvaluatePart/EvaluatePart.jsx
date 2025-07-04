@@ -14,7 +14,6 @@ const EvaluatePart = () => {
         try {
             const partEvaluation = await evaluatePart(test_cpu)
             setEvaluationData(partEvaluation)
-            console.log(partEvaluation)
             setLoading(false)
         } catch (error) {
             console.error('Error evaluating part:', error)

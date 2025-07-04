@@ -19,6 +19,9 @@ router.post('/evaluate_part', async (req, res, next) => {
     try {
         const part = req.body
         const evaluation = await evaluatePart(part)
+        // evaluationInterPriceOutliersRemoved.comparable_parts.map((comparable_part) => {
+        //     console.log(comparable_part.listing_data)
+        // })
         const evaluationWithGraphData = makeGraphData(evaluation)
         res.status(200).json(evaluationWithGraphData)
     } catch (error) {
