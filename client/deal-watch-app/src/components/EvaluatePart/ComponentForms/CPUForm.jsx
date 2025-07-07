@@ -4,7 +4,7 @@ import { CPU_PROPERTIES } from '../../../component_enums/ComponentPropertiesEnum
 import './ComponentForm.css'
 
 const CPUForm = ({ handlePartEvaluation }) => {
-    const [cores, setCores] = useState(2)
+    const [cores, setCores] = useState(4)
     const [baseClock, setBaseClock] = useState(3200000000)
     const [boostClock, setBoostClock] = useState(3400000000)
 
