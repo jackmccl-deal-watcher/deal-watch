@@ -8,7 +8,7 @@ const MemoryForm = ({ handlePartEvaluation }) => {
     const MODULE_TYPES = [ 'DDR', 'DDR2', 'DDR3', 'DDR4' ]
 
     const [speed, setSpeed] = useState(2400000000)
-    const [totalSize, setTotalSize] = useState(1)
+    const [totalSize, setTotalSize] = useState(4)
     const [moduleType, setModuleType] = useState('')
 
     const getSpeedLabelText = (speed) => {
@@ -27,7 +27,7 @@ const MemoryForm = ({ handlePartEvaluation }) => {
         const memory = {
             type: MEMORY_PROPERTIES.TYPE,
             [MEMORY_PROPERTIES.SPEED]: speed,
-            [MEMORY_PROPERTIES.TOTAL_SIZE]: totalSize,
+            [MEMORY_PROPERTIES.TOTAL_SIZE]: calcTotalSize(totalSize),
             [MEMORY_PROPERTIES.MODULE_TYPE]: moduleType,
         }
         handlePartEvaluation(memory)
