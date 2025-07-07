@@ -14,7 +14,6 @@ function LinkPoints({ seriesId, close }) {
     const xScale = useXScale();
     const yScale = useYScale();
 
-
     if (!scatter) {
         return null;
     }
