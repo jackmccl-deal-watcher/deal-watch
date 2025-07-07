@@ -8,6 +8,7 @@ import CPUForm from "./ComponentForms/CPUForm";
 import VideoCardForm from './ComponentForms/VideoCardForm';
 import MotherboardForm from './ComponentForms/MotherboardForm';
 import MemoryForm from './ComponentForms/MemoryForm';
+import HardDriveForm from './ComponentForms/HardDriveForm';
 
 const ComponentForm = ({ handlePartEvaluation }) => {
     const [componentType, setComponentType] = useState('cpu')
@@ -22,7 +23,7 @@ const ComponentForm = ({ handlePartEvaluation }) => {
             case ComponentTypes.MEMORY:
                 return <MemoryForm handlePartEvaluation={handlePartEvaluation}/>
             case ComponentTypes.HARD_DRIVE:
-                return 
+                return <HardDriveForm handlePartEvaluation={handlePartEvaluation}/>
             case ComponentTypes.POWER_SUPPLY:
                 return 
             case ComponentTypes.CASE:
