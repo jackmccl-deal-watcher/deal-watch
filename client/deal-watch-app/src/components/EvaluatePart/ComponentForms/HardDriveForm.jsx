@@ -5,7 +5,7 @@ import './ComponentForm.css'
 import OptionsDropdown from './OptionsDropdown';
 
 const HardDriveForm = ({ handlePartEvaluation }) => {
-    const STORAGE_TYPES = [ 'HDD', 'Hybrid', 'SSD' ]
+    const STORAGE_TYPES = [ 'SSD', 'HDD', 'Hybrid' ]
     const FORM_FACTORS = [
         '1.8"',     '2.5"',
         '3.5"',     'M.2-22110',
