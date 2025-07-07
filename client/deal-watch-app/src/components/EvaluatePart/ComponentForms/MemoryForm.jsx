@@ -5,7 +5,12 @@ import './ComponentForm.css'
 import OptionsDropdown from './OptionsDropdown';
 
 const MemoryForm = ({ handlePartEvaluation }) => {
-    const MODULE_TYPES = [ 'DDR', 'DDR2', 'DDR3', 'DDR4' ]
+    const MODULE_TYPES = [ 
+        'DDR', 
+        'DDR2', 
+        'DDR3', 
+        'DDR4' 
+    ]
 
     const [speed, setSpeed] = useState(2400000000)
     const [totalSize, setTotalSize] = useState(4)

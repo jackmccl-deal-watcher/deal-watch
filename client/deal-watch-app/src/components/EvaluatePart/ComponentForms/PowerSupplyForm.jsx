@@ -5,7 +5,15 @@ import './ComponentForm.css'
 import OptionsDropdown from './OptionsDropdown';
 
 const PowerSupplyForm = ({ handlePartEvaluation }) => {
-    const FORM_FACTORS = [ 'ATX', 'BTX', 'Flex ATX', 'Micro ATX', 'Mini ITX', 'SFX', 'TFX' ]
+    const FORM_FACTORS = [ 
+        'ATX', 
+        'BTX', 
+        'Flex ATX', 
+        'Micro ATX', 
+        'Mini ITX', 
+        'SFX', 
+        'TFX'
+    ]
     const EFFICIENCY_RATINGS = [
         '80+',
         '80+ Bronze',
@@ -14,7 +22,11 @@ const PowerSupplyForm = ({ handlePartEvaluation }) => {
         '80+ Platinum',
         '80+ Titanium'
     ]
-    const MODULARITIES = [ 'Full', 'Semi', 'No' ]
+    const MODULARITIES = [ 
+        'Full', 
+        'Semi', 
+        'No' 
+    ]
     const [wattage, setWattage] = useState(600)
     const [formFactor, setFormFactor] = useState('')
     const [efficiencyRating, setEfficiencyRating] = useState('')

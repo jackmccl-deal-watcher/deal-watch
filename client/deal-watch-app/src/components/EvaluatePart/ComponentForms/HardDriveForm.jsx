@@ -5,7 +5,11 @@ import './ComponentForm.css'
 import OptionsDropdown from './OptionsDropdown';
 
 const HardDriveForm = ({ handlePartEvaluation }) => {
-    const STORAGE_TYPES = [ 'SSD', 'HDD', 'Hybrid' ]
+    const STORAGE_TYPES = [ 
+        'SSD', 
+        'HDD', 
+        'Hybrid'
+    ]
     const FORM_FACTORS = [
         '1.8"',
         '2.5"',
@@ -44,16 +48,22 @@ const HardDriveForm = ({ handlePartEvaluation }) => {
     const [hardDriveInterface, setHardDriveInterface] = useState('')
 
     function getCapacityLabelText(value) {
-        const units = ['B', 'KB', 'MB', 'GB', 'TB'];
+        const units = [
+            'B', 
+            'KB', 
+            'MB', 
+            'GB', 
+            'TB'
+        ]
 
-        let unitIndex = 0;
-        let scaledValue = value;
+        let unitIndex = 0
+        let scaledValue = value
         while (scaledValue >= 1024 && unitIndex < units.length-1) {
-            unitIndex += 1;
-            scaledValue = scaledValue / (2 ** 10);
+            unitIndex += 1
+            scaledValue = scaledValue / (2 ** 10)
         }
 
-        return `${scaledValue} ${units[unitIndex]}`;
+        return `${scaledValue} ${units[unitIndex]}`
     }
 
     function calcCapacity(value) {
