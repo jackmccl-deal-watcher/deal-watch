@@ -1,3 +1,4 @@
+const { PartEvaluationError } = require('../../errors/PartEvaluationError.js')
 const { getRecentlySoldListings } = require('../ebay/EbayScraper.js')
 const { getComparabilityScores } = require('./ComparabilityScores.js')
 const { getComparableParts } = require('./ComparableParts.js')
@@ -20,13 +21,9 @@ const calcQuartileInfo = (listings) => {
 }
 
 const removeIntraPriceOutliers = (listings) => {
-    const listingsSortedByPrice = listings.sort((a, b) => {
-        return a.sold_price - b.sold_price
-    })
+    const { lower_quartile_price, upper_quartile_price, interquartile_range } = calcQuartileInfo(listings)
 
-    const { lower_quartile_price, upper_quartile_price, interquartile_range } = calcQuartileInfo(listingsSortedByPrice)
-
-    const listingsOutliersRemoved = listingsSortedByPrice.filter((listing) => {
+    const listingsOutliersRemoved = listings.filter((listing) => {
         return !(listing.sold_price > upper_quartile_price + 1.5 * interquartile_range || listing.sold_price < lower_quartile_price - 1.5 * interquartile_range)
     })
 
@@ -40,13 +37,8 @@ const removeInterPriceOutliers = (comparable_parts) => {
             listings.push(listing)
         })
     })
-    
-    const listingsSortedByPrice = listings.sort((a, b) => {
-        return a.sold_price - b.sold_price
-    })
 
-    const { lower_quartile_price, upper_quartile_price, interquartile_range } = calcQuartileInfo(listingsSortedByPrice)
-
+    const { lower_quartile_price, upper_quartile_price, interquartile_range } = calcQuartileInfo(listings)
     const comparablePartsOutlierListingsRemoved = comparable_parts.map( (comparable_part) => {
         let copy_comparable_part = comparable_part
         const listingsOutliersRemoved = comparable_part.listing_data.filter( (listing) => {
@@ -96,45 +88,44 @@ const grabNMostComparableParts = (comparable_parts, N) => {
 
 const evaluatePart = async (part) => {
     const MINIMUM_LISTINGS = 10
-    try {
-        const comparableParts = await getComparableParts(part)
-        if (!comparableParts) {
-            throw new Error("No comparable parts found!")
-        }
-        const comparablePartsWithComparabilityScores = getComparabilityScores(comparableParts, part)
-
-        const comparablePartsWithListingDataPromises = comparablePartsWithComparabilityScores.map( async (comparable_part) => {
-            let copy_comparable_part = {...comparable_part}
-            const listingData = await getListingData(comparable_part)
-
-            if (listingData.length > MINIMUM_LISTINGS) {
-                copy_comparable_part["listing_data"] = listingData
-                return copy_comparable_part
-            }
-        })
-
-        if (comparablePartsWithListingDataPromises.length === 0) {
-            throw new Error(`No comparable parts with enough listing data!`)
-        }
-
-        const comparablePartsWithListingData = (await Promise.all(comparablePartsWithListingDataPromises)).filter(value => value !== undefined)
-
-        const comparablePartsWithInterPartListingOutliersRemoved = removeInterPriceOutliers(comparablePartsWithListingData)
-
-        const comparablePartsFewListingsRemoved = comparablePartsWithInterPartListingOutliersRemoved.filter( (comparable_part) => {
-            return comparable_part.listing_data.length >= MINIMUM_LISTINGS
-        })
-
-        const mostComparableParts = grabNMostComparableParts(comparablePartsFewListingsRemoved, 10)
-        
-        const evaluation = {
-            'comparable_parts': mostComparableParts
-        }
-
-        return evaluation
-    } catch (error) {
-        console.log(error)
+    const comparableParts = await getComparableParts(part)
+    if (!comparableParts) {
+        throw new PartEvaluationError("No comparable parts found!")
     }
+    const comparablePartsWithComparabilityScores = getComparabilityScores(comparableParts, part)
+
+    const comparablePartsWithListingDataPromises = comparablePartsWithComparabilityScores.map( async (comparable_part) => {
+        let copy_comparable_part = {...comparable_part}
+        const listingData = await getListingData(comparable_part)
+
+        if (listingData.length > MINIMUM_LISTINGS) {
+            copy_comparable_part["listing_data"] = listingData
+            return copy_comparable_part
+        }
+    })
+
+    if (comparablePartsWithListingDataPromises.length === 0) {
+        throw new PartEvaluationError(`No comparable parts with enough listing data!`)
+    }
+
+    const comparablePartsWithListingData = (await Promise.all(comparablePartsWithListingDataPromises)).filter(value => value !== undefined)
+    
+    const comparablePartsWithInterPartListingOutliersRemoved = removeInterPriceOutliers(comparablePartsWithListingData)
+    
+    const comparablePartsFewListingsRemoved = comparablePartsWithInterPartListingOutliersRemoved.filter( (comparable_part) => {
+        return comparable_part.listing_data.length >= MINIMUM_LISTINGS
+    })
+    if (comparablePartsFewListingsRemoved.length === 0) {
+        throw new PartEvaluationError(`No comparable parts with low enough listing data variation!`)
+    }
+
+    const mostComparableParts = grabNMostComparableParts(comparablePartsFewListingsRemoved, 10)
+    
+    const evaluation = {
+        'comparable_parts': mostComparableParts
+    }
+
+    return evaluation
 }
 
 module.exports = { evaluatePart, removeIntraPriceOutliers, removeInterPriceOutliers }
