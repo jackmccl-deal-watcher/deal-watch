@@ -67,11 +67,16 @@ const MotherboardForm = ({ handlePartEvaluation }) => {
         'sTRX4'
     ]
     const FORM_FACTORS = [
-        'ATX',       'EATX',
-        'Flex ATX',  'HPTX',
-        'Micro ATX', 'Mini DTX',
-        'Mini ITX',  'SSI CEB',
-        'SSI EEB',   'Thin Mini ITX',
+        'ATX',
+        'EATX',
+        'Flex ATX',
+        'HPTX',
+        'Micro ATX',
+        'Mini DTX',
+        'Mini ITX',
+        'SSI CEB',
+        'SSI EEB',
+        'Thin Mini ITX',
         'XL ATX'
     ]
     const [ramSlots, setRamSlots] = useState(4)
