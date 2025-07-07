@@ -50,7 +50,7 @@ const PowerSupplyForm = ({ handlePartEvaluation }) => {
     return(
         <div className='component-form'>
             <p className='component-form-input-label'>Wattage: {getWattageLabelText(wattage)}</p>
-            <Slider min={180} max={2000} step={50} valueLabelDisplay='auto' valueLabelFormat={getWattageLabelText} value={wattage} onChange={(e, newValue) => setWattage(newValue)}></Slider>
+            <Slider min={150} max={2000} step={50} valueLabelDisplay='auto' valueLabelFormat={getWattageLabelText} value={wattage} onChange={(e, newValue) => setWattage(newValue)}></Slider>
             <OptionsDropdown options={FORM_FACTORS} optionsType={'Form Factor'} currentOptions={formFactor} setCurrentOption={setFormFactor}/>
             <OptionsDropdown options={EFFICIENCY_RATINGS} optionsType={'Efficiency Rating'} currentOptions={efficiencyRating} setCurrentOption={setEfficiencyRating}/>
             <OptionsDropdown options={MODULARITIES} optionsType={'Modularity'} currentOptions={modular} setCurrentOption={setModular}/>
