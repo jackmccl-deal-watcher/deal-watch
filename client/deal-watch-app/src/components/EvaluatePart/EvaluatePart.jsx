@@ -8,7 +8,6 @@ const EvaluatePart = () => {
     const [evaluationData, setEvaluationData] = useState([])
     const [loading, setLoading] = useState(false)
     const [message, setMessage] = useState('')
-    const [valueColor, setValueColor] = useState('')
     const [trendColor, setTrendColor] = useState('')
     const [thirtyDayTrend, setThirtyDayTrend] = useState('')
     const [marketValue, setMarketValue] = useState('')
@@ -49,21 +48,20 @@ const EvaluatePart = () => {
     }
 
     const calcMarketValue = () => {
-        setMarketValue(convertPriceToDollar(evaluationData.M_A_Points.data[evaluationData.M_A_Points.data.length - 1].y))
+        setMarketValue(convertPriceToDollar(evaluationData.M_A_Points.data[0].y))
     }
 
     const calcThirtyDayTrend = () => {
-        const nowPrice = evaluationData.M_A_Points.data[evaluationData.M_A_Points.data.length - 1].y
-        const priceThirtyDaysAgo = evaluationData.M_A_Points.data[evaluationData.M_A_Points.data.length - 31].y
+        console.log(evaluationData.M_A_Points.data)
+        const nowPrice = evaluationData.M_A_Points.data[0].y
+        const priceThirtyDaysAgo = evaluationData.M_A_Points.data[29].y
         const thirtyDayTrendAmount = nowPrice-priceThirtyDaysAgo
         const thirtyDayTrendString = convertPriceToDollar(nowPrice-priceThirtyDaysAgo)
         if (thirtyDayTrendAmount >= 0) {
             setTrendColor('green')
-            setValueColor('red')
             setThirtyDayTrend(`+${thirtyDayTrendString}`)
         } else {
             setTrendColor('red')
-            setValueColor('green')
             setThirtyDayTrend(`${thirtyDayTrendString}`)
         }
     }
@@ -75,7 +73,7 @@ const EvaluatePart = () => {
             <div className='evaluation'>
                 { !loading && evaluationData.X_Y_Points && evaluationData.M_A_Points ?
                     <div className='evaluation-results'>
-                        <p style={{color: `${valueColor}`}} className='evaluation-results-expected-value'>Expected Market Value: {marketValue}</p>
+                        <p className='evaluation-results-expected-value'>Expected Market Value: {marketValue}</p>
                         <p style={{color: `${trendColor}`}} className='evaluation-results-trend'>30 Day Trend: {thirtyDayTrend}</p>
                         <EvaluationScatterChart evaluationData={evaluationData}/>
                     </div>  : null
