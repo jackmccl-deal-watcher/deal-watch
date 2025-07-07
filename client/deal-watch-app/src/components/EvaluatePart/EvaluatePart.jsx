@@ -36,8 +36,6 @@ function LinkPoints({ seriesId, close }) {
         );
 }
 
-
-
 const EvaluatePart = () => {
     const [evaluationData, setEvaluationData] = useState([])
     const [loading, setLoading] = useState(true)
