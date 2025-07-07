@@ -5,6 +5,7 @@ import MenuItem from '@mui/material/MenuItem';
 import FormControl from '@mui/material/FormControl';
 import Select from '@mui/material/Select';
 import CPUForm from "./ComponentForms/CPUForm";
+import VideoCardForm from './ComponentForms/VideoCardForm';
 
 const ComponentForm = ({ handlePartEvaluation }) => {
     const [componentType, setComponentType] = useState('cpu')
@@ -13,7 +14,7 @@ const ComponentForm = ({ handlePartEvaluation }) => {
             case ComponentTypes.CPU:
                 return <CPUForm handlePartEvaluation={handlePartEvaluation}/>
             case ComponentTypes.VIDEOCARD:
-                return 
+                return <VideoCardForm handlePartEvaluation={handlePartEvaluation}/>
             case ComponentTypes.MOTHERBOARD:
                 return 
             case ComponentTypes.MEMORY:
