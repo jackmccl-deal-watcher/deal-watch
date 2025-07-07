@@ -4,9 +4,9 @@ import { VIDEOCARD_PROPERTIES } from '../../../component_enums/ComponentProperti
 import './ComponentForm.css'
 
 const VideoCardForm = ({ handlePartEvaluation }) => {
-    const [vram, setVram] = useState(8000000000)
-    const [baseClock, setBaseClock] = useState(1000000000)
-    const [boostClock, setBoostClock] = useState(1200000000)
+    const [vram, setVram] = useState(6000000000)
+    const [baseClock, setBaseClock] = useState(1350000000)
+    const [boostClock, setBoostClock] = useState(1750000000)
 
     const getVramLabelText = (vram) => {
         return `${Math.round(vram/1000000000 * 100) / 100} GBs`
