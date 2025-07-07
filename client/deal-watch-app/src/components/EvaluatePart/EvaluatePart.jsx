@@ -1,17 +1,23 @@
 import './EvaluatePart.css'
-import { useState } from 'react'
+import { useState, useEffect } from 'react'
 import { evaluatePart } from '../../utils/ApiUtils'
 import ComponentForm from './ComponentForm';
 import EvaluationScatterChart from './EvaluationScatterChart';
 
 const EvaluatePart = () => {
     const [evaluationData, setEvaluationData] = useState([])
-    const [loading, setLoading] = useState(true)
+    const [loading, setLoading] = useState(false)
     const [message, setMessage] = useState('')
+    const [valueColor, setValueColor] = useState('')
+    const [trendColor, setTrendColor] = useState('')
+    const [thirtyDayTrend, setThirtyDayTrend] = useState('')
+    const [marketValue, setMarketValue] = useState('')
 
     const getPartEvaluation = async (part) => {
         try {
+            setLoading(true)
             setMessage("Loading...")
+            setTrendColor('')
             const response = await evaluatePart(part)
             switch (response.status) {
                 case 'success':
@@ -28,13 +34,52 @@ const EvaluatePart = () => {
         }
     }
 
+    useEffect( () => {
+        console.log(evaluationData)
+        if(evaluationData && evaluationData.M_A_Points) {
+            calcMarketValue()
+            calcThirtyDayTrend()
+        }
+    }, [evaluationData])
+
+    const convertPriceToDollar = (price) => {
+        return new Intl.NumberFormat('en-us', {
+            style: 'currency',
+            currency: 'USD'
+        }).format(price)
+    }
+
+    const calcMarketValue = () => {
+        setMarketValue(convertPriceToDollar(evaluationData.M_A_Points.data[evaluationData.M_A_Points.data.length - 1].y))
+    }
+
+    const calcThirtyDayTrend = () => {
+        const nowPrice = evaluationData.M_A_Points.data[evaluationData.M_A_Points.data.length - 1].y
+        const priceThirtyDaysAgo = evaluationData.M_A_Points.data[evaluationData.M_A_Points.data.length - 31].y
+        const thirtyDayTrendAmount = nowPrice-priceThirtyDaysAgo
+        const thirtyDayTrendString = convertPriceToDollar(nowPrice-priceThirtyDaysAgo)
+        if (thirtyDayTrendAmount >= 0) {
+            setTrendColor('green')
+            setValueColor('red')
+            setThirtyDayTrend(`+${thirtyDayTrendString}`)
+        } else {
+            setTrendColor('red')
+            setValueColor('green')
+            setThirtyDayTrend(`${thirtyDayTrendString}`)
+        }
+    }
+    
     return(
         <div className='evaluatepart'>
             <ComponentForm handlePartEvaluation={getPartEvaluation}/>
             <p className='evaluatepart-message'>{message}</p>
             <div className='evaluation'>
                 { !loading && evaluationData.X_Y_Points && evaluationData.M_A_Points ?
-                    <EvaluationScatterChart evaluationData={evaluationData}/> : null
+                    <div className='evaluation-results'>
+                        <p style={{color: `${valueColor}`}} className='evaluation-results-expected-value'>Expected Market Value: {marketValue}</p>
+                        <p style={{color: `${trendColor}`}} className='evaluation-results-trend'>30 Day Trend: {thirtyDayTrend}</p>
+                        <EvaluationScatterChart evaluationData={evaluationData}/>
+                    </div>  : null
                 }
             </div>
         </div>
