@@ -1,9 +1,38 @@
 import './EvaluatePart.css'
 import { useState } from 'react'
 import { evaluatePart } from '../../utils/ApiUtils'
-import EvaluationScatterChart from './EvaluationScatterChart';
-import ComponentForm from './ComponentForm';
+import { LineChart } from '@mui/x-charts/LineChart';
+import { useEffect } from 'react';
+import { ScatterChart } from '@mui/x-charts';
 
+import { useScatterSeries, useXScale, useYScale } from '@mui/x-charts/hooks';
+
+// LinkPoints function from MUIX example
+function LinkPoints({ seriesId, close }) {
+    const scatter = useScatterSeries(seriesId);
+    const xScale = useXScale();
+    const yScale = useYScale();
+
+    if (!scatter) {
+        return null;
+    }
+    const { color, data } = scatter;
+
+    if (!data) {
+        return null;
+    }
+
+    return (
+        <path
+            fill="none"
+            stroke={color}
+            strokeWidth={10}
+            d={`M ${data.map(({ x, y }) => `${xScale(x)}, ${yScale(y)}`).join(' L')}${
+            close ? 'Z' : ''
+            }`}
+        />
+        );
+}
 
 const EvaluatePart = () => {
     const [evaluationData, setEvaluationData] = useState([])
