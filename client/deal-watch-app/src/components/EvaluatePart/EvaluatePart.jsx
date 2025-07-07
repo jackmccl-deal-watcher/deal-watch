@@ -35,7 +35,6 @@ const EvaluatePart = () => {
     }
 
     useEffect( () => {
-        console.log(evaluationData)
         if(evaluationData && evaluationData.M_A_Points) {
             calcMarketValue()
             calcThirtyDayTrend()
