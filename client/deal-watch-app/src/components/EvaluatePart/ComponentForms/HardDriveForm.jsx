@@ -7,22 +7,35 @@ import OptionsDropdown from './OptionsDropdown';
 const HardDriveForm = ({ handlePartEvaluation }) => {
     const STORAGE_TYPES = [ 'SSD', 'HDD', 'Hybrid' ]
     const FORM_FACTORS = [
-        '1.8"',     '2.5"',
-        '3.5"',     'M.2-22110',
-        'M.2-2242', 'M.2-2260',
-        'M.2-2280', 'PCI-E',
+        '1.8"',
+        '2.5"',
+        '3.5"',
+        'M.2-22110',
+        'M.2-2242',
+        'M.2-2260',
+        'M.2-2280',
+        'PCI-E',
         'mSATA'
     ]
     const hardDriveInterfaces = [
-        'M.2 (B+M)',         'M.2 (M)',
-        'Micro SATA 3 Gb/s', 'Micro SATA 6 Gb/s',
-        'PATA 100',          'PATA 133',
-        'PCIe x1',           'PCIe x16',
-        'PCIe x2',           'PCIe x4',
-        'PCIe x8',           'SAS 12 Gb/s',
-        'SAS 3 Gb/s',        'SAS 6 Gb/s',
-        'SATA 1.5 Gb/s',     'SATA 3 Gb/s',
-        'SATA 6 Gb/s',       'U.2',
+        'M.2 (B+M)',
+        'M.2 (M)',
+        'Micro SATA 3 Gb/s',
+        'Micro SATA 6 Gb/s',
+        'PATA 100',
+        'PATA 133',
+        'PCIe x1',
+        'PCIe x16',
+        'PCIe x2',
+        'PCIe x4',
+        'PCIe x8',
+        'SAS 12 Gb/s',
+        'SAS 3 Gb/s',
+        'SAS 6 Gb/s',
+        'SATA 1.5 Gb/s',
+        'SATA 3 Gb/s',
+        'SATA 6 Gb/s',
+        'U.2',
         'mSATA'
     ]
     const [capacity, setCapacity] = useState(40)
