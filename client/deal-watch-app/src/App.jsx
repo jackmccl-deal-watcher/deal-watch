@@ -6,6 +6,7 @@ import './App.css'
 import { UserProvider } from './components/UserProvider/UserProvider.jsx'
 import Login from './components/Login/Login.jsx'
 import Signup from './components/SignUp/SignUp.jsx'
+import EvaluatePart from './components/EvaluatePart/EvaluatePart.jsx'
 
 function App() {
 
@@ -18,6 +19,7 @@ function App() {
             <Route path='/' element={<HomePage/>} />
             <Route path='/login' element={<Login/>} />
             <Route path='/signup' element={<Signup/>} />
+            <Route path='/parts' element={<EvaluatePart/>} />
             <Route path='*' element={<NoMatch/>} />
           </Routes>
         </BrowserRouter>
