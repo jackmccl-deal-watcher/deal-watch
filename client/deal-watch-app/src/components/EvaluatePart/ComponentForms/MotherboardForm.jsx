@@ -75,7 +75,7 @@ const MotherboardForm = ({ handlePartEvaluation }) => {
         'XL ATX'
     ]
     const [ramSlots, setRamSlots] = useState(4)
-    const [maxRam, setMaxRam] = useState(128000000000)
+    const [maxRam, setMaxRam] = useState(1)
     const [socket, setSocket] = useState('')
     const [formFactor, setFormFactor] = useState('')
 
@@ -83,15 +83,19 @@ const MotherboardForm = ({ handlePartEvaluation }) => {
         return `${ram_slots} slots`
     }
 
-    const getMaxRamLabelText = (max_ram) => {
-        return `${Math.round(max_ram/1000000000 * 100) / 100} GBs`
+    const getMaxRamLabelText = () => {
+        return `${Math.round(calcMaxRam(maxRam)/1000000000 * 100) / 100} GBs`
+    }
+
+    const calcMaxRam = (value) => {
+        return 2 ** value * 1000000000
     }
 
     const motherboardEvaluate = () => {
         const motherboard = {
             type: MOTHERBOARD_PROPERTIES.TYPE,
             [MOTHERBOARD_PROPERTIES.RAM_SLOTS]: ramSlots,
-            [MOTHERBOARD_PROPERTIES.MAX_RAM]: maxRam,
+            [MOTHERBOARD_PROPERTIES.MAX_RAM]: calcMaxRam(maxRam),
             [MOTHERBOARD_PROPERTIES.SOCKET]: socket,
             [MOTHERBOARD_PROPERTIES.FORM_FACTOR]: formFactor,
         }
@@ -101,9 +105,9 @@ const MotherboardForm = ({ handlePartEvaluation }) => {
     return(
         <div className='component-form'>
             <p className='component-form-input-label'>Ram Slots: {getRamSlotsLabelText(ramSlots)}</p>
-            <Slider min={1} max={8} valueLabelDisplay='auto' valueLabelFormat={getRamSlotsLabelText} value={ramSlots} onChange={(e, newValue) => setRamSlots(newValue)}></Slider>
+            <Slider min={2} max={16} step={2} valueLabelDisplay='auto' valueLabelFormat={getRamSlotsLabelText} value={ramSlots} onChange={(e, newValue) => setRamSlots(newValue)}></Slider>
             <p className='component-form-input-label'>Max Ram: {getMaxRamLabelText(maxRam)}</p>
-            <Slider min={1000000000} max={256000000000} valueLabelDisplay='auto' valueLabelFormat={getMaxRamLabelText} value={maxRam} onChange={(e, newValue) => setMaxRam(newValue)}></Slider>
+            <Slider min={2} max={9} step={1} scale={calcMaxRam} valueLabelDisplay='auto' valueLabelFormat={getMaxRamLabelText} value={maxRam} onChange={(e, newValue) => setMaxRam(newValue)}></Slider>
             <OptionsDropdown options={SOCKETS} optionsType={'Socket'} currentOptions={socket} setCurrentOption={setSocket}/>
             <OptionsDropdown options={FORM_FACTORS} optionsType={'Form Factor'} currentOptions={formFactor} setCurrentOption={setFormFactor}/>
             <button className='component-form-submit-button' onClick={motherboardEvaluate}>Evaluate</button>
