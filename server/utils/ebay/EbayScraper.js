@@ -15,13 +15,13 @@ const ebayDateToJSDate = (ebay_date) => {
     return new Date(`${month} ${day}, ${year}`)
 }
 
-const getRecentlySoldListings = async (keyword, page_limit) => {
+const getRecentlySoldListings = async (keyword, day_limit, listing_limit) => {
     let page_number = 1
-    const THREE_MONTHS_IN_MILLISECONDS = 3 * 30 * 24 * 60 * 60 * 1000
+    const TIME_LIMIT_IN_MILLISECONDS = day_limit * 24 * 60 * 60 * 1000
 
     let recentlySoldListingsData = []
-
-    while (page_number <= page_limit) {
+    let scrape = true
+    while (scrape) {
         const url = `https://www.ebay.com/sch/i.html?_nkw=${keyword}&_sacat=0&_from=R40&rt=nc&LH_Sold=1&LH_Complete=1&_pgn=${page_number}`
         const response = await fetch(url, {method: 'GET',})
         const html_text = await response.text()
@@ -31,8 +31,11 @@ const getRecentlySoldListings = async (keyword, page_limit) => {
         const next_page_btn = soup.findAll('a', 'pagination__next')
 
         const recentlySoldListings = soup.findAll('div', 's-item__info')?.slice(2)
-        
-        recentlySoldListings?.forEach( (listing) => {
+        recentlySoldListings?.every( (listing) => {
+            if (recentlySoldListingsData.length >= listing_limit) {
+                scrape = false
+                return false
+            }
             const title = listing?.find('div', 's-item__title')?.find('span')?.text
             const ebay_sold_date = listing?.find('span', 's-item__caption--signal')?.text
             const ebay_sold_price = listing?.find('span', 's-item__price')?.text
@@ -46,16 +49,19 @@ const getRecentlySoldListings = async (keyword, page_limit) => {
             }
             // Skip listing if it's more than 3 months old
             // If less than a full page of listings, could be related listings, only include title matches
-            if (!(ebayDateToJSDate(ebay_sold_date) < ((new Date()).getTime() - THREE_MONTHS_IN_MILLISECONDS))
-                && !(isNaN(listing_data.sold_price))
-                && (next_page_btn.length > 0 || title.includes(keyword))) {
+            if (!(ebayDateToJSDate(ebay_sold_date) < ((new Date()).getTime() - TIME_LIMIT_IN_MILLISECONDS))
+                    && !(isNaN(listing_data.sold_price))
+                    && (next_page_btn.length > 0 || title.includes(keyword))) {
                 recentlySoldListingsData.push(listing_data)
+                return true
             }
         })
 
-        if (next_page_btn.length === 0) {
+        if (!scrape) {
+            console.log(`Hit listing limit for ${keyword}, pages pulled: ${page_number}, listings pulled: ${recentlySoldListingsData.length}`)
+        } else if (next_page_btn.length === 0) {
             console.log(`Ran out of pages for ${keyword}, pages pulled: ${page_number}, listings pulled: ${recentlySoldListingsData.length}`)
-            break
+            scrape = false
         }
 
         page_number++

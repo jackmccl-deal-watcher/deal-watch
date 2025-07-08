@@ -52,8 +52,10 @@ const removeInterPriceOutliers = (comparable_parts) => {
 }
 
 const getListingData = async (part) => {
-    const PAGE_LIMIT = 5
-    const recentlySoldListings = await getRecentlySoldListings(part.model, PAGE_LIMIT)
+    const DAY_LIMIT = 90
+    const LISTING_LIMIT = 100
+    const keyword = part.brand + ' ' + part.model
+    const recentlySoldListings = await getRecentlySoldListings(keyword, DAY_LIMIT, LISTING_LIMIT)
     if (recentlySoldListings.length === 0) {
         return []
     }
