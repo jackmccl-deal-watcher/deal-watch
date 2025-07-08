@@ -7,6 +7,10 @@ import Select from '@mui/material/Select';
 import CPUForm from "./ComponentForms/CPUForm";
 import VideoCardForm from './ComponentForms/VideoCardForm';
 import MotherboardForm from './ComponentForms/MotherboardForm';
+import MemoryForm from './ComponentForms/MemoryForm';
+import HardDriveForm from './ComponentForms/HardDriveForm';
+import PowerSupplyForm from './ComponentForms/PowerSupplyForm';
+import CaseForm from './ComponentForms/CaseForm';
 
 const ComponentForm = ({ handlePartEvaluation }) => {
     const [componentType, setComponentType] = useState('cpu')
@@ -19,13 +23,13 @@ const ComponentForm = ({ handlePartEvaluation }) => {
             case ComponentTypes.MOTHERBOARD:
                 return <MotherboardForm handlePartEvaluation={handlePartEvaluation}/>
             case ComponentTypes.MEMORY:
-                return 
+                return <MemoryForm handlePartEvaluation={handlePartEvaluation}/>
             case ComponentTypes.HARD_DRIVE:
-                return 
+                return <HardDriveForm handlePartEvaluation={handlePartEvaluation}/>
             case ComponentTypes.POWER_SUPPLY:
-                return 
+                return <PowerSupplyForm handlePartEvaluation={handlePartEvaluation}/>
             case ComponentTypes.CASE:
-                return
+                return <CaseForm handlePartEvaluation={handlePartEvaluation}/>
         }
     }
 
