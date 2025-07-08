@@ -22,7 +22,6 @@ const calcQuartileInfo = (listings) => {
 
 const removeIntraPriceOutliers = (listings) => {
     const { lower_quartile_price, upper_quartile_price, interquartile_range } = calcQuartileInfo(listings)
-
     const listingsOutliersRemoved = listings.filter((listing) => {
         return !(listing.sold_price > upper_quartile_price + 1.5 * interquartile_range || listing.sold_price < lower_quartile_price - 1.5 * interquartile_range)
     })

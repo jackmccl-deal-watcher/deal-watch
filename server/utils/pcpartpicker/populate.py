@@ -28,6 +28,9 @@ def populate_cpus():
             "cores": cpu.cores,
             "base_clock": cpu.base_clock.cycles,
             "multithreading": cpu.multithreading,
+            "thirtyDayAverage": 0,
+            "thirtyDayTime": 0,
+            "thirtyDayListingCount": 0,
         }
 
         # Uses base_clock as boost_clock if no boost_clock
@@ -56,10 +59,13 @@ def populate_video_cards():
     for videocard in videocard_data:
         videocard_doc = {
             "type": "video-card",
-            "model": videocard.model,
+            "model": videocard.model + ' ' + videocard.chipset,
             "brand": videocard.brand,
             "chipset": videocard.chipset,
             "vram": videocard.vram.total,
+            "thirtyDayAverage": 0,
+            "thirtyDayTime": 0,
+            "thirtyDayListingCount": 0,
         }
 
         # Set base_clock to 0 if not given
@@ -95,6 +101,9 @@ def populate_motherboards():
             "form_factor": motherboard.form_factor,
             "ram_slots": motherboard.ram_slots,
             "max_ram": motherboard.max_ram.total,
+            "thirtyDayAverage": 0,
+            "thirtyDayTime": 0,
+            "thirtyDayListingCount": 0,
         }
 
         motherboard_count += 1
@@ -121,6 +130,9 @@ def populate_memorys():
             "first_word_latency": memory.first_word_latency,
             "cas_timing": memory.cas_timing,
             "price_per_gb": float(memory.price_per_gb.amount),
+            "thirtyDayAverage": 0,
+            "thirtyDayTime": 0,
+            "thirtyDayListingCount": 0,
         }
 
         memory_count += 1
@@ -144,6 +156,9 @@ def populate_hard_drives():
             "storage_type": hard_drive.storage_type,
             "form_factor": hard_drive.form_factor,
             "interface": hard_drive.interface,
+            "thirtyDayAverage": 0,
+            "thirtyDayTime": 0,
+            "thirtyDayListingCount": 0,
         }
 
         if hard_drive.platter_rpm:
@@ -177,6 +192,9 @@ def populate_power_supplys():
             "efficiency_rating": power_supply.efficiency_rating,
             "wattage": power_supply.wattage,
             "modular": power_supply.modular,
+            "thirtyDayAverage": 0,
+            "thirtyDayTime": 0,
+            "thirtyDayListingCount": 0,
         }
 
         power_supply_count += 1
@@ -199,6 +217,9 @@ def populate_cases():
             "color": case.color,
             "external_bays": case.external_bays,
             "internal_bays": case.internal_bays,
+            "thirtyDayAverage": 0,
+            "thirtyDayTime": 0,
+            "thirtyDayListingCount": 0,
         }
 
         if case.psu_wattage:
