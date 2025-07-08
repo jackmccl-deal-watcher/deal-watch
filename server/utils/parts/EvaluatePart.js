@@ -3,6 +3,10 @@ const { getRecentlySoldListings } = require('../ebay/EbayScraper.js')
 const { getComparabilityScores } = require('./ComparabilityScores.js')
 const { getComparableParts } = require('./ComparableParts.js')
 
+const MINIMUM_LISTINGS = 10
+const LISTING_DAY_AGE_LIMIT = 90
+const MAX_LISTING_LIMIT = 500
+
 const calcQuartileInfo = (listings) => {
     const listingsSortedByPrice = listings.sort((a, b) => {
         return a.sold_price - b.sold_price
@@ -51,10 +55,8 @@ const removeInterPriceOutliers = (comparable_parts) => {
 }
 
 const getListingData = async (part) => {
-    const DAY_LIMIT = 90
-    const MAX_LISTING_LIMIT = 500
     const keyword = part.brand + ' ' + part.model
-    const recentlySoldListings = await getRecentlySoldListings(keyword, DAY_LIMIT, MAX_LISTING_LIMIT)
+    const recentlySoldListings = await getRecentlySoldListings(keyword, LISTING_DAY_AGE_LIMIT, MAX_LISTING_LIMIT)
     if (recentlySoldListings.length === 0) {
         return []
     }
@@ -88,7 +90,6 @@ const grabNMostComparableParts = (comparable_parts, N) => {
 }
 
 const evaluatePart = async (part) => {
-    const MINIMUM_LISTINGS = 10
     const comparableParts = await getComparableParts(part)
     if (!comparableParts) {
         throw new PartEvaluationError("No comparable parts found!")

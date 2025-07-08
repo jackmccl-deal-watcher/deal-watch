@@ -10,9 +10,10 @@ const { removeIntraPriceOutliers } = require('../parts/EvaluatePart.js')
 
 const MODELS = [CPUModel, VideoCardModel, MotherboardModel, MemoryModel, HardDriveModel, PowerSupplyModel, CaseModel]
 
+const LISTING_DAY_AGE_LIMIT = 30
+const MAX_LISTING_LIMIT = 100
+
 const populatePrices = async (models, prev_listing_limit) => {
-    const DAY_LIMIT = 30
-    const MAX_LISTING_LIMIT = 100
     for(let model of models) {
         console.log(`Populating ${model.collection.collectionName}`)
         let part_count = 0
@@ -27,7 +28,7 @@ const populatePrices = async (models, prev_listing_limit) => {
             }
             part_count += 1
             const keyword = part.brand + ' ' + part.model
-            const listingData = await getRecentlySoldListings(keyword, DAY_LIMIT, MAX_LISTING_LIMIT)
+            const listingData = await getRecentlySoldListings(keyword, LISTING_DAY_AGE_LIMIT, MAX_LISTING_LIMIT)
             if (listingData.length < 4) {
                 part.thirtyDayAverage = -1
                 part.thirtyDayTime = new Date().getTime()
