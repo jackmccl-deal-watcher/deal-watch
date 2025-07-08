@@ -1,4 +1,3 @@
-const mongoose = require('../../Mongoose.js')
 const CPUModel = require('../../models/part_models/CPUModel.js')
 const VideoCardModel = require('../../models/part_models/VideoCardModel.js')
 const MotherboardModel = require('../../models/part_models/MotherboardModel.js')
@@ -7,12 +6,13 @@ const HardDriveModel = require('../../models/part_models/HardDriveModel.js')
 const PowerSupplyModel = require('../../models/part_models/PowerSupplyModel.js')
 const CaseModel = require('../../models/part_models/CaseModel.js')
 const { getRecentlySoldListings } = require('../ebay/EbayScraper.js')
-const { model } = require('mongoose')
 const { removeIntraPriceOutliers } = require('../parts/EvaluatePart.js')
 
 const MODELS = [CPUModel, VideoCardModel, MotherboardModel, MemoryModel, HardDriveModel, PowerSupplyModel, CaseModel]
 
-const populatePrices = async (models, listing_limit) => {
+const populatePrices = async (models, prev_listing_limit) => {
+    const DAY_LIMIT = 30
+    const MAX_LISTING_LIMIT = 100
     for(let model of models) {
         console.log(`Populating ${model.collection.collectionName}`)
         let part_count = 0
@@ -22,14 +22,12 @@ const populatePrices = async (models, listing_limit) => {
             if(part.thirtyDayTime !== 0) {
                 continue
             }
-            if (!(part.thirtyDayListingCount >= listing_limit)) {
+            if (!(part.thirtyDayListingCount >= prev_listing_limit)) {
                 continue
             }
             part_count += 1
-            const DAY_LIMIT = 30
-            const LISTING_LIMIT = 100
             const keyword = part.brand + ' ' + part.model
-            const listingData = await getRecentlySoldListings(keyword, DAY_LIMIT, LISTING_LIMIT)
+            const listingData = await getRecentlySoldListings(keyword, DAY_LIMIT, MAX_LISTING_LIMIT)
             if (listingData.length < 4) {
                 part.thirtyDayAverage = -1
                 part.thirtyDayTime = new Date().getTime()
@@ -40,12 +38,12 @@ const populatePrices = async (models, listing_limit) => {
             const listingDataPriceOutliersRemoved = removeIntraPriceOutliers(listingData)
             let price_sum = 0
             let price_count = 0
-            listingDataPriceOutliersRemoved.map( (listing) => {
+            listingDataPriceOutliersRemoved.forEach( (listing) => {
                 price_sum += listing.sold_price
                 price_count += 1
             })
             let thirtyDayAverage = 0
-            if (!(listingDataPriceOutliersRemoved.length === 0)) {
+            if (listingDataPriceOutliersRemoved.length > 0) {
                 thirtyDayAverage = Math.round(price_sum / price_count * 100) / 100
             }
             part.thirtyDayAverage = thirtyDayAverage

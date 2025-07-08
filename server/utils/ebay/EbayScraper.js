@@ -29,7 +29,7 @@ const getRecentlySoldListings = async (keyword, day_limit, listing_limit) => {
         const soup = new JSSoup(html_text)
 
         const next_page_btn = soup.findAll('a', 'pagination__next')
-
+        // First two s-item__info class divs are used to display options at top of listings page
         const recentlySoldListings = soup.findAll('div', 's-item__info')?.slice(2)
         recentlySoldListings?.every( (listing) => {
             if (recentlySoldListingsData.length >= listing_limit) {
