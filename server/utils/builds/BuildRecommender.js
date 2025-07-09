@@ -172,11 +172,6 @@ const generalComparator = (a, b, componentAllocations, component) => {
                     }
         }
     }
-    // if ((a.model === 'speed' || a.model === 'speed') || (b.model === 'speed' || b.model === 'speed')) {
-    //     console.log("a:", a)
-    //     console.log("b:", b)
-    //     console.log("rating:", rating)
-    // }
     return rating
 }
 

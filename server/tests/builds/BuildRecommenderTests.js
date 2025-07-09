@@ -7,7 +7,6 @@ const numberAllocationTester = (test_allocations, parts, component_type) => {
         const allocations = test_allocations[key]
         const copyParts = parts
         copyParts.sort((a, b) => generalComparator(a, b, allocations, component_type))
-        console.log(copyParts)
         if (copyParts[copyParts.length-1].model === key) {
             console.log(`test_${component_type}_builds::${key}_allocation - Passed`)
         } else {
@@ -135,9 +134,6 @@ const calcSlidingQualityRatingTester = (allocations, ratings, parts, component_t
             while (check_index < part_index) {
                 const check_rating = partsCopy[check_index][spec_type]
                 const check_rating_index = ratings.indexOf(check_rating)
-                console.log("rating index:", rating_index)
-                console.log("part index:", part_index)
-                console.log("check index:", check_rating_index, '\n')
                 if (check_rating_index > part_rating_index) {
                     throw new TestError(`test_${component_type}_builds::${spec_type}_allocation::${ratings[rating_index]} - Failed`)
                 }
