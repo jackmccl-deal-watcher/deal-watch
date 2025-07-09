@@ -1,6 +1,14 @@
 const { TestError } = require("../../errors/TestError")
 const { generalComparator } = require("../../utils/builds/BuildRecommender")
+const { MODULE_TYPES, STORAGE_TYPES, MODULARITIES, EFFICIENCY_RATINGS } = require('../../utils/builds/BuildRecommender')
 const { userAllocations500, test_cpus, test_videocards, test_motherboards, test_memorys, test_hard_drives, test_power_supplys, test_cases } = require("./test_builds")
+
+const RATINGS = {
+    module_type: MODULE_TYPES,
+    storage_type: STORAGE_TYPES,
+    modular: MODULARITIES,
+    efficiency_rating: EFFICIENCY_RATINGS,
+}
 
 const numberAllocationTester = (test_allocations, parts, component_type) => {
     for (let spec_type of Object.keys(test_allocations)) {
@@ -12,6 +20,29 @@ const numberAllocationTester = (test_allocations, parts, component_type) => {
         } else {
             throw new TestError(`test_${component_type}_builds::${spec_type}_allocation - Failed`)
         }
+    }
+}
+
+const calcSlidingQualityRatingTester = (test_allocations, test_ratings, parts, component_type) => {
+    for (let spec_type of Object.keys(test_allocations)) {
+        const allocations = test_allocations[spec_type]
+        const ratings = test_ratings[spec_type]
+        const copyParts = parts
+        copyParts.sort((a, b) => generalComparator(a, b, allocations, component_type))
+        for (let part_index in copyParts) {
+            part_index = Number(part_index)
+            if(part_index === 0) {
+                continue
+            }
+            const part_rating = copyParts[part_index][spec_type]
+            const part_rating_index = ratings.indexOf(part_rating)
+            const prev_part_rating = copyParts[part_index-1][spec_type]
+            const prev_part_rating_index = ratings.indexOf(prev_part_rating)
+            if (prev_part_rating_index > part_rating_index) {
+                throw new TestError(`test_${component_type}_builds::${spec_type}_allocation - Failed`)
+            }
+        }
+        console.log(`test_${component_type}_builds::${spec_type}_allocation - Passed`)
     }
 }
 
@@ -122,35 +153,6 @@ const test_motherboard_builds = () => {
     numberAllocationTester(motherboard_number_test_allocations, test_motherboards, 'motherboard')
 }
 
-const calcSlidingQualityRatingTester = (test_allocations, ratings, parts, component_type) => {
-    for (let spec_type of Object.keys(test_allocations)) {
-        const allocations = test_allocations[spec_type]
-        const copyParts = parts
-        copyParts.sort((a, b) => generalComparator(a, b, allocations, component_type))
-        for (let part_index in copyParts) {
-            part_index = Number(part_index)
-            if(part_index === 0) {
-                continue
-            }
-            const part_rating = copyParts[part_index][spec_type]
-            const part_rating_index = ratings.indexOf(part_rating)
-            const prev_part_rating = copyParts[part_index-1][spec_type]
-            const prev_part_rating_index = ratings.indexOf(prev_part_rating)
-            if (prev_part_rating_index > part_rating_index) {
-                throw new TestError(`test_${component_type}_builds::${spec_type}_allocation - Failed`)
-            }
-        }
-        console.log(`test_${component_type}_builds::${spec_type}_allocation - Passed`)
-    }
-}
-
-const MODULE_TYPES = [
-    "DDR",
-    "DDR2", 
-    "DDR3", 
-    "DDR4",
-]
-
 const test_memory_builds = () => {
     console.log("Starting test_memory_builds tests...")
     const memory_number_test_allocations = {
@@ -182,9 +184,69 @@ const test_memory_builds = () => {
             },
         },
     }
-    calcSlidingQualityRatingTester(memory_module_type_test_allocations, MODULE_TYPES, test_memorys, 'memory')
+    calcSlidingQualityRatingTester(memory_module_type_test_allocations, RATINGS, test_memorys, 'memory')
 }
 
+const test_hard_drive_builds = () => {
+    console.log("Starting test_hard_drive_builds tests...")
+    const hard_drive_number_test_allocations = {
+        capacity: {
+            'hard-drive': {
+                allocation: 0.1,
+                capacity: .6,
+                storage_type: 0.4,
+            },
+        },
+    }
+    numberAllocationTester(hard_drive_number_test_allocations, test_hard_drives, 'hard-drive')
+    const hard_drive_storage_type_test_allocations = {
+        storage_type: {
+            'hard-drive': {
+                allocation: 0.1,
+                capacity: .4,
+                storage_type: 0.6,
+            },
+        },
+    }
+    calcSlidingQualityRatingTester(hard_drive_storage_type_test_allocations, RATINGS, test_hard_drives, 'hard-drive')
+}
+
+const test_power_supply_builds = () => {
+    console.log("Starting test_power_supply_builds tests...")
+    const power_supply_number_test_allocations = {
+        wattage: {
+            'power-supply': {
+                allocation: 0.1,
+                wattage: .5,
+                efficiency_rating: 0.25,
+                form_factor: 'ATX',
+                modular: 0.25,
+            },
+        },
+    }
+    numberAllocationTester(power_supply_number_test_allocations, test_power_supplys, 'power-supply')
+    const power_supply_efficiency_rating_and_modular_test_allocations = {
+        efficiency_rating: {
+            'power-supply': {
+                allocation: 0.1,
+                wattage: .25,
+                efficiency_rating: 0.5,
+                form_factor: 'ATX',
+                modular: 0.25,
+            },
+        },
+        modular: {
+            'power-supply': {
+                allocation: 0.1,
+                wattage: .25,
+                efficiency_rating: 0.25,
+                form_factor: 'ATX',
+                modular: 0.5,
+            },
+        },
+    }
+    calcSlidingQualityRatingTester(power_supply_efficiency_rating_and_modular_test_allocations, RATINGS, test_power_supplys, 'power-supply')
+}
 
 
 const running_tests = async () => {
@@ -193,6 +255,8 @@ const running_tests = async () => {
         test_videocard_builds()
         test_motherboard_builds()
         test_memory_builds()
+        test_hard_drive_builds()
+        test_power_supply_builds()
     } catch (error) {
         console.error(error)
     }

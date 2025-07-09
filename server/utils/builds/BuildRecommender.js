@@ -123,13 +123,16 @@ const calcSlidingQualityRating = (a, b, spec_allocation, quality_levels, spec_ke
 
     let a_key_value_quality_index = quality_levels.indexOf(a[spec_key])
     let b_key_value_quality_index = quality_levels.indexOf(b[spec_key])
+    // console.log(a[spec_key])
+    // console.log(quality_levels)
+    // console.log(quality_levels.indexOf(a[spec_key]))
 
     a_key_value_rating += a_key_value_quality_index / quality_levels.length
     b_key_value_rating += b_key_value_quality_index / quality_levels.length
 
     const total_key_value_rating = a_key_value_rating + b_key_value_rating
     return Math.sign(a_key_value_rating - b_key_value_rating) * spec_allocation * (2/3) 
-                            + Math.min(spec_allocation * (a_key_value_rating - b_key_value_rating) / total_key_value_rating, 1/3)
+                            + spec_allocation * (1/3) * (a_key_value_rating - b_key_value_rating) / total_key_value_rating
 }
 
 const generalComparator = (a, b, componentAllocations, component) => {
@@ -159,7 +162,7 @@ const generalComparator = (a, b, componentAllocations, component) => {
                     case ('number'): 
                         const key_value_total = a[key] + b[key]
                         rating += Math.sign(a[key] - b[key]) * allocation * (2/3) 
-                            + Math.min(allocation * (a[key] - b[key]) / key_value_total, 1/3)
+                            +allocation * (1/3) * (a[key] - b[key]) / key_value_total
                         break
                     case ('string'):
                         // form_factor or socket
@@ -187,4 +190,4 @@ const recommendBuilds = async (userAllocations) => {
 
 recommendBuilds(userAllocations500)
 
-module.exports = { recommendBuilds, generalComparator }
+module.exports = { recommendBuilds, generalComparator, MODULARITIES, MODULE_TYPES, EFFICIENCY_RATINGS, STORAGE_TYPES }
