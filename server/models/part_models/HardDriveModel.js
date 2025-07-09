@@ -12,6 +12,7 @@ const HardDriveSchema = new mongoose.Schema({
     thirtyDayAverage: Number,
     thirtyDayTime: Number,
     thirtyDayListingCount: Number,
+    pcppPrice: Number,
 })
 
 const HardDriveModel = mongoose.model('HardDrive', HardDriveSchema, 'hard-drive')

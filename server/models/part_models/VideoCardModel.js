@@ -11,6 +11,7 @@ const VideoCardSchema = new mongoose.Schema({
     thirtyDayAverage: Number,
     thirtyDayTime: Number,
     thirtyDayListingCount: Number,
+    pcppPrice: Number,
 })
 
 const VideoCardModel = mongoose.model('VideoCard', VideoCardSchema, 'video-card')

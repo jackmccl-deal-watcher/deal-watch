@@ -14,7 +14,7 @@ def remakeCollection(type):
 
 def populate_cpus():
     api = API()
-    cpu_data = api.retrieve("cpu")["cpu"]
+    cpu_data = api.retrieve("cpu", force_refresh=True)["cpu"]
 
     cpu_collection = remakeCollection("cpu")
     
@@ -31,6 +31,7 @@ def populate_cpus():
             "thirtyDayAverage": 0,
             "thirtyDayTime": 0,
             "thirtyDayListingCount": 0,
+            "pcppPrice": float(cpu.price.amount),
         }
 
         # Uses base_clock as boost_clock if no boost_clock
@@ -50,7 +51,7 @@ def populate_cpus():
 
 def populate_video_cards():
     api = API()
-    videocard_data = api.retrieve("video-card")["video-card"]
+    videocard_data = api.retrieve("video-card", force_refresh=True)["video-card"]
 
     videocard_collection = remakeCollection("video-card")
     
@@ -66,6 +67,7 @@ def populate_video_cards():
             "thirtyDayAverage": 0,
             "thirtyDayTime": 0,
             "thirtyDayListingCount": 0,
+            "pcppPrice": float(videocard.price.amount),
         }
 
         # Set base_clock to 0 if not given
@@ -86,7 +88,7 @@ def populate_video_cards():
 
 def populate_motherboards():
     api = API()
-    motherboard_data = api.retrieve("motherboard")["motherboard"]
+    motherboard_data = api.retrieve("motherboard", force_refresh=True)["motherboard"]
 
     motherboard_collection = remakeCollection("motherboard")
     
@@ -104,6 +106,7 @@ def populate_motherboards():
             "thirtyDayAverage": 0,
             "thirtyDayTime": 0,
             "thirtyDayListingCount": 0,
+            "pcppPrice": float(motherboard.price.amount),
         }
 
         motherboard_count += 1
@@ -112,7 +115,7 @@ def populate_motherboards():
 
 def populate_memorys():
     api = API()
-    memory_data = api.retrieve("memory")["memory"]
+    memory_data = api.retrieve("memory", force_refresh=True)["memory"]
 
     memory_collection = remakeCollection("memory")
     memory_count = 0
@@ -133,6 +136,7 @@ def populate_memorys():
             "thirtyDayAverage": 0,
             "thirtyDayTime": 0,
             "thirtyDayListingCount": 0,
+            "pcppPrice": float(memory.price.amount),
         }
 
         memory_count += 1
@@ -141,7 +145,7 @@ def populate_memorys():
 
 def populate_hard_drives():
     api = API()
-    hard_drive_data = api.retrieve("internal-hard-drive")["internal-hard-drive"]
+    hard_drive_data = api.retrieve("internal-hard-drive", force_refresh=True)["internal-hard-drive"]
 
     hard_drive_collection = remakeCollection("hard-drive")
     hard_drive_count = 0
@@ -159,6 +163,7 @@ def populate_hard_drives():
             "thirtyDayAverage": 0,
             "thirtyDayTime": 0,
             "thirtyDayListingCount": 0,
+            "pcppPrice": float(hard_drive.price.amount),
         }
 
         if hard_drive.platter_rpm:
@@ -178,7 +183,7 @@ def populate_hard_drives():
 
 def populate_power_supplys():
     api = API()
-    power_supply_data = api.retrieve("power-supply")["power-supply"]
+    power_supply_data = api.retrieve("power-supply", force_refresh=True)["power-supply"]
 
     power_supply_collection = remakeCollection("power-supply")
     power_supply_count = 0
@@ -195,6 +200,7 @@ def populate_power_supplys():
             "thirtyDayAverage": 0,
             "thirtyDayTime": 0,
             "thirtyDayListingCount": 0,
+            "pcppPrice": float(power_supply.price.amount),
         }
 
         power_supply_count += 1
@@ -203,7 +209,7 @@ def populate_power_supplys():
 
 def populate_cases():
     api = API()
-    case_data = api.retrieve("case")["case"]
+    case_data = api.retrieve("case", force_refresh=True)["case"]
 
     case_collection = remakeCollection("case")
     case_count = 0
@@ -220,6 +226,7 @@ def populate_cases():
             "thirtyDayAverage": 0,
             "thirtyDayTime": 0,
             "thirtyDayListingCount": 0,
+            "pcppPrice": float(case.price.amount),
         }
 
         if case.psu_wattage:

@@ -13,6 +13,7 @@ const CaseSchema = new mongoose.Schema({
     thirtyDayAverage: Number,
     thirtyDayTime: Number,
     thirtyDayListingCount: Number,
+    pcppPrice: Number,
 })
 
 const CaseModel = mongoose.model('Case', CaseSchema, 'case')
