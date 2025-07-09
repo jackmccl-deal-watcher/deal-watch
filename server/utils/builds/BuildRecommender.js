@@ -143,7 +143,6 @@ const recommendBuilds = async (userAllocations) => {
     for (let [component_key, components] of Object.entries(partsInBudget)) {
         rankedComponents[component_key] = components.sort((a, b) => generalComparator(a, b, userAllocations, component_key))
     }
-    console.log(rankedComponents['case'])
 }
 
 recommendBuilds(userAllocations500)
