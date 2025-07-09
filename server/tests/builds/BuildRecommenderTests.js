@@ -3,14 +3,15 @@ const { generalComparator } = require("../../utils/builds/BuildRecommender")
 const { userAllocations500, test_cpus, test_videocards, test_motherboards, test_memorys, test_hard_drives, test_power_supplys, test_cases } = require("./test_builds")
 
 const numberAllocationTester = (test_allocations, parts, component_type) => {
-    for (let key of Object.keys(test_allocations)) {
-        const allocations = test_allocations[key]
+    for (let spec_type of Object.keys(test_allocations)) {
+        const allocations = test_allocations[spec_type]
         const copyParts = parts
         copyParts.sort((a, b) => generalComparator(a, b, allocations, component_type))
-        if (copyParts[copyParts.length-1].model === key) {
-            console.log(`test_${component_type}_builds::${key}_allocation - Passed`)
+        console.log(copyParts)
+        if (copyParts[copyParts.length-1].model === spec_type) {
+            console.log(`test_${component_type}_builds::${spec_type}_allocation - Passed`)
         } else {
-            throw new TestError(`test_${component_type}_builds::${key}_allocation - Failed`)
+            throw new TestError(`test_${component_type}_builds::${spec_type}_allocation - Failed`)
         }
     }
 }
@@ -122,26 +123,27 @@ const test_motherboard_builds = () => {
     numberAllocationTester(motherboard_number_test_allocations, test_motherboards, 'motherboard')
 }
 
-const calcSlidingQualityRatingTester = (allocations, ratings, parts, component_type) => {
-    const spec_type = allocations['spec_type']
-    for (let rating_index in ratings) {
-        const partsCopy = [...parts]
-        partsCopy.sort((a, b) => generalComparator(a, b, allocations[ratings[rating_index]], component_type))
-        for (let part_index in partsCopy) {
-            const part_rating = partsCopy[part_index][spec_type]
+const calcSlidingQualityRatingTester = (test_allocations, ratings, parts, component_type) => {
+    for (let spec_type of Object.keys(test_allocations)) {
+        const allocations = test_allocations[spec_type]
+        const copyParts = parts
+        copyParts.sort((a, b) => generalComparator(a, b, allocations, component_type))
+        console.log(copyParts)
+        for (let part_index in copyParts) {
+            part_index = Number(part_index)
+            if(part_index === 0) {
+                continue
+            }
+            const part_rating = copyParts[part_index][spec_type]
             const part_rating_index = ratings.indexOf(part_rating)
-            let check_index = 0
-            while (check_index < part_index) {
-                const check_rating = partsCopy[check_index][spec_type]
-                const check_rating_index = ratings.indexOf(check_rating)
-                if (check_rating_index > part_rating_index) {
-                    throw new TestError(`test_${component_type}_builds::${spec_type}_allocation::${ratings[rating_index]} - Failed`)
-                }
-                check_index += 1
+            const prev_part_rating = copyParts[part_index-1][spec_type]
+            const prev_part_rating_index = ratings.indexOf(prev_part_rating)
+            if (prev_part_rating_index > part_rating_index) {
+                throw new TestError(`test_${component_type}_builds::${spec_type}_allocation - Failed`)
             }
         }
-        console.log(`test_${component_type}_builds::${spec_type}_allocation::${ratings[rating_index]} - Passed`)
     }
+    console.log(`test_${component_type}_builds::${spec_type}_allocation::${ratings[rating_index]} - Passed`)
 }
 
 const MODULE_TYPES = [
@@ -173,8 +175,7 @@ const test_memory_builds = () => {
     }
     numberAllocationTester(memory_number_test_allocations, test_memorys, 'memory')
     const memory_module_type_test_allocations = {
-        spec_type: 'module_type',
-        DDR: {
+        module_type: {
             memory: {
                 allocation: 0.1,
                 speed: 0.25,
