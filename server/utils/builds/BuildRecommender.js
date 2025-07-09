@@ -104,12 +104,12 @@ const calcColorRating = (a, b, color_allocation_dict) => {
         if (a['color'] === preferenceColors[color_index]) {
             a_color_rating += preferenceColors.length - color_index
         } else if (a['color'].includes(preferenceColors[color_index]) || preferenceColors[color_index].includes(a['color'])) {
-            a_color_rating += preferenceColors.length - color_index / 2
+            a_color_rating += (preferenceColors.length - color_index) / 2
         }
         if (b['color'] === preferenceColors[color_index]) {
             b_color_rating += preferenceColors.length - color_index
         } else if (b['color'].includes(preferenceColors[color_index]) || preferenceColors[color_index].includes(b['color'])) {
-            b_color_rating += preferenceColors.length - color_index / 2
+            b_color_rating += (preferenceColors.length - color_index) / 2
         }
     }
     const colorAllocation = color_allocation_dict['allocation']
@@ -128,7 +128,8 @@ const calcSlidingQualityRating = (a, b, spec_allocation, quality_levels, spec_ke
     b_key_value_rating += b_key_value_quality_index / quality_levels.length
 
     const total_key_value_rating = a_key_value_rating + b_key_value_rating
-    return spec_allocation * (a_key_value_rating - b_key_value_rating) / total_key_value_rating
+    return Math.sign(a_key_value_rating - b_key_value_rating) * spec_allocation * (2/3) 
+                            + Math.min(spec_allocation * (a_key_value_rating - b_key_value_rating) / total_key_value_rating, 1/3)
 }
 
 const generalComparator = (a, b, componentAllocations, component) => {

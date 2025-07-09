@@ -7,7 +7,6 @@ const numberAllocationTester = (test_allocations, parts, component_type) => {
         const allocations = test_allocations[spec_type]
         const copyParts = parts
         copyParts.sort((a, b) => generalComparator(a, b, allocations, component_type))
-        console.log(copyParts)
         if (copyParts[copyParts.length-1].model === spec_type) {
             console.log(`test_${component_type}_builds::${spec_type}_allocation - Passed`)
         } else {
@@ -128,7 +127,6 @@ const calcSlidingQualityRatingTester = (test_allocations, ratings, parts, compon
         const allocations = test_allocations[spec_type]
         const copyParts = parts
         copyParts.sort((a, b) => generalComparator(a, b, allocations, component_type))
-        console.log(copyParts)
         for (let part_index in copyParts) {
             part_index = Number(part_index)
             if(part_index === 0) {
@@ -142,8 +140,8 @@ const calcSlidingQualityRatingTester = (test_allocations, ratings, parts, compon
                 throw new TestError(`test_${component_type}_builds::${spec_type}_allocation - Failed`)
             }
         }
+        console.log(`test_${component_type}_builds::${spec_type}_allocation - Passed`)
     }
-    console.log(`test_${component_type}_builds::${spec_type}_allocation::${ratings[rating_index]} - Passed`)
 }
 
 const MODULE_TYPES = [

@@ -44,7 +44,7 @@ const userAllocations500 = {
             'internal-bays': 0.5,
             color: {
                 allocation: 0.5,
-                color: ['Black'],
+                colors: ['Black'],
             },
         },
     }
