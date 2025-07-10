@@ -1,5 +1,6 @@
-const { test_cpu } = require("../../tests/test_parts/test_cpu")
+const { userAllocations500 } = require("../../tests/builds/test_builds")
 const { getListings } = require("../../utils/ebay/EbayUtils")
+const { recommendBuild, MODE } = require("./BuildRecommender")
 
 const LISTING_LIMIT = 100
 
@@ -13,7 +14,7 @@ const getPriceRange = (part) => {
     return { priceRangeLow: (price - price * 0.1), priceRangeHigh: (price + price * 0.1) }
 }
 
-const getListingLink = async (part) => {
+const getPartListing = async (part) => {
     const keyword = encodeURI(`${part.brand} ${part.model}`)
     const listingsData = await getListings(keyword, LISTING_LIMIT)
     if (listingsData['itemSummaries'].length === 0) {
@@ -35,6 +36,17 @@ const getListingLink = async (part) => {
     }
 }
 
-getListingLink(test_cpu)
+const addPartListingsToBuild = async (build) => {
+    const buildWithPartListings = JSON.parse(JSON.stringify(build))
+    for (let part of Object.values(buildWithPartListings)) {
+        const listing = await getPartListing(part)
+        if (listing) {
+            part['listing'] = listing
+        } else {
+            part['listing'] = 'No listing found for part'
+        }
+    }
+    return buildWithPartListings
+}
 
-module.exports = getListingLink
+module.exports = { addPartListingsToBuild }

@@ -6,7 +6,7 @@ const HardDriveModel = require('../../models/part_models/HardDriveModel.js')
 const PowerSupplyModel = require('../../models/part_models/PowerSupplyModel.js')
 const CaseModel = require('../../models/part_models/CaseModel.js')
 const { userAllocations500 } = require('../../tests/builds/test_builds.js')
-const getListingLink = require('./ListingLink.js')
+const getListingLink = require('./PartListing.js')
 
 const MODEL_DICT = {
     'cpu': CPUModel,
@@ -273,21 +273,10 @@ const recommendBuild = async (userAllocations, mode) => {
     let build = {}
     for (let [component_key, components] of Object.entries(partsInBudget)) {
         const componentAllocations = userAllocations['components']
-<<<<<<< HEAD
         const sortedComponents = components.sort((a, b) => generalComparator(a, b, componentAllocations, component_key, mode))
         build[component_key] = sortedComponents[sortedComponents.length - 1]
-=======
-        rankedComponents[component_key] = components.sort((a, b) => generalComparator(a, b, componentAllocations, component_key, MODE.DEFAULT))
->>>>>>> jackmccl/builds-varied-builds
     }
-    console.log(build)
+    return build
 }
-recommendBuild(userAllocations500)
 
-<<<<<<< HEAD
-module.exports = { recommendBuild, generalComparator, getPerformanceAllocations, MODULARITIES, MODULE_TYPES, EFFICIENCY_RATINGS, STORAGE_TYPES, PERFORMANCE_PRIORITIES, COMPARED_KEYS }
-=======
-recommendBuilds(userAllocations500)
-
-module.exports = { recommendBuilds, generalComparator, getPerformanceAllocations, MODULARITIES, MODULE_TYPES, EFFICIENCY_RATINGS, STORAGE_TYPES, PERFORMANCE_PRIORITIES, COMPARED_KEYS, MODE }
->>>>>>> jackmccl/builds-varied-builds
+module.exports = { recommendBuild, generalComparator, getPerformanceAllocations, MODULARITIES, MODULE_TYPES, EFFICIENCY_RATINGS, STORAGE_TYPES, PERFORMANCE_PRIORITIES, COMPARED_KEYS, MODE }
