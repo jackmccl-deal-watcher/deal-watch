@@ -13,15 +13,15 @@ const RATINGS = {
 const numberAllocationTester = (test_allocations, parts, component_type) => {
     for (let spec_type of Object.keys(test_allocations)) {
         const allocations = test_allocations[spec_type]
-        const copyParts = [...parts]
-        copyParts.sort((a, b) => generalComparator(a, b, allocations, component_type))
+        const sortedParts = [...parts]
+        sortedParts.sort((a, b) => generalComparator(a, b, allocations, component_type))
         if (spec_type === 'color') {
-            const resultColor = copyParts[copyParts.length-1].model.split(' ')[1]
+            const resultColor = sortedParts[sortedParts.length-1].model.split(' ')[1]
             if (test_allocations[spec_type]['case']['color']['colors'].includes(resultColor)) {
                 console.log(`test_${component_type}_builds::${spec_type}_allocation - Passed`)
                 continue
             }
-        } else if (copyParts[copyParts.length-1].model === spec_type) {
+        } else if (sortedParts[sortedParts.length-1].model === spec_type) {
             console.log(`test_${component_type}_builds::${spec_type}_allocation - Passed`)
             continue
         }
@@ -33,16 +33,16 @@ const calcSlidingQualityRatingTester = (test_allocations, test_ratings, parts, c
     for (let spec_type of Object.keys(test_allocations)) {
         const allocations = test_allocations[spec_type]
         const ratings = test_ratings[spec_type]
-        const copyParts = [...parts]
-        copyParts.sort((a, b) => generalComparator(a, b, allocations, component_type))
-        for (let part_index in copyParts) {
+        const sortedParts = [...parts]
+        sortedParts.sort((a, b) => generalComparator(a, b, allocations, component_type))
+        for (let part_index in sortedParts) {
             part_index = Number(part_index)
             if(part_index === 0) {
                 continue
             }
-            const part_rating = copyParts[part_index][spec_type]
+            const part_rating = sortedParts[part_index][spec_type]
             const part_rating_index = ratings.indexOf(part_rating)
-            const prev_part_rating = copyParts[part_index-1][spec_type]
+            const prev_part_rating = sortedParts[part_index-1][spec_type]
             const prev_part_rating_index = ratings.indexOf(prev_part_rating)
             if (prev_part_rating_index > part_rating_index) {
                 throw new TestError(`test_${component_type}_builds::${spec_type}_allocation - Failed`)
@@ -81,7 +81,7 @@ const test_cpu_builds = () => {
         }
     }
 
-    numberAllocationTester(cpu_number_test_allocations, test_cpus, 'cpu', )
+    numberAllocationTester(cpu_number_test_allocations, test_cpus, 'cpu')
 }
 
 const test_videocard_builds = () => {
