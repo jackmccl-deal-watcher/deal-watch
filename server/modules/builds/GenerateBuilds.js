@@ -1,11 +1,12 @@
+const { userAllocations500 } = require("../../tests/builds/test_builds")
 const { recommendBuild, MODE } = require("./BuildRecommender")
 const { addPartListingsToBuild } = require("./PartListing")
 
 const generateBuilds = async (userAllocations) => {
-    const budgetBuild = await recommendBuild(userAllocations, MODE.BUDGET)
-    const budgetBuildWithListings = await addPartListingsToBuild(budgetBuild)
     const balancedBuild = await recommendBuild(userAllocations, MODE.BALANCED)
     const balancedBuildWithListings = await addPartListingsToBuild(balancedBuild)
+    const budgetBuild = await recommendBuild(userAllocations, MODE.BUDGET)
+    const budgetBuildWithListings = await addPartListingsToBuild(budgetBuild)
     const performanceBuild = await recommendBuild(userAllocations, MODE.PERFORMANCE)
     const performanceBuildWithListings = await addPartListingsToBuild(performanceBuild)
 
@@ -16,5 +17,7 @@ const generateBuilds = async (userAllocations) => {
     }
     return builds
 }
+
+generateBuilds(userAllocations500)
 
 module.exports = { generateBuilds }

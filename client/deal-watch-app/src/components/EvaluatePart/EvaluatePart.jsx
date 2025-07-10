@@ -52,7 +52,6 @@ const EvaluatePart = () => {
     }
 
     const calcThirtyDayTrend = () => {
-        console.log(evaluationData.M_A_Points.data)
         const nowPrice = evaluationData.M_A_Points.data[0].y
         const priceThirtyDaysAgo = evaluationData.M_A_Points.data[29].y
         const thirtyDayTrendAmount = nowPrice-priceThirtyDaysAgo
