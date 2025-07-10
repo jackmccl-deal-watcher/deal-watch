@@ -36,3 +36,5 @@ const getListingLink = async (part) => {
 }
 
 getListingLink(test_cpu)
+
+module.exports = getListingLink

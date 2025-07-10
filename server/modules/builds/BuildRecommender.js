@@ -5,7 +5,8 @@ const MemoryModel = require('../../models/part_models/MemoryModel.js')
 const HardDriveModel = require('../../models/part_models/HardDriveModel.js')
 const PowerSupplyModel = require('../../models/part_models/PowerSupplyModel.js')
 const CaseModel = require('../../models/part_models/CaseModel.js')
-const userAllocations500 = require('../../tests/builds/test_builds.js')
+const { userAllocations500 } = require('../../tests/builds/test_builds.js')
+const getListingLink = require('./ListingLink.js')
 
 const MODEL_DICT = {
     'cpu': CPUModel,
@@ -136,19 +137,23 @@ const calcColorRating = (a, b, color_allocation_dict) => {
 }
 
 const calcSlidingQualityRating = (a, b, spec_allocation, quality_levels, spec_key) => {
+    // Issue with ~30% of power-supplies having no efficiency rating, assuming lowest quality_level
+    if (a['type'] === 'power-supply' && a['efficiency_rating'] === null) {
+        a['efficiency_rating'] = "80+"
+    }
+    if (b['type'] === 'power-supply' && b['efficiency_rating'] === null) {
+        b['efficiency_rating'] = "80+"
+    }
     let a_key_value_rating = 0
     let b_key_value_rating = 0
-
     let a_key_value_quality_index = quality_levels.indexOf(a[spec_key])
     let b_key_value_quality_index = quality_levels.indexOf(b[spec_key])
-
     if (a_key_value_quality_index === -1) {
         throw new Error(`Unknown part quality spec: ${a[spec_key]}`)
     }
     if (b_key_value_quality_index === -1) {
         throw new Error(`Unknown part quality spec: ${b[spec_key]}`)
     }
-
     a_key_value_rating += a_key_value_quality_index / quality_levels.length
     b_key_value_rating += b_key_value_quality_index / quality_levels.length
 
@@ -253,15 +258,16 @@ const generalComparator = (a, b, componentAllocations, component_key, mode) => {
     }
 }
 
-const recommendBuilds = async (userAllocations) => {
+const recommendBuild = async (userAllocations, mode) => {
     const partsInBudget = await fetchPartsInBudget(userAllocations, MARGIN)
-    let rankedComponents = {}
+    let build = {}
     for (let [component_key, components] of Object.entries(partsInBudget)) {
         const componentAllocations = userAllocations['components']
-        rankedComponents[component_key] = components.sort((a, b) => generalComparator(a, b, componentAllocations, component_key, 'default'))
+        const sortedComponents = components.sort((a, b) => generalComparator(a, b, componentAllocations, component_key, mode))
+        build[component_key] = sortedComponents[sortedComponents.length - 1]
     }
+    console.log(build)
 }
+recommendBuild(userAllocations500)
 
-recommendBuilds(userAllocations500)
-
-module.exports = { recommendBuilds, generalComparator, getPerformanceAllocations, MODULARITIES, MODULE_TYPES, EFFICIENCY_RATINGS, STORAGE_TYPES, PERFORMANCE_PRIORITIES, COMPARED_KEYS }
+module.exports = { recommendBuild, generalComparator, getPerformanceAllocations, MODULARITIES, MODULE_TYPES, EFFICIENCY_RATINGS, STORAGE_TYPES, PERFORMANCE_PRIORITIES, COMPARED_KEYS }
