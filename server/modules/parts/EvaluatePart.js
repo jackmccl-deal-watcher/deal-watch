@@ -1,5 +1,5 @@
 const { PartEvaluationError } = require('../../errors/PartEvaluationError.js')
-const { getRecentlySoldListings } = require('../ebay/EbayScraper.js')
+const { getRecentlySoldListings } = require('../../utils/ebay/EbayScraper.js')
 const { getComparabilityScores } = require('./ComparabilityScores.js')
 const { getComparableParts } = require('./ComparableParts.js')
 

@@ -1,6 +1,6 @@
 const { TestError } = require("../../errors/TestError")
-const { generalComparator } = require("../../utils/builds/BuildRecommender")
-const { MODULE_TYPES, STORAGE_TYPES, MODULARITIES, EFFICIENCY_RATINGS } = require('../../utils/builds/BuildRecommender')
+const { generalComparator } = require("../../modules/builds/BuildRecommender")
+const { MODULE_TYPES, STORAGE_TYPES, MODULARITIES, EFFICIENCY_RATINGS } = require('../../modules/builds/BuildRecommender')
 const { userAllocations500, test_cpus, test_videocards, test_motherboards, test_memorys, test_hard_drives, test_power_supplys, test_cases } = require("./test_builds")
 
 const RATINGS = {
