@@ -12,7 +12,7 @@ const RATINGS = {
 
 const numberAllocationTester = (test_allocations, parts, component_type) => {
     for (let spec_type of Object.keys(test_allocations)) {
-        let mode = MODE.DEFAULT
+        let mode = MODE.BALANCED
         if (spec_type === 'pcppPrice') {
             mode = MODE.BUDGET
         }
@@ -38,7 +38,7 @@ const calcSlidingQualityRatingTester = (test_allocations, test_ratings, parts, c
         const allocations = test_allocations[spec_type]
         const ratings = test_ratings[spec_type]
         const sortedParts = [...parts]
-        sortedParts.sort((a, b) => generalComparator(a, b, allocations, component_type, MODE.DEFAULT))
+        sortedParts.sort((a, b) => generalComparator(a, b, allocations, component_type, MODE.BALANCED))
         for (let part_index in sortedParts) {
             part_index = Number(part_index)
             if(part_index === 0) {

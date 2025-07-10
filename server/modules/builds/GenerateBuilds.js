@@ -4,7 +4,7 @@ const { addPartListingsToBuild } = require("./PartListing")
 const generateBuilds = async (userAllocations) => {
     const budgetBuild = await recommendBuild(userAllocations, MODE.BUDGET)
     const budgetBuildWithListings = await addPartListingsToBuild(budgetBuild)
-    const balancedBuild = await recommendBuild(userAllocations, MODE.DEFAULT)
+    const balancedBuild = await recommendBuild(userAllocations, MODE.BALANCED)
     const balancedBuildWithListings = await addPartListingsToBuild(balancedBuild)
     const performanceBuild = await recommendBuild(userAllocations, MODE.PERFORMANCE)
     const performanceBuildWithListings = await addPartListingsToBuild(performanceBuild)

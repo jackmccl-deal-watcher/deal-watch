@@ -5,8 +5,6 @@ const MemoryModel = require('../../models/part_models/MemoryModel.js')
 const HardDriveModel = require('../../models/part_models/HardDriveModel.js')
 const PowerSupplyModel = require('../../models/part_models/PowerSupplyModel.js')
 const CaseModel = require('../../models/part_models/CaseModel.js')
-const { userAllocations500 } = require('../../tests/builds/test_builds.js')
-const getListingLink = require('./PartListing.js')
 
 const MODEL_DICT = {
     'cpu': CPUModel,
@@ -79,7 +77,7 @@ const PERFORMANCE_PRIORITIES = [
 ]
 
 const MODE = Object.freeze({
-    DEFAULT: 'default',
+    BALANCED: 'balanced',
     BUDGET: 'budget',
     PERFORMANCE: 'performance',
 });
@@ -261,7 +259,9 @@ const generalComparator = (a, b, componentAllocations, component_key, mode) => {
         case MODE.BUDGET:
             // Modifies rating to also account for price
             return calcRatingWithPrice(a, b, rating, 0.3)
-        case MODE.DEFAULT:
+        case MODE.BALANCED:
+            return rating
+        case MODE.PERFORMANCE:
             return rating
         default:
             throw new Error(`Unknown ranking mode: ${mode}`)
