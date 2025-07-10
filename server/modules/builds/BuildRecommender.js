@@ -45,9 +45,13 @@ const EFFICIENCY_RATINGS = [
 
 const MARGIN = 0.30
 
-const PRICE_ALLOCATION = 0.4
+const BUDGET_PRICE_ALLOCATION = 0.4
 
-const PERFORMANCE_ALLOCATION = 0.4
+const BALANCED_PRICE_ALLOCATION = 0.2
+
+const PERFORMANCE_PRICE_ALLOCATION = 0
+
+const PERFORMANCE_ALLOCATION = 0.5
 
 const COMPARED_KEYS = [
     'cores',
@@ -117,8 +121,7 @@ const fetchPartsInBudget = async (userAllocations, margin) => {
             }
             return part
         })
-        partsDict[component_key] = partsInBudgetPriceFixed
-        
+        partsDict[component_key] = partsInBudgetPriceFixed   
     }
     return partsDict
 }
@@ -269,11 +272,11 @@ const generalComparator = (a, b, componentAllocations, component_key, mode) => {
     switch (mode) {
         case MODE.BUDGET:
             // Modifies rating to also account for price
-            return calcRatingWithPrice(a, b, rating, PRICE_ALLOCATION)
+            return calcRatingWithPrice(a, b, rating, BUDGET_PRICE_ALLOCATION)
         case MODE.BALANCED:
-            return rating
+            return calcRatingWithPrice(a, b, rating, BALANCED_PRICE_ALLOCATION)
         case MODE.PERFORMANCE:
-            return rating
+            return calcRatingWithPrice(a, b, rating, PERFORMANCE_PRICE_ALLOCATION)
         default:
             throw new Error(`Unknown ranking mode: ${mode}`)
     }

@@ -14,7 +14,6 @@ const generateBuilds = async (userAllocations) => {
         'balanced_build': balancedBuildWithListings,
         'performance_build': performanceBuildWithListings,
     }
-    console.log(builds)
     return builds
 }
 

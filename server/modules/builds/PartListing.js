@@ -23,7 +23,7 @@ const getPartListing = async (part) => {
     const listingSummaries = listingsData['itemSummaries']
     const { priceRangeLow, priceRangeHigh } = getPriceRange(part)
     const priceFilteredListings = listingSummaries.filter((listing) => {
-        return (listing.price.value >= priceRangeLow) && (listing.price.value <= priceRangeHigh && (listing.buyingOptions[0] === 'FIXED_PRICE'))
+        return (listing.price.value >= priceRangeLow) && (listing.price.value <= priceRangeHigh && (listing.buyingOptions.includes('FIXED_PRICE')))
     })
     if (priceFilteredListings.length === 0) {
         return false
