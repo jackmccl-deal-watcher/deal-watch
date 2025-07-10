@@ -43,7 +43,11 @@ const EFFICIENCY_RATINGS = [
     "80+ Titanium"
 ]
 
-const MARGIN = 0.10
+const MARGIN = 0.30
+
+const PRICE_ALLOCATION = 0.4
+
+const PERFORMANCE_ALLOCATION = 0.4
 
 const COMPARED_KEYS = [
     'cores',
@@ -107,7 +111,14 @@ const fetchPartsInBudget = async (userAllocations, margin) => {
                 },
             ]
         })
-        partsDict[component_key] = partsInBudget
+        const partsInBudgetPriceFixed = partsInBudget.map((part) => {
+            if (part.thirtyDayAverage > 0) {
+                part.pcppPrice = -1
+            }
+            return part
+        })
+        partsDict[component_key] = partsInBudgetPriceFixed
+        
     }
     return partsDict
 }
@@ -215,7 +226,7 @@ const getPerformanceAllocations = (componentAllocations, performanceAllocation) 
 const generalComparator = (a, b, componentAllocations, component_key, mode) => {
     if (mode === MODE.PERFORMANCE) {
         // Redistributes allocations based on performance, then creates rating
-        componentAllocations = getPerformanceAllocations(componentAllocations, 0.2)
+        componentAllocations = getPerformanceAllocations(componentAllocations, PERFORMANCE_ALLOCATION)
     }
     let rating = 0
     const componentDict = componentAllocations[component_key]
@@ -258,7 +269,7 @@ const generalComparator = (a, b, componentAllocations, component_key, mode) => {
     switch (mode) {
         case MODE.BUDGET:
             // Modifies rating to also account for price
-            return calcRatingWithPrice(a, b, rating, 0.3)
+            return calcRatingWithPrice(a, b, rating, PRICE_ALLOCATION)
         case MODE.BALANCED:
             return rating
         case MODE.PERFORMANCE:
