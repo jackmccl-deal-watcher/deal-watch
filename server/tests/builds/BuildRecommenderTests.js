@@ -13,7 +13,7 @@ const RATINGS = {
 const numberAllocationTester = (test_allocations, parts, component_type) => {
     for (let spec_type of Object.keys(test_allocations)) {
         const allocations = test_allocations[spec_type]
-        const copyParts = parts
+        const copyParts = [...parts]
         copyParts.sort((a, b) => generalComparator(a, b, allocations, component_type))
         if (spec_type === 'color') {
             const resultColor = copyParts[copyParts.length-1].model.split(' ')[1]
@@ -33,7 +33,7 @@ const calcSlidingQualityRatingTester = (test_allocations, test_ratings, parts, c
     for (let spec_type of Object.keys(test_allocations)) {
         const allocations = test_allocations[spec_type]
         const ratings = test_ratings[spec_type]
-        const copyParts = parts
+        const copyParts = [...parts]
         copyParts.sort((a, b) => generalComparator(a, b, allocations, component_type))
         for (let part_index in copyParts) {
             part_index = Number(part_index)
