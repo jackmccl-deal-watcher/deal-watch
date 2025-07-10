@@ -64,7 +64,7 @@ const COMPARED_KEYS = [
     'efficiency_rating',
     'modular',
     'internal_bays',
-    'color'
+    'color',
 ]
 
 const fetchPartsInBudget = async (userAllocations, margin) => {
@@ -145,12 +145,84 @@ const calcSlidingQualityRating = (a, b, spec_allocation, quality_levels, spec_ke
     return calcMixedRating(a_key_value_rating, b_key_value_rating, spec_allocation)
 }
 
-const generalComparator = (a, b, componentAllocations, component) => {
+const getAllocationNumber = (allocation) => {
+    switch (typeof allocation) {
+        case 'number':
+            return allocation
+        case 'string':
+            return 0
+        case 'dict':
+            // color array
+            return allocation["allocation"]
+    }
+}
+
+const calcPriceRating = (a, b, priceAllocation) => {
+    let a_price = 0
+    let b_price = 0
+
+    if (a['thirtyDayAverage'] > 0) {
+        a_price = a['thirtyDayAverage']
+    } else {
+        a_price = a['pcppPrice']
+    }
+    if (b['thirtyDayAverage'] > 0) {
+        b_price = b['thirtyDayAverage']
+    } else {
+        b_price = b['pcppPrice']
+    }
+    return calcMixedRating(b_price, a_price, priceAllocation)
+}
+
+const calcRatingWithPrice = (a, b, nonPriceAllocations, priceAllocation) => {
+    const newNonPriceAllocations = nonPriceAllocations * (1-priceAllocation)
+    return newNonPriceAllocations + calcPriceRating(a, b, priceAllocation)
+}
+
+const getPerformanceAllocations = (componentAllocations, performanceAllocation) => {
+    const priorities = [
+        'base_clock', 
+        'boost_clock', 
+        'max_ram', 
+        'total_size', 
+        'module_type', 
+        'storage_type',
+        'wattage',
+    ]
+    for (let component_key of Object.keys(componentAllocations)) {
+        const componentDict = componentAllocations[component_key]
+        const componentPropertyKeys = Object.keys(componentDict).filter(key => COMPARED_KEYS.includes(key))
+        let numPriorityPropertiesInComponent = 0
+        for (let prop_key of priorities) {
+            if (componentPropertyKeys.includes(prop_key)) {
+                numPriorityPropertiesInComponent += 1
+            }
+        }
+        for (let key of componentPropertyKeys) {
+            switch (typeof componentDict[key]) {
+                case 'number':
+                    componentDict[key] *= (1-performanceAllocation)
+                case 'dict':
+                    componentDict[key][allocation] *= (1-performanceAllocation)
+            }
+            if (priorities.includes(key)) {
+                componentDict[key] += performanceAllocation / numPriorityPropertiesInComponent
+            }
+        }
+    }
+}
+
+const generalComparator = (a, b, componentAllocations, component_key, mode) => {
+    if (mode === 'performance') {
+        componentAllocations = getPerformanceAllocations(componentAllocations, 0.2)
+    }
     let rating = 0
-    const componentDict = componentAllocations[component]
+    let nonPriceAllocations = 0
+    const componentDict = componentAllocations[component_key]
     const componentPropertyKeys = Object.keys(componentDict).filter(key => COMPARED_KEYS.includes(key))
     for (let key of componentPropertyKeys) {
         const allocation = componentDict[key]
+        nonPriceAllocations += getAllocationNumber(allocation)
         switch (key) {
             case ('color'):
                 rating += calcColorRating(a, b, allocation)
@@ -184,7 +256,12 @@ const generalComparator = (a, b, componentAllocations, component) => {
                     }
         }
     }
-    return rating
+    switch (mode) {
+        case 'budget':
+            return calcRatingWithPrice(a, b, nonPriceAllocations, 0.2)
+        default:
+            return rating
+    }
 }
 
 const recommendBuilds = async (userAllocations) => {
@@ -192,7 +269,7 @@ const recommendBuilds = async (userAllocations) => {
     let rankedComponents = {}
     for (let [component_key, components] of Object.entries(partsInBudget)) {
         const componentAllocations = userAllocations['components']
-        rankedComponents[component_key] = components.sort((a, b) => generalComparator(a, b, componentAllocations, component_key))
+        rankedComponents[component_key] = components.sort((a, b) => generalComparator(a, b, componentAllocations, component_key, 'default'))
     }
 }
 

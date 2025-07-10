@@ -12,9 +12,13 @@ const RATINGS = {
 
 const numberAllocationTester = (test_allocations, parts, component_type) => {
     for (let spec_type of Object.keys(test_allocations)) {
+        let mode = 'default'
+        if (spec_type === 'pcppPrice') {
+            mode = 'budget'
+        }
         const allocations = test_allocations[spec_type]
         const sortedParts = [...parts]
-        sortedParts.sort((a, b) => generalComparator(a, b, allocations, component_type))
+        sortedParts.sort((a, b) => generalComparator(a, b, allocations, component_type, mode))
         if (spec_type === 'color') {
             const resultColor = sortedParts[sortedParts.length-1].model.split(' ')[1]
             if (test_allocations[spec_type]['case']['color']['colors'].includes(resultColor)) {
