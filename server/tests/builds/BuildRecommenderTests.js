@@ -1,5 +1,5 @@
 const { TestError } = require("../../errors/TestError")
-const { generalComparator, getPerformanceAllocations, PERFORMANCE_PRIORITIES, COMPARED_KEYS } = require("../../modules/builds/BuildRecommender")
+const { generalComparator, getPerformanceAllocations, PERFORMANCE_PRIORITIES, COMPARED_KEYS, MODE } = require("../../modules/builds/BuildRecommender")
 const { MODULE_TYPES, STORAGE_TYPES, MODULARITIES, EFFICIENCY_RATINGS } = require('../../modules/builds/BuildRecommender')
 const { userAllocations500, test_cpus, test_videocards, test_motherboards, test_memorys, test_hard_drives, test_power_supplys, test_cases } = require("./test_builds")
 
@@ -12,9 +12,9 @@ const RATINGS = {
 
 const numberAllocationTester = (test_allocations, parts, component_type) => {
     for (let spec_type of Object.keys(test_allocations)) {
-        let mode = 'default'
+        let mode = MODE.DEFAULT
         if (spec_type === 'pcppPrice') {
-            mode = 'budget'
+            mode = MODE.BUDGET
         }
         const allocations = test_allocations[spec_type]
         const sortedParts = [...parts]
@@ -38,7 +38,7 @@ const calcSlidingQualityRatingTester = (test_allocations, test_ratings, parts, c
         const allocations = test_allocations[spec_type]
         const ratings = test_ratings[spec_type]
         const sortedParts = [...parts]
-        sortedParts.sort((a, b) => generalComparator(a, b, allocations, component_type, 'default'))
+        sortedParts.sort((a, b) => generalComparator(a, b, allocations, component_type, MODE.DEFAULT))
         for (let part_index in sortedParts) {
             part_index = Number(part_index)
             if(part_index === 0) {
