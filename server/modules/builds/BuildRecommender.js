@@ -254,8 +254,10 @@ const generalComparator = (a, b, componentAllocations, component_key, mode) => {
     switch (mode) {
         case MODE.BUDGET:
             return calcRatingWithPrice(a, b, rating, 0.3)
-        default:
+        case MODE.DEFAULT:
             return rating
+        default:
+            throw new Error(`Unknown ranking mode: ${mode}`)
     }
 }
 
