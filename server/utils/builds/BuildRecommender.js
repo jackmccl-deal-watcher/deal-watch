@@ -177,9 +177,6 @@ const generalComparator = (a, b, componentAllocations, component) => {
                     }
         }
     }
-    // console.log('a:', a)
-    // console.log('b:', b)
-    // console.log(rating)
     return rating
 }
 
