@@ -42,8 +42,14 @@ const calcSlidingQualityRatingTester = (test_allocations, test_ratings, parts, c
             }
             const part_rating = sortedParts[part_index][spec_type]
             const part_rating_index = ratings.indexOf(part_rating)
+            if (part_rating_index === -1) {
+                throw new TestError(`test_${component_type}_builds::${spec_type}_allocation - Failed`)
+            }
             const prev_part_rating = sortedParts[part_index-1][spec_type]
             const prev_part_rating_index = ratings.indexOf(prev_part_rating)
+            if (prev_part_rating_index === -1) {
+                throw new TestError(`test_${component_type}_builds::${spec_type}_allocation - Failed`)
+            }
             if (prev_part_rating_index > part_rating_index) {
                 throw new TestError(`test_${component_type}_builds::${spec_type}_allocation - Failed`)
             }
