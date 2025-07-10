@@ -97,7 +97,7 @@ const fetchPartsInBudget = async (userAllocations, margin) => {
     return partsDict
 }
 
-const calcRating = (a_rating, b_rating, allocation) => {
+const calcMixedRating = (a_rating, b_rating, allocation) => {
     if ((a_rating + b_rating) === 0) {
         return 0
     }
@@ -122,7 +122,7 @@ const calcColorRating = (a, b, color_allocation_dict) => {
         }
     }
     const colorAllocation = color_allocation_dict['allocation']
-    return calcRating(a_color_rating, b_color_rating, colorAllocation)
+    return calcMixedRating(a_color_rating, b_color_rating, colorAllocation)
 }
 
 const calcSlidingQualityRating = (a, b, spec_allocation, quality_levels, spec_key) => {
@@ -132,10 +132,17 @@ const calcSlidingQualityRating = (a, b, spec_allocation, quality_levels, spec_ke
     let a_key_value_quality_index = quality_levels.indexOf(a[spec_key])
     let b_key_value_quality_index = quality_levels.indexOf(b[spec_key])
 
+    if (a_key_value_quality_index === -1) {
+        throw new Error(`Unknown part quality spec: ${a[spec_key]}`)
+    }
+    if (b_key_value_quality_index === -1) {
+        throw new Error(`Unknown part quality spec: ${b[spec_key]}`)
+    }
+
     a_key_value_rating += a_key_value_quality_index / quality_levels.length
     b_key_value_rating += b_key_value_quality_index / quality_levels.length
 
-    return calcRating(a_key_value_rating, b_key_value_rating, spec_allocation)
+    return calcMixedRating(a_key_value_rating, b_key_value_rating, spec_allocation)
 }
 
 const generalComparator = (a, b, componentAllocations, component) => {
@@ -163,10 +170,10 @@ const generalComparator = (a, b, componentAllocations, component) => {
             default:
                 switch (typeof a[key]) {
                     case ('number'): 
-                        rating += calcRating(a[key], b[key], allocation)
+                        rating += calcMixedRating(a[key], b[key], allocation)
                         break
                     case ('string'):
-                        // form_factor or socket
+                        // form_factor or socket, allocation is the form_factor/socket value inputed by user as preference
                         if (a[key] === allocation) {
                             rating += 1000
                         }
