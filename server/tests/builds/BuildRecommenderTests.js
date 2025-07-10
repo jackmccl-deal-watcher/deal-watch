@@ -374,6 +374,7 @@ const test_case_builds = () => {
 }
 
 const test_performance_mode_allocations = () => {
+    console.log("Starting performance mode tests...")
     const componentAllocations = {...userAllocations500['components']}
     const performanceAllocations = getPerformanceAllocations(componentAllocations, 0.2)
     for (let component_key of Object.keys(componentAllocations)) {
