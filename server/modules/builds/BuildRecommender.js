@@ -211,6 +211,7 @@ const getPerformanceAllocations = (componentAllocations, performanceAllocation) 
 
 const generalComparator = (a, b, componentAllocations, component_key, mode) => {
     if (mode === MODE.PERFORMANCE) {
+        // Redistributes allocations based on performance, then creates rating
         componentAllocations = getPerformanceAllocations(componentAllocations, 0.2)
     }
     let rating = 0
@@ -253,6 +254,7 @@ const generalComparator = (a, b, componentAllocations, component_key, mode) => {
     }
     switch (mode) {
         case MODE.BUDGET:
+            // Modifies rating to also account for price
             return calcRatingWithPrice(a, b, rating, 0.3)
         case MODE.DEFAULT:
             return rating
