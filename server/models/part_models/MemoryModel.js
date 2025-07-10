@@ -15,6 +15,7 @@ const MemorySchema = new mongoose.Schema({
     thirtyDayAverage: Number,
     thirtyDayTime: Number,
     thirtyDayListingCount: Number,
+    pcppPrice: Number,
 })
 
 const MemoryModel = mongoose.model('Memory', MemorySchema, 'memory')

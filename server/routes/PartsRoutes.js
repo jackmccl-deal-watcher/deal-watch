@@ -1,7 +1,7 @@
 const express = require('express')
 const { getListings } = require('../utils/ebay/EbayUtils')
-const { evaluatePart } = require('../utils/parts/EvaluatePart')
-const { makeGraphData } = require('../utils/parts/EvaluationGraphs')
+const { evaluatePart } = require('../modules/parts/EvaluatePart')
+const { makeGraphData } = require('../modules/parts/EvaluationGraphs')
 
 const router = express.Router()
 

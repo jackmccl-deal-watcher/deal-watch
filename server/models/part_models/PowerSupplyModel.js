@@ -11,6 +11,7 @@ const PowerSupplySchema = new mongoose.Schema({
     thirtyDayAverage: Number,
     thirtyDayTime: Number,
     thirtyDayListingCount: Number,
+    pcppPrice: Number,
 })
 
 const PowerSupplyModel = mongoose.model('PowerSupply', PowerSupplySchema, 'power-supply')

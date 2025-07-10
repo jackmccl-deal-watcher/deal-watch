@@ -5,7 +5,7 @@ const MemoryModel = require('../../models/part_models/MemoryModel.js')
 const HardDriveModel = require('../../models/part_models/HardDriveModel.js')
 const PowerSupplyModel = require('../../models/part_models/PowerSupplyModel.js')
 const CaseModel = require('../../models/part_models/CaseModel.js')
-const { getRecentlySoldListings } = require('../ebay/EbayScraper.js')
+const { getRecentlySoldListings } = require('../../utils/ebay/EbayScraper.js')
 const { removeIntraPriceOutliers } = require('../parts/EvaluatePart.js')
 
 const MODELS = [CPUModel, VideoCardModel, MotherboardModel, MemoryModel, HardDriveModel, PowerSupplyModel, CaseModel]

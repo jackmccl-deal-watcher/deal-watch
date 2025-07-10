@@ -11,6 +11,7 @@ const MotherboardSchema = new mongoose.Schema({
     thirtyDayAverage: Number,
     thirtyDayTime: Number,
     thirtyDayListingCount: Number,
+    pcppPrice: Number,
 })
 
 const MotherboardModel = mongoose.model('Motherboard', MotherboardSchema, 'motherboard')

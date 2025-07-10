@@ -12,6 +12,7 @@ const CPUSchema = new mongoose.Schema({
     thirtyDayAverage: Number,
     thirtyDayTime: Number,
     thirtyDayListingCount: Number,
+    pcppPrice: Number,
 })
 
 const CPUModel = mongoose.model('CPU', CPUSchema, 'cpu')
