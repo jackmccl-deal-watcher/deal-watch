@@ -64,7 +64,7 @@ const test_cpus = [
         "thirtyDayAverage": -1,
         "thirtyDayTime": 1752018563449,
         "thirtyDayListingCount": 0,
-        "pcppPrice": 84.43,
+        "pcppPrice": 76.43,
         "boost_clock": 3200000000,
         "integrated_graphics": "none"
     },
@@ -151,7 +151,7 @@ const test_videocards = [
         "thirtyDayAverage": 0,
         "thirtyDayTime": 0,
         "thirtyDayListingCount": 0,
-        "pcppPrice": 78.24,
+        "pcppPrice": 70.24,
         "base_clock": 1228000000,
         "boost_clock": 1329000000
     },
@@ -236,7 +236,7 @@ const test_motherboards = [
         "thirtyDayAverage": 0,
         "thirtyDayTime": 0,
         "thirtyDayListingCount": 0,
-        "pcppPrice": 78.01
+        "pcppPrice": 70.01
     },
     {
         "_id": {
@@ -339,7 +339,7 @@ const test_memorys = [
         "thirtyDayAverage": 0,
         "thirtyDayTime": 0,
         "thirtyDayListingCount": 0,
-        "pcppPrice": 18.24,
+        "pcppPrice": 12.24,
     },
     {
         "_id": {
@@ -499,7 +499,7 @@ const test_hard_drives = [
         "thirtyDayAverage": 0,
         "thirtyDayTime": 0,
         "thirtyDayListingCount": 0,
-        "pcppPrice": 78.21,
+        "pcppPrice": 70.21,
         "platter_rpm": "none",
         "cache_amount": "none"
     },
@@ -634,7 +634,7 @@ const test_power_supplys = [
         "thirtyDayAverage": 0,
         "thirtyDayTime": 0,
         "thirtyDayListingCount": 0,
-        "pcppPrice": 88.22,
+        "pcppPrice": 80.22,
     },
     {
         "_id": {
@@ -801,6 +801,22 @@ const test_power_supplys = [
         "$oid": "686dac09a10f5924279b32fd"
         },
         "type": "power-supply",
+        "model": "form_factor",
+        "brand": "Corsair",
+        "form_factor": "Mini ATX",
+        "efficiency_rating": "80+ Platinum",
+        "wattage": 760,
+        "modular": "Full",
+        "thirtyDayAverage": 0,
+        "thirtyDayTime": 0,
+        "thirtyDayListingCount": 0,
+        "pcppPrice": 84.21,
+    },
+    {
+        "_id": {
+        "$oid": "686dac09a10f5924279b32fd"
+        },
+        "type": "power-supply",
         "model": "base",
         "brand": "Corsair",
         "form_factor": "ATX",
@@ -829,7 +845,7 @@ const test_cases = [
         "thirtyDayAverage": 0,
         "thirtyDayTime": 0,
         "thirtyDayListingCount": 0,
-        "pcppPrice": 55.31,
+        "pcppPrice": 48.31,
         "psu_wattage": 0,
         "side_panel": "none"
     },

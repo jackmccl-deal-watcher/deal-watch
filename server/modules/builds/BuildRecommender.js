@@ -67,6 +67,16 @@ const COMPARED_KEYS = [
     'color',
 ]
 
+const PERFORMANCE_PRIORITIES = [
+    'base_clock', 
+    'boost_clock', 
+    'max_ram', 
+    'total_size', 
+    'module_type', 
+    'storage_type',
+    'wattage',
+]
+
 const fetchPartsInBudget = async (userAllocations, margin) => {
     let partsDict = {}
     for (let [component_key, component] of Object.entries(userAllocations.components)) {
@@ -145,18 +155,6 @@ const calcSlidingQualityRating = (a, b, spec_allocation, quality_levels, spec_ke
     return calcMixedRating(a_key_value_rating, b_key_value_rating, spec_allocation)
 }
 
-const getAllocationNumber = (allocation) => {
-    switch (typeof allocation) {
-        case 'number':
-            return allocation
-        case 'string':
-            return 0
-        case 'dict':
-            // color array
-            return allocation["allocation"]
-    }
-}
-
 const calcPriceRating = (a, b, priceAllocation) => {
     let a_price = 0
     let b_price = 0
@@ -174,26 +172,18 @@ const calcPriceRating = (a, b, priceAllocation) => {
     return calcMixedRating(b_price, a_price, priceAllocation)
 }
 
-const calcRatingWithPrice = (a, b, nonPriceAllocations, priceAllocation) => {
-    const newNonPriceAllocations = nonPriceAllocations * (1-priceAllocation)
-    return newNonPriceAllocations + calcPriceRating(a, b, priceAllocation)
+const calcRatingWithPrice = (a, b, nonPriceRating, priceAllocation) => {
+    const newNonePriceRating = nonPriceRating * (1-priceAllocation)
+    return newNonePriceRating + calcPriceRating(a, b, priceAllocation)
 }
 
 const getPerformanceAllocations = (componentAllocations, performanceAllocation) => {
-    const priorities = [
-        'base_clock', 
-        'boost_clock', 
-        'max_ram', 
-        'total_size', 
-        'module_type', 
-        'storage_type',
-        'wattage',
-    ]
+    const componentAllocationsWithPerformance = JSON.parse(JSON.stringify(componentAllocations))
     for (let component_key of Object.keys(componentAllocations)) {
-        const componentDict = componentAllocations[component_key]
+        const componentDict = componentAllocationsWithPerformance[component_key]
         const componentPropertyKeys = Object.keys(componentDict).filter(key => COMPARED_KEYS.includes(key))
         let numPriorityPropertiesInComponent = 0
-        for (let prop_key of priorities) {
+        for (let prop_key of PERFORMANCE_PRIORITIES) {
             if (componentPropertyKeys.includes(prop_key)) {
                 numPriorityPropertiesInComponent += 1
             }
@@ -203,13 +193,14 @@ const getPerformanceAllocations = (componentAllocations, performanceAllocation) 
                 case 'number':
                     componentDict[key] *= (1-performanceAllocation)
                 case 'dict':
-                    componentDict[key][allocation] *= (1-performanceAllocation)
+                    componentDict[key]['allocation'] *= (1-performanceAllocation)
             }
-            if (priorities.includes(key)) {
+            if (PERFORMANCE_PRIORITIES.includes(key)) {
                 componentDict[key] += performanceAllocation / numPriorityPropertiesInComponent
             }
         }
     }
+    return componentAllocationsWithPerformance
 }
 
 const generalComparator = (a, b, componentAllocations, component_key, mode) => {
@@ -217,12 +208,10 @@ const generalComparator = (a, b, componentAllocations, component_key, mode) => {
         componentAllocations = getPerformanceAllocations(componentAllocations, 0.2)
     }
     let rating = 0
-    let nonPriceAllocations = 0
     const componentDict = componentAllocations[component_key]
     const componentPropertyKeys = Object.keys(componentDict).filter(key => COMPARED_KEYS.includes(key))
     for (let key of componentPropertyKeys) {
         const allocation = componentDict[key]
-        nonPriceAllocations += getAllocationNumber(allocation)
         switch (key) {
             case ('color'):
                 rating += calcColorRating(a, b, allocation)
@@ -258,7 +247,7 @@ const generalComparator = (a, b, componentAllocations, component_key, mode) => {
     }
     switch (mode) {
         case 'budget':
-            return calcRatingWithPrice(a, b, nonPriceAllocations, 0.2)
+            return calcRatingWithPrice(a, b, rating, 0.3)
         default:
             return rating
     }
@@ -275,4 +264,4 @@ const recommendBuilds = async (userAllocations) => {
 
 recommendBuilds(userAllocations500)
 
-module.exports = { recommendBuilds, generalComparator, MODULARITIES, MODULE_TYPES, EFFICIENCY_RATINGS, STORAGE_TYPES }
+module.exports = { recommendBuilds, generalComparator, getPerformanceAllocations, MODULARITIES, MODULE_TYPES, EFFICIENCY_RATINGS, STORAGE_TYPES, PERFORMANCE_PRIORITIES, COMPARED_KEYS }
