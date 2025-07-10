@@ -63,7 +63,7 @@ const COMPARED_KEYS = [
     'wattage',
     'efficiency_rating',
     'modular',
-    'internal-bays',
+    'internal_bays',
     'color'
 ]
 
@@ -85,6 +85,7 @@ const fetchPartsInBudget = async (userAllocations, margin) => {
                 },
                 {
                     $and: [
+                        { thirtyDayAverage: -1},
                         { pcppPrice: {$gte: componentBudgetLow} },
                         { pcppPrice: {$lte: componentBudgetHigh} },
                     ]
@@ -94,6 +95,14 @@ const fetchPartsInBudget = async (userAllocations, margin) => {
         partsDict[component_key] = partsInBudget
     }
     return partsDict
+}
+
+const calcRating = (a_rating, b_rating, allocation) => {
+    if ((a_rating + b_rating) === 0) {
+        return 0
+    }
+    return Math.sign(a_rating - b_rating) * allocation * (2/3) 
+                + allocation * (1/3) * (a_rating - b_rating) / (a_rating+b_rating)
 }
 
 const calcColorRating = (a, b, color_allocation_dict) => {
@@ -113,8 +122,7 @@ const calcColorRating = (a, b, color_allocation_dict) => {
         }
     }
     const colorAllocation = color_allocation_dict['allocation']
-    const total_color_rating = a_color_rating + b_color_rating
-    return colorAllocation * (a_color_rating - b_color_rating) / total_color_rating
+    return calcRating(a_color_rating, b_color_rating, colorAllocation)
 }
 
 const calcSlidingQualityRating = (a, b, spec_allocation, quality_levels, spec_key) => {
@@ -123,16 +131,11 @@ const calcSlidingQualityRating = (a, b, spec_allocation, quality_levels, spec_ke
 
     let a_key_value_quality_index = quality_levels.indexOf(a[spec_key])
     let b_key_value_quality_index = quality_levels.indexOf(b[spec_key])
-    // console.log(a[spec_key])
-    // console.log(quality_levels)
-    // console.log(quality_levels.indexOf(a[spec_key]))
 
     a_key_value_rating += a_key_value_quality_index / quality_levels.length
     b_key_value_rating += b_key_value_quality_index / quality_levels.length
 
-    const total_key_value_rating = a_key_value_rating + b_key_value_rating
-    return Math.sign(a_key_value_rating - b_key_value_rating) * spec_allocation * (2/3) 
-                            + spec_allocation * (1/3) * (a_key_value_rating - b_key_value_rating) / total_key_value_rating
+    return calcRating(a_key_value_rating, b_key_value_rating, spec_allocation)
 }
 
 const generalComparator = (a, b, componentAllocations, component) => {
@@ -160,9 +163,7 @@ const generalComparator = (a, b, componentAllocations, component) => {
             default:
                 switch (typeof a[key]) {
                     case ('number'): 
-                        const key_value_total = a[key] + b[key]
-                        rating += Math.sign(a[key] - b[key]) * allocation * (2/3) 
-                            +allocation * (1/3) * (a[key] - b[key]) / key_value_total
+                        rating += calcRating(a[key], b[key], allocation)
                         break
                     case ('string'):
                         // form_factor or socket
@@ -176,6 +177,9 @@ const generalComparator = (a, b, componentAllocations, component) => {
                     }
         }
     }
+    // console.log('a:', a)
+    // console.log('b:', b)
+    // console.log(rating)
     return rating
 }
 

@@ -15,11 +15,17 @@ const numberAllocationTester = (test_allocations, parts, component_type) => {
         const allocations = test_allocations[spec_type]
         const copyParts = parts
         copyParts.sort((a, b) => generalComparator(a, b, allocations, component_type))
-        if (copyParts[copyParts.length-1].model === spec_type) {
+        if (spec_type === 'color') {
+            const resultColor = copyParts[copyParts.length-1].model.split(' ')[1]
+            if (test_allocations[spec_type]['case']['color']['colors'].includes(resultColor)) {
+                console.log(`test_${component_type}_builds::${spec_type}_allocation - Passed`)
+                continue
+            }
+        } else if (copyParts[copyParts.length-1].model === spec_type) {
             console.log(`test_${component_type}_builds::${spec_type}_allocation - Passed`)
-        } else {
-            throw new TestError(`test_${component_type}_builds::${spec_type}_allocation - Failed`)
+            continue
         }
+        throw new TestError(`test_${component_type}_builds::${spec_type}_allocation - Failed`)
     }
 }
 
@@ -248,6 +254,46 @@ const test_power_supply_builds = () => {
     calcSlidingQualityRatingTester(power_supply_efficiency_rating_and_modular_test_allocations, RATINGS, test_power_supplys, 'power-supply')
 }
 
+const test_case_builds = () => {
+    console.log("Starting test_case_builds tests...")
+    const case_number_test_allocations = {
+        form_factor: {
+            case: {
+                allocation: 0.1,
+                form_factor: 'HTPC',
+                'internal-bays': 0.6,
+                color: {
+                    allocation: 0.4,
+                    colors: ['Black'],
+                },
+            },
+        },
+        internal_bays: {
+            case: {
+                allocation: 0.1,
+                form_factor: 'ATX',
+                internal_bays: 0.6,
+                color: {
+                    allocation: 0.4,
+                    colors: ['Black'],
+                },
+            },
+        },
+        color: {
+            case: {
+                allocation: 0.1,
+                form_factor: 'ATX',
+                internal_bays: 0.4,
+                color: {
+                    allocation: 0.6,
+                    colors: ['White'],
+                },
+            },
+        },
+    }
+    numberAllocationTester(case_number_test_allocations, test_cases, 'case')
+}
+
 
 const running_tests = async () => {
     try {
@@ -257,6 +303,7 @@ const running_tests = async () => {
         test_memory_builds()
         test_hard_drive_builds()
         test_power_supply_builds()
+        test_case_builds()
     } catch (error) {
         console.error(error)
     }
