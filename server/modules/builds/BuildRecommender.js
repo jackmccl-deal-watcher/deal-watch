@@ -77,6 +77,12 @@ const PERFORMANCE_PRIORITIES = [
     'wattage',
 ]
 
+const MODE = Object.freeze({
+    DEFAULT: 'default',
+    BUDGET: 'budget',
+    PERFORMANCE: 'performance',
+});
+
 const fetchPartsInBudget = async (userAllocations, margin) => {
     let partsDict = {}
     for (let [component_key, component] of Object.entries(userAllocations.components)) {
@@ -204,7 +210,7 @@ const getPerformanceAllocations = (componentAllocations, performanceAllocation) 
 }
 
 const generalComparator = (a, b, componentAllocations, component_key, mode) => {
-    if (mode === 'performance') {
+    if (mode === MODE.PERFORMANCE) {
         componentAllocations = getPerformanceAllocations(componentAllocations, 0.2)
     }
     let rating = 0
@@ -246,7 +252,7 @@ const generalComparator = (a, b, componentAllocations, component_key, mode) => {
         }
     }
     switch (mode) {
-        case 'budget':
+        case MODE.BUDGET:
             return calcRatingWithPrice(a, b, rating, 0.3)
         default:
             return rating
@@ -258,10 +264,10 @@ const recommendBuilds = async (userAllocations) => {
     let rankedComponents = {}
     for (let [component_key, components] of Object.entries(partsInBudget)) {
         const componentAllocations = userAllocations['components']
-        rankedComponents[component_key] = components.sort((a, b) => generalComparator(a, b, componentAllocations, component_key, 'default'))
+        rankedComponents[component_key] = components.sort((a, b) => generalComparator(a, b, componentAllocations, component_key, MODE.DEFAULT))
     }
 }
 
 recommendBuilds(userAllocations500)
 
-module.exports = { recommendBuilds, generalComparator, getPerformanceAllocations, MODULARITIES, MODULE_TYPES, EFFICIENCY_RATINGS, STORAGE_TYPES, PERFORMANCE_PRIORITIES, COMPARED_KEYS }
+module.exports = { recommendBuilds, generalComparator, getPerformanceAllocations, MODULARITIES, MODULE_TYPES, EFFICIENCY_RATINGS, STORAGE_TYPES, PERFORMANCE_PRIORITIES, COMPARED_KEYS, MODE }
