@@ -10,10 +10,10 @@ const CaseSchema = new mongoose.Schema({
     internal_bays: Number,
     psu_wattage: Number,
     side_panel: String,
-    thirtyDayAverage: Number,
-    thirtyDayTime: Number,
-    thirtyDayListingCount: Number,
-    pcppPrice: Number,
+    thirty_day_average: Number,
+    thirty_day_time: Number,
+    thirty_day_listing_count: Number,
+    pcpp_price: Number,
 })
 
 const CaseModel = mongoose.model('Case', CaseSchema, 'case')

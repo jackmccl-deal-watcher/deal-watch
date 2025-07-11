@@ -10,19 +10,19 @@ const populatePrices = async (models, prev_listing_limit) => {
         let total_listing_count = 0
         const parts = await model.find()
         for (let part of parts) {
-            if(part.thirtyDayTime !== 0) {
+            if(part.thirty_day_time !== 0) {
                 continue
             }
-            if (!(part.thirtyDayListingCount >= prev_listing_limit)) {
+            if (!(part.thirty_day_listing_count >= prev_listing_limit)) {
                 continue
             }
             part_count += 1
             const keyword = part.brand + ' ' + part.model
             const listingData = await getRecentlySoldListings(keyword, LISTING_DAY_AGE_LIMIT, MAX_LISTING_LIMIT)
             if (listingData.length < 4) {
-                part.thirtyDayAverage = -1
-                part.thirtyDayTime = new Date().getTime()
-                part.thirtyDayListingCount = listingData.length
+                part.thirty_day_average = -1
+                part.thirty_day_time = new Date().getTime()
+                part.thirty_day_listing_count = listingData.length
                 await part.save()
                 continue
             }
@@ -33,13 +33,13 @@ const populatePrices = async (models, prev_listing_limit) => {
                 price_sum += listing.sold_price
                 price_count += 1
             })
-            let thirtyDayAverage = 0
+            let thirty_day_average = 0
             if (listingDataPriceOutliersRemoved.length > 0) {
-                thirtyDayAverage = Math.round(price_sum / price_count * 100) / 100
+                thirty_day_average = Math.round(price_sum / price_count * 100) / 100
             }
-            part.thirtyDayAverage = thirtyDayAverage
-            part.thirtyDayTime = new Date().getTime()
-            part.thirtyDayListingCount = listingDataPriceOutliersRemoved.length
+            part.thirty_day_average = thirty_day_average
+            part.thirty_day_time = new Date().getTime()
+            part.thirty_day_listing_count = listingDataPriceOutliersRemoved.length
             await part.save()
             total_listing_count += listingDataPriceOutliersRemoved.length
         }

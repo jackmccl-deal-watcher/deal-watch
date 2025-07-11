@@ -12,15 +12,15 @@ const fetchPartsInBudget = async (userAllocations, budget_margin) => {
             $or: [
                 {
                     $and: [
-                        { thirtyDayAverage: {$gte: componentBudgetLow} },
-                        { thirtyDayAverage: {$lte: componentBudgetHigh} },
+                        { thirty_day_average: {$gte: componentBudgetLow} },
+                        { thirty_day_average: {$lte: componentBudgetHigh} },
                     ]
                 },
                 {
                     $and: [
-                        { thirtyDayAverage: -1},
-                        { pcppPrice: {$gte: componentBudgetLow} },
-                        { pcppPrice: {$lte: componentBudgetHigh} },
+                        { thirty_day_average: -1},
+                        { pcpp_price: {$gte: componentBudgetLow} },
+                        { pcpp_price: {$lte: componentBudgetHigh} },
                     ]
                 },
             ]
@@ -82,13 +82,13 @@ const calcPriceRating = (a, b, priceAllocation) => {
     let a_price = 0
     let b_price = 0
 
-    if (a[ComponentSpecs.THIRTYDAYAVERAGE] > 0) {
-        a_price = a[ComponentSpecs.THIRTYDAYAVERAGE]
+    if (a[ComponentSpecs.thirty_day_average] > 0) {
+        a_price = a[ComponentSpecs.thirty_day_average]
     } else {
         a_price = a[ComponentSpecs.PCPP_PRICE]
     }
-    if (b[ComponentSpecs.THIRTYDAYAVERAGE] > 0) {
-        b_price = b[ComponentSpecs.THIRTYDAYAVERAGE]
+    if (b[ComponentSpecs.thirty_day_average] > 0) {
+        b_price = b[ComponentSpecs.thirty_day_average]
     } else {
         b_price = b[ComponentSpecs.PCPP_PRICE]
     }

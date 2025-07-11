@@ -9,10 +9,10 @@ const HardDriveSchema = new mongoose.Schema({
     storage_type: String,
     form_factor: String,
     interface: String,
-    thirtyDayAverage: Number,
-    thirtyDayTime: Number,
-    thirtyDayListingCount: Number,
-    pcppPrice: Number,
+    thirty_day_average: Number,
+    thirty_day_time: Number,
+    thirty_day_listing_count: Number,
+    pcpp_price: Number,
 })
 
 const HardDriveModel = mongoose.model('HardDrive', HardDriveSchema, 'hard-drive')
