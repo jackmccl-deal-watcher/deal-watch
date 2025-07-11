@@ -2,33 +2,35 @@ import { useState, useEffect } from "react"
 import Slider from '@mui/material/Slider';
 import './SumSliders.css'
 
-const SumSliders = ({ specs, handleAllocations }) => {
+const SumSliders = ({ specs, handlePointsAllocations }) => {
     const [pointsDict, setPointsDict] = useState({})
 
     const updatePointsDict = ({spec, newValue}) => {
         setPointsDict(prevDict => {
-            let newDict = {...prevDict}
-            newDict[spec.key] = newValue
+            let newPointsDict = {...prevDict}
+            newPointsDict[spec.key] = newValue
             let sum = 0
-            Object.values(newDict).forEach((points) => (sum += points))
+            Object.values(newPointsDict).forEach((points) => (sum += points))
             const excess = sum - 1
-            if (excess > 0) {
-                const per_spec_adjustment = excess / (specs.length - 1)
-                Object.keys(newDict).forEach((key) => {
-                    if (key !== spec.key) {
-                        newDict[key] = newDict[key] - per_spec_adjustment
+            const per_spec_adjustment = Math.abs(excess / (specs.length - 1))
+            Object.keys(newPointsDict).forEach((key) => {
+                if (key !== spec.key) {
+                    if (excess > 0) {
+                        newPointsDict[key] = newPointsDict[key] - per_spec_adjustment
+                    } else if (excess < 0) {
+                        newPointsDict[key] = newPointsDict[key] + per_spec_adjustment
                     }
-                })
-            }
-            return newDict
+                }
+            })
+            return newPointsDict
         })
-        pointsDict && handleAllocations(pointsDict)
+        pointsDict && handlePointsAllocations(pointsDict)
     }
 
     const createPointsDict = () => {
-        let newDict = {}
-        specs && specs.forEach((spec) => newDict[spec.key] = (1 / specs.length))
-        setPointsDict(newDict)
+        let newPointsDict = {}
+        specs && specs.forEach((spec) => newPointsDict[spec.key] = (1 / specs.length))
+        setPointsDict(newPointsDict)
     }
 
     const getSliderLabelText = (points) => {
