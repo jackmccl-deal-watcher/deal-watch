@@ -38,21 +38,24 @@ const calcMixedRating = (a_rating, b_rating, allocation) => {
                 + allocation * (1/3) * (a_rating - b_rating) / (a_rating+b_rating)
 }
 
+const calcPartColorScore = (part, color_index, color_preferences) => {
+    let part_color_rating = 0
+    const current_color = color_preferences[color_index]
+    if (part[ComponentSpecs.COLOR] === current_color) {
+        part_color_rating += color_preferences.length - color_index
+    } else if (part[ComponentSpecs.COLOR].includes(current_color) || current_color.includes(part[ComponentSpecs.COLOR])) {
+        part_color_rating += (color_preferences.length - color_index) / 2
+    }
+    return part_color_rating
+}
+
 const calcColorRating = (a, b, color_allocation_dict) => {
     const preferenceColors = color_allocation_dict['colors']
     let a_color_rating = 0
     let b_color_rating = 0
     for (let color_index in preferenceColors) {
-        if (a[ComponentSpecs.COLOR] === preferenceColors[color_index]) {
-            a_color_rating += preferenceColors.length - color_index
-        } else if (a[ComponentSpecs.COLOR].includes(preferenceColors[color_index]) || preferenceColors[color_index].includes(a[ComponentSpecs.COLOR])) {
-            a_color_rating += (preferenceColors.length - color_index) / 2
-        }
-        if (b[ComponentSpecs.COLOR] === preferenceColors[color_index]) {
-            b_color_rating += preferenceColors.length - color_index
-        } else if (b[ComponentSpecs.COLOR].includes(preferenceColors[color_index]) || preferenceColors[color_index].includes(b[ComponentSpecs.COLOR])) {
-            b_color_rating += (preferenceColors.length - color_index) / 2
-        }
+        a_color_rating += calcPartColorScore(a, color_index, preferenceColors)
+        b_color_rating += calcPartColorScore(b, color_index, preferenceColors)
     }
     const colorAllocation = color_allocation_dict['allocation']
     return calcMixedRating(a_color_rating, b_color_rating, colorAllocation)
@@ -101,7 +104,7 @@ const calcRatingWithPrice = (a, b, nonPriceRating, priceAllocation) => {
 }
 
 const getPerformanceAllocations = (componentAllocations, performanceAllocation) => {
-    const componentAllocationsWithPerformance = JSON.parse(JSON.stringify(componentAllocations))
+    const componentAllocationsWithPerformance = componentAllocations
     for (let component_key of Object.keys(componentAllocations)) {
         const componentDict = componentAllocationsWithPerformance[component_key]
         const componentPropertyKeys = Object.keys(componentDict).filter(key => COMPARED_KEYS.includes(key))

@@ -1,8 +1,5 @@
 const { MODELS, LISTING_DAY_AGE_LIMIT, MAX_LISTING_LIMIT } = require('./BuildConstants.js')
 
-const LISTING_DAY_AGE_LIMIT = 30
-const MAX_LISTING_LIMIT = 100
-
 const populatePrices = async (models, prev_listing_limit) => {
     for(let model of models) {
         console.log(`Populating ${model.collection.collectionName}`)
