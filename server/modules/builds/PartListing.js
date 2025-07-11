@@ -35,9 +35,9 @@ const addPartListingsToBuild = async (build) => {
     for (let part of Object.values(buildWithPartListings)) {
         const listing = await getPartListing(part)
         if (listing) {
-            part['listing'] = listing
+            part['listing_info'] = { status: 'has_listing', listing: listing}
         } else {
-            part['listing'] = 'No listing found for part'
+            part['listing_info'] = { status: 'no_listing' }
         }
     }
     return buildWithPartListings
