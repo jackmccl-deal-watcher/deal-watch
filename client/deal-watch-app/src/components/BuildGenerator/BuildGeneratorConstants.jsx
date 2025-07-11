@@ -89,7 +89,7 @@ export const COLORS = [
     'Yellow'
 ]
 
-export const FORM_FACTORS = [
+export const CASE_FORM_FACTORS = [
     'ATX Mid Tower',
     'ATX Full Tower',
     'MicroATX Mid Tower',
@@ -102,5 +102,91 @@ export const FORM_FACTORS = [
     'MicroATX Slim',
     'Mini ITX Desktop',
     'Mini ITX Test Bench',
-    'Mini ITX Tower'
+    'Mini ITX Tower',
+]
+
+export const MOTHERBOARD_FORM_FACTORS = [
+    'ATX',
+    'EATX',
+    'Flex ATX',
+    'HPTX',
+    'Micro ATX',
+    'Mini DTX',
+    'Mini ITX',
+    'SSI CEB',
+    'SSI EEB',
+    'Thin Mini ITX',
+    'XL ATX',
+]
+
+export const SOCKETS = [
+    '2 x G34',
+    '2 x LGA1366',
+    '2 x LGA2011',
+    '2 x LGA2011-3',
+    '2 x LGA2011-3 Narrow',
+    'AM1',
+    'AM2',
+    'AM2+/AM2',
+    'AM3',
+    'AM3+',
+    'AM3+/AM3',
+    'AM3/AM2+',
+    'AM3/AM2+/AM2',
+    'AM4',
+    'FM1',
+    'FM2',
+    'FM2+',
+    'Integrated A4-5000',
+    'Integrated Athlon II X2 215',
+    'Integrated Atom 230',
+    'Integrated Atom 330',
+    'Integrated Atom C2358',
+    'Integrated Atom C2550',
+    'Integrated Atom C2750',
+    'Integrated Atom D2500',
+    'Integrated Atom D2550',
+    'Integrated Atom D2700',
+    'Integrated Atom D410',
+    'Integrated Atom D425',
+    'Integrated Atom D510',
+    'Integrated Atom D525',
+    'Integrated Atom N550',
+    'Integrated C-Series C-70',
+    'Integrated Celeron 1037U',
+    'Integrated Celeron 847',
+    'Integrated Celeron J1900',
+    'Integrated Celeron N3050',
+    'Integrated Celeron N3150',
+    'Integrated E-Series E-350',
+    'Integrated E-Series E-450',
+    'Integrated Pentium J3710',
+    'Integrated Pentium N3700',
+    'Integrated Xeon D-1520',
+    'Integrated Xeon D-1521',
+    'Integrated Xeon D-1537',
+    'Integrated Xeon D-1541',
+    'LGA1150',
+    'LGA1151',
+    'LGA1155',
+    'LGA1156',
+    'LGA1200',
+    'LGA1366',
+    'LGA2011',
+    'LGA2011-3',
+    'LGA2011-3 Narrow',
+    'LGA2066',
+    'LGA775',
+    'sTR4',
+    'sTRX4'
+]
+
+export const POWER_SUPPLY_FORM_FACTORS = [ 
+    'ATX', 
+    'BTX', 
+    'Flex ATX', 
+    'Micro ATX', 
+    'Mini ITX', 
+    'SFX', 
+    'TFX'
 ]
