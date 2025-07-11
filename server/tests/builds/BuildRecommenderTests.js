@@ -1,27 +1,21 @@
 const { TestError } = require("../../errors/TestError")
-const { generalComparator, getPerformanceAllocations, PERFORMANCE_PRIORITIES, COMPARED_KEYS, MODE } = require("../../modules/builds/BuildRecommender")
-const { MODULE_TYPES, STORAGE_TYPES, MODULARITIES, EFFICIENCY_RATINGS } = require('../../modules/builds/BuildRecommender')
+const ComponentTypes = require("../../models/part_models/ComponentTypesEnum")
+const { PERFORMANCE_PRIORITIES, COMPARED_KEYS, MODE, ComponentSpecs, RATINGS} = require('../../modules/builds/BuildConstants.js')
+const { generalComparator, getPerformanceAllocations } = require("../../modules/builds/BuildRecommender")
 const { userAllocations500, test_cpus, test_videocards, test_motherboards, test_memorys, test_hard_drives, test_power_supplys, test_cases } = require("./test_builds")
-
-const RATINGS = {
-    module_type: MODULE_TYPES,
-    storage_type: STORAGE_TYPES,
-    modular: MODULARITIES,
-    efficiency_rating: EFFICIENCY_RATINGS,
-}
 
 const numberAllocationTester = (test_allocations, parts, component_type) => {
     for (let spec_type of Object.keys(test_allocations)) {
         let mode = MODE.BALANCED
-        if (spec_type === 'pcppPrice') {
+        if (spec_type === ComponentSpecs.PCPP_PRICE) {
             mode = MODE.BUDGET
         }
         const allocations = test_allocations[spec_type]
         const sortedParts = [...parts]
         sortedParts.sort((a, b) => generalComparator(a, b, allocations, component_type, mode))
-        if (spec_type === 'color') {
+        if (spec_type === ComponentSpecs.COLOR) {
             const resultColor = sortedParts[sortedParts.length-1].model.split(' ')[1]
-            if (test_allocations[spec_type]['case']['color']['colors'].includes(resultColor)) {
+            if (test_allocations[spec_type]['case'][ComponentSpecs.COLOR]['colors'].includes(resultColor)) {
                 console.log(`test_${component_type}_builds::${spec_type}_allocation - Passed`)
                 continue
             }
@@ -99,7 +93,7 @@ const test_cpu_builds = () => {
         },
     }
 
-    numberAllocationTester(cpu_number_test_allocations, test_cpus, 'cpu')
+    numberAllocationTester(cpu_number_test_allocations, test_cpus, ComponentTypes.CPU)
 }
 
 const test_videocard_builds = () => {
@@ -139,7 +133,7 @@ const test_videocard_builds = () => {
         },
     }
 
-    numberAllocationTester(videocard_number_test_allocations, test_videocards, 'video-card')
+    numberAllocationTester(videocard_number_test_allocations, test_videocards, ComponentTypes.VIDEOCARD)
 }
 
 const test_motherboard_builds = () => {
@@ -191,7 +185,7 @@ const test_motherboard_builds = () => {
             },
         },
     }
-    numberAllocationTester(motherboard_number_test_allocations, test_motherboards, 'motherboard')
+    numberAllocationTester(motherboard_number_test_allocations, test_motherboards, ComponentTypes.MOTHERBOARD)
 }
 
 const test_memory_builds = () => {
@@ -222,7 +216,7 @@ const test_memory_builds = () => {
             },
         },
     }
-    numberAllocationTester(memory_number_test_allocations, test_memorys, 'memory')
+    numberAllocationTester(memory_number_test_allocations, test_memorys, ComponentTypes.MEMORY)
     const memory_module_type_test_allocations = {
         module_type: {
             memory: {
@@ -233,7 +227,7 @@ const test_memory_builds = () => {
             },
         },
     }
-    calcSlidingQualityRatingTester(memory_module_type_test_allocations, RATINGS, test_memorys, 'memory')
+    calcSlidingQualityRatingTester(memory_module_type_test_allocations, RATINGS, test_memorys, ComponentTypes.MEMORY)
 }
 
 const test_hard_drive_builds = () => {
@@ -254,7 +248,7 @@ const test_hard_drive_builds = () => {
             },
         },
     }
-    numberAllocationTester(hard_drive_number_test_allocations, test_hard_drives, 'hard-drive')
+    numberAllocationTester(hard_drive_number_test_allocations, test_hard_drives, ComponentTypes.HARD_DRIVE)
     const hard_drive_storage_type_test_allocations = {
         storage_type: {
             'hard-drive': {
@@ -264,7 +258,7 @@ const test_hard_drive_builds = () => {
             },
         },
     }
-    calcSlidingQualityRatingTester(hard_drive_storage_type_test_allocations, RATINGS, test_hard_drives, 'hard-drive')
+    calcSlidingQualityRatingTester(hard_drive_storage_type_test_allocations, RATINGS, test_hard_drives, ComponentTypes.HARD_DRIVE)
 }
 
 const test_power_supply_builds = () => {
@@ -298,7 +292,7 @@ const test_power_supply_builds = () => {
             },
         },
     }
-    numberAllocationTester(power_supply_number_test_allocations, test_power_supplys, 'power-supply')
+    numberAllocationTester(power_supply_number_test_allocations, test_power_supplys, ComponentTypes.POWER_SUPPLY)
     const power_supply_efficiency_rating_and_modular_test_allocations = {
         efficiency_rating: {
             'power-supply': {
@@ -319,7 +313,7 @@ const test_power_supply_builds = () => {
             },
         },
     }
-    calcSlidingQualityRatingTester(power_supply_efficiency_rating_and_modular_test_allocations, RATINGS, test_power_supplys, 'power-supply')
+    calcSlidingQualityRatingTester(power_supply_efficiency_rating_and_modular_test_allocations, RATINGS, test_power_supplys, ComponentTypes.POWER_SUPPLY)
 }
 
 const test_case_builds = () => {
@@ -370,7 +364,7 @@ const test_case_builds = () => {
             },
         },
     }
-    numberAllocationTester(case_number_test_allocations, test_cases, 'case')
+    numberAllocationTester(case_number_test_allocations, test_cases, ComponentTypes.CASE)
 }
 
 const test_performance_mode_allocations = () => {
