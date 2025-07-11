@@ -1,7 +1,7 @@
 import './EvaluatePart.css'
 import { useState, useEffect } from 'react'
 import { evaluatePart } from '../../utils/ApiUtils'
-import ComponentForm from './ComponentForm';
+import ComponentForm from './ComponentPartForm';
 import EvaluationScatterChart from './EvaluationScatterChart';
 
 const EvaluatePart = () => {

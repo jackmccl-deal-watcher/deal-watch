@@ -1,10 +1,9 @@
 import { useState } from 'react'
 import Slider from '@mui/material/Slider';
 import { POWER_SUPPLY_PROPERTIES } from '../../../component_enums/ComponentPropertiesEnums';
-import './ComponentForm.css'
 import OptionsDropdown from './OptionsDropdown';
 
-const PowerSupplyForm = ({ handlePartEvaluation }) => {
+const PowerSupplyPartForm = ({ handlePartEvaluation }) => {
     const FORM_FACTORS = [ 
         'ATX', 
         'BTX', 
@@ -59,4 +58,4 @@ const PowerSupplyForm = ({ handlePartEvaluation }) => {
     )
 }
 
-export default PowerSupplyForm
+export default PowerSupplyPartForm

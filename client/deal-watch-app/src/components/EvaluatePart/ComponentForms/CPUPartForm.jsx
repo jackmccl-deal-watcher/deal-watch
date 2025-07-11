@@ -1,9 +1,8 @@
 import { useState } from 'react'
 import Slider from '@mui/material/Slider';
 import { CPU_PROPERTIES } from '../../../component_enums/ComponentPropertiesEnums';
-import './ComponentForm.css'
 
-const CPUForm = ({ handlePartEvaluation }) => {
+const CPUPartForm = ({ handlePartEvaluation }) => {
     const [cores, setCores] = useState(4)
     const [baseClock, setBaseClock] = useState(3200000000)
     const [boostClock, setBoostClock] = useState(3400000000)
@@ -39,4 +38,4 @@ const CPUForm = ({ handlePartEvaluation }) => {
     )
 }
 
-export default CPUForm
+export default CPUPartForm
