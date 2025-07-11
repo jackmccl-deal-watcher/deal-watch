@@ -37,7 +37,7 @@ const CaseBuildForm = ({ handleAllocations, allocations }) => {
         let componentAllocationsDict = {...allocations[ComponentTypes.CASE]}
         componentAllocationsDict[CASE_PROPERTIES.COLOR] = {
             allocation: allocations[ComponentTypes.CASE]['allocation'],
-            colors: colors,
+            colors: newColors,
         }
         handleAllocations(ComponentTypes.CASE, componentAllocationsDict)
     }
