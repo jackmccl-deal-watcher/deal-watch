@@ -27,11 +27,7 @@ const getPartListing = async (part) => {
         return false
     }
     const sortedListingSummaries = priceFilteredListings.sort((a, b) => a.price.value - b.price.value)
-    if (sortedListingSummaries.length === 0) {
-        return false
-    } else {
-        return sortedListingSummaries[0]
-    }
+    return sortedListingSummaries[0]
 }
 
 const addPartListingsToBuild = async (build) => {
