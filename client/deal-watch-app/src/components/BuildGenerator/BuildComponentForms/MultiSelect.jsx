@@ -1,10 +1,5 @@
 import TextField from '@mui/material/TextField';
 import Autocomplete from '@mui/material/Autocomplete';
-import OutlinedInput from '@mui/material/OutlinedInput';
-import InputLabel from '@mui/material/InputLabel';
-import MenuItem from '@mui/material/MenuItem';
-import FormControl from '@mui/material/FormControl';
-import Select from '@mui/material/Select';
 import Chip from '@mui/material/Chip';
 import './MultiSelect.css'
 
@@ -29,12 +24,16 @@ const MultiSelect = ({ options, optionsType, currentOptions, setCurrentOptions }
                     }
                 }}
                 sx={{ width: 300 }}
-                filterSelectedOptions
+                freeSolo
                 value={currentOptions}
                 onChange={ (event, newValue) => {
-                    newValue && setCurrentOptions([...currentOptions, newValue])}
+                    if (newValue && !currentOptions.includes(newValue)) {
+                        setCurrentOptions([...currentOptions, newValue])}
+                    }
                 }
                 renderInput={(params) => <TextField {...params} label={optionsType} />}
+                getOptionDisabled={(option) => currentOptions.includes(option)}
+                filterSelectedOptions
             />
         </div>
     )

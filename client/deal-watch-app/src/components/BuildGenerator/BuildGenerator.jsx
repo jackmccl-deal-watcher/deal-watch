@@ -15,6 +15,14 @@ const BuildGenerator = () => {
     const [allocations, setAllocations] = useState({})
     const [budget, setBudget] = useState(STARTING_BUDGET)
 
+    const generateBuilds = () => {
+        const allocationsBody = {
+            budget: budget,
+            components: allocations,
+        }
+        console.log(allocationsBody)
+    }
+
     const handleAllocations = (component_type, component_allocations) => {
         setAllocations(prevAllocations => {
             let newAllocationsDict = {...prevAllocations}
@@ -84,6 +92,7 @@ const BuildGenerator = () => {
                     <HardDriveBuildForm handleAllocations={handleAllocations} allocations={allocations}/>
                     <PowerSupplyBuildForm handleAllocations={handleAllocations} allocations={allocations}/>
                     <CaseBuildForm handleAllocations={handleAllocations} allocations={allocations}/>
+                    <button className='generate-build-form-submit-button' onClick={generateBuilds}>Generate Builds</button>
                 </div> : null
             }
         </div>

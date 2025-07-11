@@ -1,7 +1,7 @@
 import './EvaluatePart.css'
 import { useState, useEffect } from 'react'
 import { evaluatePart } from '../../utils/ApiUtils'
-import ComponentForm from './ComponentPartForm';
+import ComponentPartForm from './ComponentPartForm';
 import EvaluationScatterChart from './EvaluationScatterChart';
 
 const EvaluatePart = () => {
@@ -67,7 +67,7 @@ const EvaluatePart = () => {
     
     return(
         <div className='evaluatepart'>
-            <ComponentForm handlePartEvaluation={getPartEvaluation}/>
+            <ComponentPartForm handlePartEvaluation={getPartEvaluation}/>
             <p className='evaluatepart-message'>{message}</p>
             <div className='evaluation'>
                 { !loading && evaluationData.X_Y_Points && evaluationData.M_A_Points ?

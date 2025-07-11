@@ -11,7 +11,7 @@ import MemoryPartForm from './ComponentForms/MemoryPartForm';
 import HardDrivePartForm from './ComponentForms/HardDrivePartForm';
 import PowerSupplyPartForm from './ComponentForms/PowerSupplyPartForm';
 import CasePartForm from './ComponentForms/CasePartForm';
-import './ComponentForms/ComponentPartForm.css'
+import './ComponentPartForm.css'
 
 
 const ComponentPartForm = ({ handlePartEvaluation }) => {
@@ -36,7 +36,7 @@ const ComponentPartForm = ({ handlePartEvaluation }) => {
     }
 
     return (
-        <div className='componentform'>
+        <div className='component-part-form'>
             <FormControl variant="filled" sx={{ m: 1, minWidth: 120 }}>
                 <InputLabel>Component Type:</InputLabel>
                 <Select
