@@ -1,14 +1,4 @@
-const CPUModel = require('../../models/part_models/CPUModel.js')
-const VideoCardModel = require('../../models/part_models/VideoCardModel.js')
-const MotherboardModel = require('../../models/part_models/MotherboardModel.js')
-const MemoryModel = require('../../models/part_models/MemoryModel.js')
-const HardDriveModel = require('../../models/part_models/HardDriveModel.js')
-const PowerSupplyModel = require('../../models/part_models/PowerSupplyModel.js')
-const CaseModel = require('../../models/part_models/CaseModel.js')
-const { getRecentlySoldListings } = require('../../utils/ebay/EbayScraper.js')
-const { removeIntraPriceOutliers } = require('../parts/EvaluatePart.js')
-
-const MODELS = [CPUModel, VideoCardModel, MotherboardModel, MemoryModel, HardDriveModel, PowerSupplyModel, CaseModel]
+const { MODELS, LISTING_DAY_AGE_LIMIT, MAX_LISTING_LIMIT } = require('./BuildConstants.js')
 
 const LISTING_DAY_AGE_LIMIT = 30
 const MAX_LISTING_LIMIT = 100

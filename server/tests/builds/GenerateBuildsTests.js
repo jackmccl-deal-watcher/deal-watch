@@ -3,7 +3,7 @@ const { userAllocations500 } = require("./test_builds")
 
 const test_generate_builds = async () => {
     const builds = await generateBuilds(userAllocations500)
-    if (builds.budget_build && builds.balanced_build && builds.performance_build) {
+    if (builds && builds.budget_build && builds.balanced_build && builds.performance_build) {
         console.log(`test_generate_builds - Passed`)
     } else {
         throw new Error(`test_generate_builds - Failed`)

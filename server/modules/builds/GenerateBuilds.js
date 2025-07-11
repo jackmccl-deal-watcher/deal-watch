@@ -1,5 +1,6 @@
 const { userAllocations500 } = require("../../tests/builds/test_builds")
-const { recommendBuild, MODE } = require("./BuildRecommender")
+const { MODE } = require('./BuildConstants')
+const { recommendBuild } = require("./BuildRecommender")
 const { addPartListingsToBuild } = require("./PartListing")
 
 const generateBuilds = async (userAllocations) => {
