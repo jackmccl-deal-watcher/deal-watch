@@ -5,9 +5,10 @@ import { CASE_PROPERTIES } from '../../../component_enums/ComponentPropertiesEnu
 import ComponentTypes from '../../../component_enums/ComponentTypesEnum'
 import Slider from '@mui/material/Slider';
 import { COLORS, COMPONENT_ALLOCATION_MAXIMUM, COMPONENT_ALLOCATION_MINIMUM, SPEC_ALLOCATION_MINIMUM } from '../BuildGeneratorConstants'
+import MultiSelect from './MultiSelect'
 
 const CaseBuildForm = ({ handleAllocations, allocations }) => {
-    const [color, setColor] = useState('')
+    const [colors, setColors] = useState([])
 
     const handlePointsAllocations = (pointsDict) => {
         let componentAllocationsDict = {...pointsDict}
@@ -17,11 +18,10 @@ const CaseBuildForm = ({ handleAllocations, allocations }) => {
             } else if (key === CASE_PROPERTIES.COLOR) {
                 componentAllocationsDict[key] = {
                     allocation: allocations[ComponentTypes.CASE]['allocation'],
-                    colors: color,
+                    colors: colors,
                 }
             }
         })
-        componentAllocationsDict[CASE_PROPERTIES.COLOR] = color
         componentAllocationsDict['allocation'] = allocations[ComponentTypes.CASE]['allocation']
         handleAllocations(ComponentTypes.CASE, componentAllocationsDict)
     }
@@ -32,12 +32,12 @@ const CaseBuildForm = ({ handleAllocations, allocations }) => {
         handleAllocations(ComponentTypes.CASE, componentAllocationsDict)
     }
 
-    const handleColorAllocation = (newColor) => {
-        setColor(newColor)
+    const handleColorAllocation = (newColors) => {
+        setColors(newColors)
         let componentAllocationsDict = {...allocations[ComponentTypes.CASE]}
         componentAllocationsDict[CASE_PROPERTIES.COLOR] = {
             allocation: allocations[ComponentTypes.CASE]['allocation'],
-            colors: color,
+            colors: colors,
         }
         handleAllocations(ComponentTypes.CASE, componentAllocationsDict)
     }
@@ -54,7 +54,7 @@ const CaseBuildForm = ({ handleAllocations, allocations }) => {
                     <p>Case: {getSliderLabelText(allocations[ComponentTypes.CASE]['allocation'])}</p>
                     <Slider min={COMPONENT_ALLOCATION_MINIMUM} max={COMPONENT_ALLOCATION_MAXIMUM} step={0.01} valueLabelDisplay='auto' valueLabelFormat={getSliderLabelText} value={allocations[ComponentTypes.CASE]['allocation']} onChange={(e, newValue) => updateComponentAllocation({ newValue })}></Slider>
                     <SumSliders specs={[{ key: CASE_PROPERTIES.INTERNAL_BAYS, tag: 'Internal Bays' }, { key: CASE_PROPERTIES.COLOR, tag: 'Color' }]} handlePointsAllocations={handlePointsAllocations}/>
-                    <OptionsDropdown options={COLORS} optionsType={'Color'} currentOption={color} setCurrentOption={handleColorAllocation}/>
+                    <MultiSelect options={COLORS} optionsType={'Colors'} currentOptions={colors} setCurrentOptions={handleColorAllocation}/>
                 </div> : null
             }
         </div>
