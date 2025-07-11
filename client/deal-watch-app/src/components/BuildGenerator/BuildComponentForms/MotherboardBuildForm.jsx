@@ -1,28 +1,13 @@
 import { useState } from 'react'
 import SumSliders from '../SumSliders'
 import OptionsDropdown from '../../EvaluatePart/ComponentForms/OptionsDropdown'
-import { useEffect } from 'react'
 import { MOTHERBOARD_PROPERTIES } from '../../../component_enums/ComponentPropertiesEnums'
 import ComponentTypes from '../../../component_enums/ComponentTypesEnum'
 import Slider from '@mui/material/Slider';
+import { COMPONENT_ALLOCATION_MAXIMUM, COMPONENT_ALLOCATION_MINIMUM, FORM_FACTORS } from '../BuildGeneratorConstants'
 
 const MotherboardBuildForm = ({ handleAllocations, allocations }) => {
     const [formFactor, setFormFactor] = useState('')
-    const FORM_FACTORS = [
-        'ATX Mid Tower',
-        'ATX Full Tower',
-        'MicroATX Mid Tower',
-        'ATX Desktop',
-        'ATX Mini Tower',
-        'ATX Test Bench',
-        'HTPC',
-        'MicroATX Desktop',
-        'MicroATX Mini Tower',
-        'MicroATX Slim',
-        'Mini ITX Desktop',
-        'Mini ITX Test Bench',
-        'Mini ITX Tower'
-    ]
 
     const handlePointsAllocations = (pointsDict) => {
         let componentAllocationsDict = {...pointsDict}
@@ -54,11 +39,11 @@ const MotherboardBuildForm = ({ handleAllocations, allocations }) => {
 
     return(
         <div>
-            { allocations?.[ComponentTypes.MOTHERBOARD] ?
+            { allocations?.[ComponentTypes.MOTHERBOARD]?.['allocation'] ?
                 <div className='build-form'>
-                    <p>Motherboard:</p>
-                    <Slider min={0.01} max={1} step={0.01} valueLabelDisplay='auto' valueLabelFormat={getSliderLabelText} value={allocations[ComponentTypes.MOTHERBOARD]['allocation']} onChange={(e, newValue) => updateComponentAllocation({ newValue })}></Slider>
-                    <SumSliders specs={[{ key: 'ram_slots', tag: 'Ram Slots' }, { key: 'max_ram', tag: 'Max Ram' }]} handlePointsAllocations={handlePointsAllocations}/>
+                    <p>Motherboard: {getSliderLabelText(allocations[ComponentTypes.MOTHERBOARD]['allocation'])}</p>
+                    <Slider min={COMPONENT_ALLOCATION_MINIMUM} max={COMPONENT_ALLOCATION_MAXIMUM} step={0.01} valueLabelDisplay='auto' valueLabelFormat={getSliderLabelText} value={allocations[ComponentTypes.MOTHERBOARD]['allocation']} onChange={(e, newValue) => updateComponentAllocation({ newValue })}></Slider>
+                    <SumSliders specs={[{ key: MOTHERBOARD_PROPERTIES.RAM_SLOTS, tag: 'Ram Slots' }, { key: MOTHERBOARD_PROPERTIES.MAX_RAM, tag: 'Max Ram' }]} handlePointsAllocations={handlePointsAllocations}/>
                     <OptionsDropdown options={FORM_FACTORS} optionsType={'Form Factor'} currentOption={formFactor} setCurrentOption={handleFormFactorAllocation}/>
                 </div> : null
             }

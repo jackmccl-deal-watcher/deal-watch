@@ -1,8 +1,8 @@
-import { useEffect } from 'react';
 import SumSliders from '../SumSliders'
 import ComponentTypes from '../../../component_enums/ComponentTypesEnum'
-import { CPU_PROPERTIES } from '../../../component_enums/ComponentPropertiesEnums';
 import Slider from '@mui/material/Slider';
+import { CPU_PROPERTIES } from '../../../component_enums/ComponentPropertiesEnums';
+import { COMPONENT_ALLOCATION_MAXIMUM, COMPONENT_ALLOCATION_MINIMUM } from '../BuildGeneratorConstants';
 
 const CPUBuildForm = ({ handleAllocations, allocations }) => {
 
@@ -27,11 +27,11 @@ const CPUBuildForm = ({ handleAllocations, allocations }) => {
 
     return(
         <div>
-            { allocations?.[ComponentTypes.CPU] ?
+            { allocations?.[ComponentTypes.CPU]?.['allocation'] ?
                 <div className='build-form'>
-                    <p>CPU:</p>
-                    <Slider min={0.01} max={1} step={0.01} valueLabelDisplay='auto' valueLabelFormat={getSliderLabelText} value={allocations[ComponentTypes.CPU]['allocation']} onChange={(e, newValue) => updateComponentAllocation({ newValue })}></Slider>
-                    <SumSliders specs={[{ key: 'cores', tag: 'Cores' }, { key: 'base_clock', tag: 'Base Clock' }, { key: 'boost_clock', tag: 'Boost Clock' }]} handlePointsAllocations={handlePointsAllocations}/>
+                    <p>CPU: {getSliderLabelText(allocations[ComponentTypes.CPU]['allocation'])}</p>
+                    <Slider min={COMPONENT_ALLOCATION_MINIMUM} max={COMPONENT_ALLOCATION_MAXIMUM} step={0.01} valueLabelDisplay='auto' valueLabelFormat={getSliderLabelText} value={allocations[ComponentTypes.CPU]['allocation']} onChange={(e, newValue) => updateComponentAllocation({ newValue })}></Slider>
+                    <SumSliders specs={[{ key: CPU_PROPERTIES.CORES, tag: 'Cores' }, { key: CPU_PROPERTIES.BASE_CLOCK, tag: 'Base Clock' }, { key: CPU_PROPERTIES.BOOST_CLOCK, tag: 'Boost Clock' }]} handlePointsAllocations={handlePointsAllocations}/>
                 </div> : null
             }
         </div>

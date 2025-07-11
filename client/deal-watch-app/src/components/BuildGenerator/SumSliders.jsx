@@ -1,6 +1,7 @@
 import { useState, useEffect } from "react"
 import Slider from '@mui/material/Slider';
 import './SumSliders.css'
+import { SPEC_ALLOCATION_MAXIMUM, SPEC_ALLOCATION_MINIMUM } from "./BuildGeneratorConstants";
 
 const SumSliders = ({ specs, handlePointsAllocations }) => {
     const [pointsDict, setPointsDict] = useState({})
@@ -30,6 +31,7 @@ const SumSliders = ({ specs, handlePointsAllocations }) => {
     const createPointsDict = () => {
         let newPointsDict = {}
         specs && specs.forEach((spec) => newPointsDict[spec.key] = (1 / specs.length))
+        handlePointsAllocations && handlePointsAllocations(newPointsDict)
         setPointsDict(newPointsDict)
     }
 
@@ -40,8 +42,8 @@ const SumSliders = ({ specs, handlePointsAllocations }) => {
     const createSliderDiv = (spec) => {
         return (
             <div key={spec.key} className='sum-slider-div'>
-                <p className='sum-slider-title'>{spec.tag}:</p>
-                <Slider min={0.01} max={1} step={0.01} valueLabelDisplay='auto' valueLabelFormat={getSliderLabelText} value={pointsDict[spec.key]} onChange={(e, newValue) => updatePointsDict({ spec, newValue })}></Slider>
+                <p className='sum-slider-title'>{spec.tag}: {getSliderLabelText(pointsDict[spec.key])}</p>
+                <Slider min={SPEC_ALLOCATION_MINIMUM} max={SPEC_ALLOCATION_MAXIMUM} step={0.01} valueLabelDisplay='auto' valueLabelFormat={getSliderLabelText} value={pointsDict[spec.key]} onChange={(e, newValue) => updatePointsDict({ spec, newValue })}></Slider>
             </div>
         )
     }
