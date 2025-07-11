@@ -10,7 +10,7 @@ const generateBuilds = async (userAllocations) => {
     const budgetBuildWithListings = await addPartListingsToBuild(budgetBuild)
     const performanceBuild = await recommendBuild(userAllocations, MODE.PERFORMANCE)
     const performanceBuildWithListings = await addPartListingsToBuild(performanceBuild)
-    builds = {
+    const builds = {
         'budget_build': budgetBuildWithListings,
         'balanced_build': balancedBuildWithListings,
         'performance_build': performanceBuildWithListings,

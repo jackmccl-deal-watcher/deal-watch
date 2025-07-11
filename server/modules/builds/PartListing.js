@@ -15,7 +15,7 @@ const getPriceRange = (part) => {
 const getPartListing = async (part) => {
     const keyword = encodeURI(`${part.brand} ${part.model}`)
     const listingsData = await getListings(keyword, LISTING_LIMIT)
-    if (!(listingsData) || !(listingsData.itemSummaries) || (listingsData.itemSummaries.length === 0)) {
+    if (!(listingsData?.itemSummaries?.length) || (listingsData.itemSummaries.length === 0)) {
         return false
     }
     const listingSummaries = listingsData['itemSummaries']
