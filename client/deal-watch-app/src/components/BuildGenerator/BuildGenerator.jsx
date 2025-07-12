@@ -7,9 +7,10 @@ import MemoryBuildForm from "./BuildComponentForms/MemoryBuildForm"
 import HardDriveBuildForm from "./BuildComponentForms/HardDriveBuildForm"
 import PowerSupplyBuildForm from "./BuildComponentForms/PowerSupplyBuildForm"
 import CaseBuildForm from "./BuildComponentForms/CaseBuildForm"
-import { COMPONENT_TYPES_STARTING_ALLOCATIONS, STARTING_BUDGET } from "./BuildGeneratorConstants"
+import { FORM_CONFIG, COMPONENT_TYPES_STARTING_ALLOCATIONS, STARTING_BUDGET } from "./BuildGeneratorConstants"
 import TextField from '@mui/material/TextField';
 import InputAdornment from '@mui/material/InputAdornment';
+import ComponentTypes from "../../component_enums/ComponentTypesEnum"
 
 const BuildGenerator = () => {
     const [allocations, setAllocations] = useState({})
@@ -21,6 +22,28 @@ const BuildGenerator = () => {
             components: allocations,
         }
         console.log(allocationsBody)
+    }
+
+    const makeBuildForms = (config) => {
+        return Object.values(config).map( (component_data) => {
+            const componentFormProp = { handleAllocations, allocations, component_data}
+            switch (component_data.component_type) {
+                case ComponentTypes.CPU:
+                    return <CPUBuildForm {...componentFormProp} key={component_data.component_type}/>
+                case ComponentTypes.VIDEOCARD:
+                    return <VideoCardBuildForm {...componentFormProp} key={component_data.component_type}/>
+                case ComponentTypes.MOTHERBOARD:
+                    return <MotherboardBuildForm {...componentFormProp} key={component_data.component_type}/>
+                case ComponentTypes.MEMORY:
+                    return <MemoryBuildForm {...componentFormProp} key={component_data.component_type}/>
+                case ComponentTypes.HARD_DRIVE:
+                    return <HardDriveBuildForm {...componentFormProp} key={component_data.component_type}/>
+                case ComponentTypes.POWER_SUPPLY:
+                    return <PowerSupplyBuildForm {...componentFormProp} key={component_data.component_type}/>
+                case ComponentTypes.CASE:
+                    return <CaseBuildForm {...componentFormProp} key={component_data.component_type}/>
+            }
+        })
     }
 
     const handleAllocations = (component_type, component_allocations) => {
@@ -85,13 +108,7 @@ const BuildGenerator = () => {
                             },
                         }}
                     />
-                    <CPUBuildForm handleAllocations={handleAllocations} allocations={allocations}/>
-                    <VideoCardBuildForm handleAllocations={handleAllocations} allocations={allocations}/>
-                    <MotherboardBuildForm handleAllocations={handleAllocations} allocations={allocations}/>
-                    <MemoryBuildForm handleAllocations={handleAllocations} allocations={allocations}/>
-                    <HardDriveBuildForm handleAllocations={handleAllocations} allocations={allocations}/>
-                    <PowerSupplyBuildForm handleAllocations={handleAllocations} allocations={allocations}/>
-                    <CaseBuildForm handleAllocations={handleAllocations} allocations={allocations}/>
+                    {makeBuildForms(FORM_CONFIG)}
                     <button className='generate-build-form-submit-button' onClick={generateBuilds}>Generate Builds</button>
                 </div> : null
             }
