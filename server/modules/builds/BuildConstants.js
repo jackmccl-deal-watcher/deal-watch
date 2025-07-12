@@ -42,8 +42,10 @@ const ComponentSpecs = Object.freeze({
     EXTERNAL_BAYS: "external_bays",
     PSU_WATTAGE: 'psu_wattage',
     SIDE_PANEL: 'side_panel',
-    THIRTYDAYAVERAGE: 'thirtyDayAverage',
-    PCPP_PRICE: 'pcppPrice',
+    THIRTY_DAY_AVERAGE: 'thirty_day_average',
+    THIRTY_DAY_TIME: 'thirty_day_time',
+    THIRTY_DAY_LISTING_COUNT: 'thirty_day_listing_count',
+    PCPP_PRICE: 'pcpp_price',
 })
 
 const MODEL_DICT = {

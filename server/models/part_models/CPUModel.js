@@ -9,10 +9,10 @@ const CPUSchema = new mongoose.Schema({
     boost_clock: Number,
     integrated_graphics: String,
     multithreading: Boolean,
-    thirtyDayAverage: Number,
-    thirtyDayTime: Number,
-    thirtyDayListingCount: Number,
-    pcppPrice: Number,
+    thirty_day_average: Number,
+    thirty_day_time: Number,
+    thirty_day_listing_count: Number,
+    pcpp_price: Number,
 })
 
 const CPUModel = mongoose.model('CPU', CPUSchema, 'cpu')
