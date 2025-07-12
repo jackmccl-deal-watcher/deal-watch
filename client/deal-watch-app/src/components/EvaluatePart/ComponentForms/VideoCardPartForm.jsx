@@ -1,9 +1,8 @@
 import { useState } from 'react'
 import Slider from '@mui/material/Slider';
 import { VIDEOCARD_PROPERTIES } from '../../../component_enums/ComponentPropertiesEnums';
-import './ComponentForm.css'
 
-const VideoCardForm = ({ handlePartEvaluation }) => {
+const VideoCardPartForm = ({ handlePartEvaluation }) => {
     const [vram, setVram] = useState(6000000000)
     const [baseClock, setBaseClock] = useState(1350000000)
     const [boostClock, setBoostClock] = useState(1750000000)
@@ -39,4 +38,4 @@ const VideoCardForm = ({ handlePartEvaluation }) => {
     )
 }
 
-export default VideoCardForm
+export default VideoCardPartForm

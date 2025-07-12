@@ -1,0 +1,8 @@
+.sum-sliders {
+    max-width: 500px;
+    min-width: 200px;
+    justify-self: center;
+}
+.sum-sliders-container {
+    max-width: 500px;
+}

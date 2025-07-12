@@ -4,37 +4,39 @@ import InputLabel from '@mui/material/InputLabel';
 import MenuItem from '@mui/material/MenuItem';
 import FormControl from '@mui/material/FormControl';
 import Select from '@mui/material/Select';
-import CPUForm from "./ComponentForms/CPUForm";
-import VideoCardForm from './ComponentForms/VideoCardForm';
-import MotherboardForm from './ComponentForms/MotherboardForm';
-import MemoryForm from './ComponentForms/MemoryForm';
-import HardDriveForm from './ComponentForms/HardDriveForm';
-import PowerSupplyForm from './ComponentForms/PowerSupplyForm';
-import CaseForm from './ComponentForms/CaseForm';
+import CPUPartForm from "./ComponentForms/CPUPartForm";
+import VideoCardPartForm from './ComponentForms/VideoCardPartForm';
+import MotherboardPartForm from './ComponentForms/MotherboardPartForm';
+import MemoryPartForm from './ComponentForms/MemoryPartForm';
+import HardDrivePartForm from './ComponentForms/HardDrivePartForm';
+import PowerSupplyPartForm from './ComponentForms/PowerSupplyPartForm';
+import CasePartForm from './ComponentForms/CasePartForm';
+import './ComponentPartForm.css'
 
-const ComponentForm = ({ handlePartEvaluation }) => {
+
+const ComponentPartForm = ({ handlePartEvaluation }) => {
     const [componentType, setComponentType] = useState('cpu')
     const selectComponentForm = () => {
         switch (componentType) {
             case ComponentTypes.CPU:
-                return <CPUForm handlePartEvaluation={handlePartEvaluation}/>
+                return <CPUPartForm handlePartEvaluation={handlePartEvaluation}/>
             case ComponentTypes.VIDEOCARD:
-                return <VideoCardForm handlePartEvaluation={handlePartEvaluation}/>
+                return <VideoCardPartForm handlePartEvaluation={handlePartEvaluation}/>
             case ComponentTypes.MOTHERBOARD:
-                return <MotherboardForm handlePartEvaluation={handlePartEvaluation}/>
+                return <MotherboardPartForm handlePartEvaluation={handlePartEvaluation}/>
             case ComponentTypes.MEMORY:
-                return <MemoryForm handlePartEvaluation={handlePartEvaluation}/>
+                return <MemoryPartForm handlePartEvaluation={handlePartEvaluation}/>
             case ComponentTypes.HARD_DRIVE:
-                return <HardDriveForm handlePartEvaluation={handlePartEvaluation}/>
+                return <HardDrivePartForm handlePartEvaluation={handlePartEvaluation}/>
             case ComponentTypes.POWER_SUPPLY:
-                return <PowerSupplyForm handlePartEvaluation={handlePartEvaluation}/>
+                return <PowerSupplyPartForm handlePartEvaluation={handlePartEvaluation}/>
             case ComponentTypes.CASE:
-                return <CaseForm handlePartEvaluation={handlePartEvaluation}/>
+                return <CasePartForm handlePartEvaluation={handlePartEvaluation}/>
         }
     }
 
     return (
-        <div className='componentform'>
+        <div className='component-part-form'>
             <FormControl variant="filled" sx={{ m: 1, minWidth: 120 }}>
                 <InputLabel>Component Type:</InputLabel>
                 <Select
@@ -55,4 +57,4 @@ const ComponentForm = ({ handlePartEvaluation }) => {
     )
 }
 
-export default ComponentForm
+export default ComponentPartForm
