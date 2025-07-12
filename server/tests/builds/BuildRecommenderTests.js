@@ -1,7 +1,8 @@
 const { TestError } = require("../../errors/TestError")
 const ComponentTypes = require("../../models/part_models/ComponentTypesEnum")
 const { PERFORMANCE_PRIORITIES, COMPARED_KEYS, MODE, ComponentSpecs, RATINGS} = require('../../modules/builds/BuildConstants.js')
-const { generalComparator, getPerformanceAllocations } = require("../../modules/builds/BuildRecommender")
+const { generalComparator } = require("../../modules/builds/BuildRecommender")
+const { getPerformanceAllocations } = require('../../modules/builds/BuildModes.js')
 const { userAllocations500, test_cpus, test_videocards, test_motherboards, test_memorys, test_hard_drives, test_power_supplys, test_cases } = require("./test_builds")
 
 const numberAllocationTester = (test_allocations, parts, component_type) => {
