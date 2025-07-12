@@ -8,10 +8,10 @@ const PowerSupplySchema = new mongoose.Schema({
     efficiency_rating: String,
     wattage: Number,
     modular: String,
-    thirtyDayAverage: Number,
-    thirtyDayTime: Number,
-    thirtyDayListingCount: Number,
-    pcppPrice: Number,
+    thirty_day_average: Number,
+    thirty_day_time: Number,
+    thirty_day_listing_count: Number,
+    pcpp_price: Number,
 })
 
 const PowerSupplyModel = mongoose.model('PowerSupply', PowerSupplySchema, 'power-supply')

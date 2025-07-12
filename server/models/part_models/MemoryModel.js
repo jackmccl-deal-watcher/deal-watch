@@ -12,10 +12,10 @@ const MemorySchema = new mongoose.Schema({
     first_word_latency: Number,
     cas_timing: Number,
     price_per_gb: Number,
-    thirtyDayAverage: Number,
-    thirtyDayTime: Number,
-    thirtyDayListingCount: Number,
-    pcppPrice: Number,
+    thirty_day_average: Number,
+    thirty_day_time: Number,
+    thirty_day_listing_count: Number,
+    pcpp_price: Number,
 })
 
 const MemoryModel = mongoose.model('Memory', MemorySchema, 'memory')

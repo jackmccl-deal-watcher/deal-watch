@@ -1,108 +1,17 @@
-const CPUModel = require('../../models/part_models/CPUModel.js')
-const VideoCardModel = require('../../models/part_models/VideoCardModel.js')
-const MotherboardModel = require('../../models/part_models/MotherboardModel.js')
-const MemoryModel = require('../../models/part_models/MemoryModel.js')
-const HardDriveModel = require('../../models/part_models/HardDriveModel.js')
-const PowerSupplyModel = require('../../models/part_models/PowerSupplyModel.js')
-const CaseModel = require('../../models/part_models/CaseModel.js')
-const userAllocations500 = require('../../tests/builds/test_builds.js')
+const { ComponentSpecs, MODULARITIES, MODULE_TYPES, STORAGE_TYPES, EFFICIENCY_RATINGS, BUDGET_MARGIN, COMPARED_KEYS, MODE} = require('./BuildConstants.js')
+const { fetchPartsInBudget } = require('./FetchParts.js')
+const { calcMixedRating } = require('./BuildUtils.js')
+const { calcRatingWithPrice, getPerformanceAllocations } = require('./BuildModes.js')
 
-const MODEL_DICT = {
-    'cpu': CPUModel,
-    'video-card': VideoCardModel,
-    'motherboard': MotherboardModel,
-    'memory': MemoryModel,
-    'hard-drive': HardDriveModel,
-    'power-supply': PowerSupplyModel,
-    'case': CaseModel,
-}
-
-// In order of "increasing" quality
-const MODULARITIES = [
-    "No", 
-    "Semi", 
-    "Full",
-]
-const MODULE_TYPES = [
-    "DDR",
-    "DDR2", 
-    "DDR3", 
-    "DDR4",
-]
-const STORAGE_TYPES = [
-    "HDD", 
-    "Hybrid", 
-    "SSD",
-]
-
-const EFFICIENCY_RATINGS = [
-    "80+",
-    "80+ Bronze",
-    "80+ Silver",
-    "80+ Gold",
-    "80+ Platinum",
-    "80+ Titanium"
-]
-
-const MARGIN = 0.10
-
-const COMPARED_KEYS = [
-    'cores',
-    'base_clock',
-    'boost_clock',
-    'vram',
-    'ram_slots',
-    'max_ram',
-    'socket',
-    'form_factor',
-    'speed',
-    'total_size',
-    'module_type',
-    'capacity',
-    'storage_type',
-    'wattage',
-    'efficiency_rating',
-    'modular',
-    'internal_bays',
-    'color'
-]
-
-const fetchPartsInBudget = async (userAllocations, margin) => {
-    let partsDict = {}
-    for (let [component_key, component] of Object.entries(userAllocations.components)) {
-        const componentBudget = userAllocations.budget * component.allocation
-        const componentBudgetLow = componentBudget - componentBudget * margin
-        const componentBudgetHigh = componentBudget
-        
-        const componentModel = MODEL_DICT[component_key]
-        const partsInBudget = await componentModel.find( { 
-            $or: [
-                {
-                    $and: [
-                        { thirtyDayAverage: {$gte: componentBudgetLow} },
-                        { thirtyDayAverage: {$lte: componentBudgetHigh} },
-                    ]
-                },
-                {
-                    $and: [
-                        { thirtyDayAverage: -1},
-                        { pcppPrice: {$gte: componentBudgetLow} },
-                        { pcppPrice: {$lte: componentBudgetHigh} },
-                    ]
-                },
-            ]
-        })
-        partsDict[component_key] = partsInBudget
+const calcPartColorScore = (part, color_index, color_preferences) => {
+    let part_color_rating = 0
+    const current_color = color_preferences[color_index]
+    if (part[ComponentSpecs.COLOR] === current_color) {
+        part_color_rating += color_preferences.length - color_index
+    } else if (part[ComponentSpecs.COLOR].includes(current_color) || current_color.includes(part[ComponentSpecs.COLOR])) {
+        part_color_rating += (color_preferences.length - color_index) / 2
     }
-    return partsDict
-}
-
-const calcMixedRating = (a_rating, b_rating, allocation) => {
-    if ((a_rating + b_rating) === 0) {
-        return 0
-    }
-    return Math.sign(a_rating - b_rating) * allocation * (2/3) 
-                + allocation * (1/3) * (a_rating - b_rating) / (a_rating+b_rating)
+    return part_color_rating
 }
 
 const calcColorRating = (a, b, color_allocation_dict) => {
@@ -110,16 +19,8 @@ const calcColorRating = (a, b, color_allocation_dict) => {
     let a_color_rating = 0
     let b_color_rating = 0
     for (let color_index in preferenceColors) {
-        if (a['color'] === preferenceColors[color_index]) {
-            a_color_rating += preferenceColors.length - color_index
-        } else if (a['color'].includes(preferenceColors[color_index]) || preferenceColors[color_index].includes(a['color'])) {
-            a_color_rating += (preferenceColors.length - color_index) / 2
-        }
-        if (b['color'] === preferenceColors[color_index]) {
-            b_color_rating += preferenceColors.length - color_index
-        } else if (b['color'].includes(preferenceColors[color_index]) || preferenceColors[color_index].includes(b['color'])) {
-            b_color_rating += (preferenceColors.length - color_index) / 2
-        }
+        a_color_rating += calcPartColorScore(a, color_index, preferenceColors)
+        b_color_rating += calcPartColorScore(b, color_index, preferenceColors)
     }
     const colorAllocation = color_allocation_dict['allocation']
     return calcMixedRating(a_color_rating, b_color_rating, colorAllocation)
@@ -145,26 +46,30 @@ const calcSlidingQualityRating = (a, b, spec_allocation, quality_levels, spec_ke
     return calcMixedRating(a_key_value_rating, b_key_value_rating, spec_allocation)
 }
 
-const generalComparator = (a, b, componentAllocations, component) => {
+const generalComparator = (a, b, componentAllocations, component_key, mode) => {
+    if (mode === MODE.PERFORMANCE) {
+        // Redistributes allocations based on performance, then creates rating
+        componentAllocations = getPerformanceAllocations(componentAllocations, 0.2)
+    }
     let rating = 0
-    const componentDict = componentAllocations[component]
+    const componentDict = componentAllocations[component_key]
     const componentPropertyKeys = Object.keys(componentDict).filter(key => COMPARED_KEYS.includes(key))
     for (let key of componentPropertyKeys) {
         const allocation = componentDict[key]
         switch (key) {
-            case ('color'):
+            case (ComponentSpecs.COLOR):
                 rating += calcColorRating(a, b, allocation)
                 break
-            case ('modular'):
+            case (ComponentSpecs.MODULAR):
                 rating += calcSlidingQualityRating(a, b, allocation, MODULARITIES, key)
                 break
-            case ('module_type'):
+            case (ComponentSpecs.MODULE_TYPE):
                 rating += calcSlidingQualityRating(a, b, allocation, MODULE_TYPES, key)
                 break
-            case ('storage_type'):
+            case (ComponentSpecs.STORAGE_TYPE):
                 rating += calcSlidingQualityRating(a, b, allocation, STORAGE_TYPES, key)
                 break
-            case ('efficiency_rating'):
+            case (ComponentSpecs.EFFICIENCY_RATING):
                 rating += calcSlidingQualityRating(a, b, allocation, EFFICIENCY_RATINGS, key)
                 break
             default:
@@ -184,18 +89,24 @@ const generalComparator = (a, b, componentAllocations, component) => {
                     }
         }
     }
-    return rating
-}
-
-const recommendBuilds = async (userAllocations) => {
-    const partsInBudget = await fetchPartsInBudget(userAllocations, MARGIN)
-    let rankedComponents = {}
-    for (let [component_key, components] of Object.entries(partsInBudget)) {
-        const componentAllocations = userAllocations['components']
-        rankedComponents[component_key] = components.sort((a, b) => generalComparator(a, b, componentAllocations, component_key))
+    switch (mode) {
+        case MODE.BUDGET:
+            // Modifies rating to also account for price
+            return calcRatingWithPrice(a, b, rating, 0.3)
+        case MODE.DEFAULT:
+            return rating
+        default:
+            throw new Error(`Unknown ranking mode: ${mode}`)
     }
 }
 
-recommendBuilds(userAllocations500)
+const recommendBuilds = async (userAllocations) => {
+    const partsInBudget = await fetchPartsInBudget(userAllocations, BUDGET_MARGIN)
+    let rankedComponents = {}
+    for (let [component_key, components] of Object.entries(partsInBudget)) {
+        const componentAllocations = userAllocations['components']
+        rankedComponents[component_key] = components.sort((a, b) => generalComparator(a, b, componentAllocations, component_key, MODE.DEFAULT))
+    }
+}
 
-module.exports = { recommendBuilds, generalComparator, MODULARITIES, MODULE_TYPES, EFFICIENCY_RATINGS, STORAGE_TYPES }
+module.exports = { recommendBuilds, generalComparator, calcMixedRating }
