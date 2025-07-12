@@ -1,9 +1,10 @@
 const { json } = require('body-parser')
 const EbayAuthToken = require('ebay-oauth-nodejs-client')
-require('dotenv').config()
+require('dotenv').config({
+    path: `${__dirname}/../../.env`
+})
 
 const EBAY_API_BROWSE_URL = process.env.EBAY_API_BROWSE_URL
-
 const generateClientAccessToken = async () => {
     try {
         const ebayAuthToken = new EbayAuthToken({
