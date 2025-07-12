@@ -5,55 +5,35 @@ import { MOTHERBOARD_PROPERTIES } from '../../../component_enums/ComponentProper
 import ComponentTypes from '../../../component_enums/ComponentTypesEnum'
 import Slider from '@mui/material/Slider';
 import { COMPONENT_ALLOCATION_MAXIMUM, COMPONENT_ALLOCATION_MINIMUM, MOTHERBOARD_FORM_FACTORS, SOCKETS } from '../BuildGeneratorConstants'
+import { getSliderLabelText } from './BuildFormUtils'
+import { updateComponentAllocation } from './BuildFormUtils'
+import { handleSpecialAllocation } from './BuildFormUtils'
 
 const MotherboardBuildForm = ({ handleAllocations, allocations }) => {
     const [formFactor, setFormFactor] = useState('')
     const [socket, setSocket] = useState('')
 
-    const handlePointsAllocations = (pointsDict) => {
-        let componentAllocationsDict = {...pointsDict}
-        pointsDict && Object.keys(pointsDict).forEach((key) => {
-            componentAllocationsDict[key] = pointsDict[key]
-        })
-        componentAllocationsDict[MOTHERBOARD_PROPERTIES.FORM_FACTOR] = formFactor
-        componentAllocationsDict['allocation'] = allocations[ComponentTypes.MOTHERBOARD]['allocation']
-        handleAllocations(ComponentTypes.MOTHERBOARD, componentAllocationsDict)
-    }
-
-    const updateComponentAllocation = ({newValue}) => {
-        let componentAllocationsDict = {...allocations[ComponentTypes.MOTHERBOARD]}
-        componentAllocationsDict['allocation'] = newValue
-        handleAllocations(ComponentTypes.MOTHERBOARD, componentAllocationsDict)
-    }
-
-    const handleFormFactorAllocation = (newFormFactor) => {
+    const handleFormFactorAllocationMotherboard = (newFormFactor) => {
         setFormFactor(newFormFactor)
-        let componentAllocationsDict = {...allocations[ComponentTypes.MOTHERBOARD]}
-        componentAllocationsDict[MOTHERBOARD_PROPERTIES.FORM_FACTOR] = newFormFactor
-        handleAllocations(ComponentTypes.MOTHERBOARD, componentAllocationsDict)
+        const specialAllocationParameters = {newAllocation: newFormFactor, spec_type: MOTHERBOARD_PROPERTIES.FORM_FACTOR, component_type: ComponentTypes.MOTHERBOARD, allocations: allocations, handleAllocations: handleAllocations}
+        handleSpecialAllocation(specialAllocationParameters)
     }
 
-    const handleSocketAllocation = (newSocket) => {
+    const handleSocketAllocationMotherboard = (newSocket) => {
         setSocket(newSocket)
-        let componentAllocationsDict = {...allocations[ComponentTypes.MOTHERBOARD]}
-        componentAllocationsDict[MOTHERBOARD_PROPERTIES.SOCKET] = newSocket
-        handleAllocations(ComponentTypes.MOTHERBOARD, componentAllocationsDict)
+        const specialAllocationParameters = {newAllocation: newSocket, spec_type: MOTHERBOARD_PROPERTIES.SOCKET, component_type: ComponentTypes.MOTHERBOARD, allocations: allocations, handleAllocations: handleAllocations}
+        handleSpecialAllocation(specialAllocationParameters)
     }
-
-    const getSliderLabelText = (points) => {
-        return Math.floor(points * 100)
-    }
-
 
     return(
         <div>
             { allocations?.[ComponentTypes.MOTHERBOARD]?.['allocation'] ?
                 <div className='build-form'>
                     <p>Motherboard: {getSliderLabelText(allocations[ComponentTypes.MOTHERBOARD]['allocation'])}</p>
-                    <Slider min={COMPONENT_ALLOCATION_MINIMUM} max={COMPONENT_ALLOCATION_MAXIMUM} step={0.01} valueLabelDisplay='auto' valueLabelFormat={getSliderLabelText} value={allocations[ComponentTypes.MOTHERBOARD]['allocation']} onChange={(e, newValue) => updateComponentAllocation({ newValue })}></Slider>
-                    <SumSliders specs={[{ key: MOTHERBOARD_PROPERTIES.RAM_SLOTS, tag: 'Ram Slots' }, { key: MOTHERBOARD_PROPERTIES.MAX_RAM, tag: 'Max Ram' }]} handlePointsAllocations={handlePointsAllocations}/>
-                    <OptionsDropdown options={MOTHERBOARD_FORM_FACTORS} optionsType={'Form Factor'} currentOption={formFactor} setCurrentOption={handleFormFactorAllocation}/>
-                    <OptionsDropdown options={SOCKETS} optionsType={'Socket'} currentOption={socket} setCurrentOption={handleSocketAllocation}/>
+                    <Slider min={COMPONENT_ALLOCATION_MINIMUM} max={COMPONENT_ALLOCATION_MAXIMUM} step={0.01} valueLabelDisplay='auto' valueLabelFormat={getSliderLabelText} value={allocations[ComponentTypes.MOTHERBOARD]['allocation']} onChange={(e, newValue) => updateComponentAllocation({ newValue, component_type: ComponentTypes.MOTHERBOARD, allocations, handleAllocations })}></Slider>
+                    <SumSliders specs={[{ key: MOTHERBOARD_PROPERTIES.RAM_SLOTS, tag: 'Ram Slots' }, { key: MOTHERBOARD_PROPERTIES.MAX_RAM, tag: 'Max Ram' }]} handlePointsAllocationsParameters={{ component_type: ComponentTypes.MOTHERBOARD, special_specs: {form_factor: formFactor}, allocations, handleAllocations }}/>
+                    <OptionsDropdown options={MOTHERBOARD_FORM_FACTORS} optionsType={'Form Factor'} currentOption={formFactor} setCurrentOption={handleFormFactorAllocationMotherboard}/>
+                    <OptionsDropdown options={SOCKETS} optionsType={'Socket'} currentOption={socket} setCurrentOption={handleSocketAllocationMotherboard}/>
                 </div> : null
             }
         </div>

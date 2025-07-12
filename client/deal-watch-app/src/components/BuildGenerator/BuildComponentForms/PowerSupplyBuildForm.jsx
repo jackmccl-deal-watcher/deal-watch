@@ -5,34 +5,16 @@ import { POWER_SUPPLY_PROPERTIES } from '../../../component_enums/ComponentPrope
 import { COMPONENT_ALLOCATION_MAXIMUM, COMPONENT_ALLOCATION_MINIMUM, POWER_SUPPLY_FORM_FACTORS } from '../BuildGeneratorConstants';
 import { useState } from 'react';
 import OptionsDropdown from '../../EvaluatePart/ComponentForms/OptionsDropdown'
+import { getSliderLabelText, handleSpecialAllocation } from './BuildFormUtils'
+import { updateComponentAllocation } from './BuildFormUtils';
 
 const PowerSupplyBuildForm = ({ handleAllocations, allocations }) => {
     const [formFactor, setFormFactor] = useState('')
 
-    const handlePointsAllocations = (pointsDict) => {
-        let componentAllocationsDict = {...pointsDict}
-        pointsDict && Object.keys(pointsDict).forEach((key) => {
-            componentAllocationsDict[key] = pointsDict[key]
-        })
-        componentAllocationsDict['allocation'] = allocations[ComponentTypes.POWER_SUPPLY]['allocation']
-        handleAllocations(ComponentTypes.POWER_SUPPLY, componentAllocationsDict)
-    }
-
-    const handleFormFactorAllocation = (newFormFactor) => {
+    const handleFormFactorAllocationPowerSupply = (newFormFactor) => {
         setFormFactor(newFormFactor)
-        let componentAllocationsDict = {...allocations[ComponentTypes.POWER_SUPPLY]}
-        componentAllocationsDict[POWER_SUPPLY_PROPERTIES.FORM_FACTOR] = newFormFactor
-        handleAllocations(ComponentTypes.POWER_SUPPLY, componentAllocationsDict)
-    }
-
-    const updateComponentAllocation = ({newValue}) => {
-        let componentAllocationsDict = {...allocations[ComponentTypes.POWER_SUPPLY]}
-        componentAllocationsDict['allocation'] = newValue
-        handleAllocations(ComponentTypes.POWER_SUPPLY, componentAllocationsDict)
-    }
-
-    const getSliderLabelText = (points) => {
-        return Math.floor(points * 100)
+        const specialAllocationParameters = {newAllocation: newFormFactor, spec_type: POWER_SUPPLY_PROPERTIES.FORM_FACTOR, component_type: ComponentTypes.POWER_SUPPLY, allocations: allocations, handleAllocations: handleAllocations}
+        handleSpecialAllocation(specialAllocationParameters)
     }
 
     return(
@@ -40,9 +22,9 @@ const PowerSupplyBuildForm = ({ handleAllocations, allocations }) => {
             { allocations?.[ComponentTypes.POWER_SUPPLY]?.['allocation'] ?
                 <div className='build-form'>
                     <p>Power-Supply: {getSliderLabelText(allocations[ComponentTypes.POWER_SUPPLY]['allocation'])}</p>
-                    <Slider min={COMPONENT_ALLOCATION_MINIMUM} max={COMPONENT_ALLOCATION_MAXIMUM} step={0.01} valueLabelDisplay='auto' valueLabelFormat={getSliderLabelText} value={allocations[ComponentTypes.POWER_SUPPLY]['allocation']} onChange={(e, newValue) => updateComponentAllocation({ newValue })}></Slider>
-                    <SumSliders specs={[{ key: POWER_SUPPLY_PROPERTIES.WATTAGE, tag: 'Wattage' }, { key: POWER_SUPPLY_PROPERTIES.EFFICIENCY_RATING, tag: 'Efficiency Rating' }, { key: POWER_SUPPLY_PROPERTIES.MODULAR, tag: 'Modularity' }]} handlePointsAllocations={handlePointsAllocations}/>
-                    <OptionsDropdown options={POWER_SUPPLY_FORM_FACTORS} optionsType={'Form Factor'} currentOption={formFactor} setCurrentOption={handleFormFactorAllocation}/>
+                    <Slider min={COMPONENT_ALLOCATION_MINIMUM} max={COMPONENT_ALLOCATION_MAXIMUM} step={0.01} valueLabelDisplay='auto' valueLabelFormat={getSliderLabelText} value={allocations[ComponentTypes.POWER_SUPPLY]['allocation']} onChange={(e, newValue) => updateComponentAllocation({ newValue, component_type: ComponentTypes.POWER_SUPPLY, allocations, handleAllocations })}></Slider>
+                    <SumSliders specs={[{ key: POWER_SUPPLY_PROPERTIES.WATTAGE, tag: 'Wattage' }, { key: POWER_SUPPLY_PROPERTIES.EFFICIENCY_RATING, tag: 'Efficiency Rating' }, { key: POWER_SUPPLY_PROPERTIES.MODULAR, tag: 'Modularity' }]} handlePointsAllocationsParameters={{ component_type: ComponentTypes.POWER_SUPPLY, special_specs: {form_factor: formFactor}, allocations, handleAllocations }}/>
+                    <OptionsDropdown options={POWER_SUPPLY_FORM_FACTORS} optionsType={'Form Factor'} currentOption={formFactor} setCurrentOption={handleFormFactorAllocationPowerSupply}/>
                 </div> : null
             }
         </div>
