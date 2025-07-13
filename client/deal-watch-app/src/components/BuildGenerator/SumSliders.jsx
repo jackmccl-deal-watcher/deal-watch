@@ -2,43 +2,24 @@ import { useState, useEffect } from "react"
 import Slider from '@mui/material/Slider';
 import './SumSliders.css'
 import { SPEC_ALLOCATION_MAXIMUM, SPEC_ALLOCATION_MINIMUM } from "./BuildGeneratorConstants";
-import { handlePointsAllocations } from "./BuildComponentForms/BuildFormUtils";
+import { balancePoints, handlePointsAllocations } from "./BuildComponentForms/BuildFormUtils";
 import { getSliderLabelText } from "./BuildComponentForms/BuildFormUtils";
 
-const SumSliders = ({ specs, handlePointsAllocationsParameters }) => {
+const SumSliders = ({ specs, handleUpdatePoints }) => {
     const [pointsDict, setPointsDict] = useState({})
 
     const updatePointsDict = ({spec, newValue}) => {
-        setPointsDict(prevDict => {
-            let newPointsDict = {...prevDict}
-            newPointsDict[spec.key] = newValue
-            let sum = 0
-            Object.values(newPointsDict).forEach((points) => (sum += points))
-            const excess = sum - 1
-            const per_spec_adjustment = Math.abs(excess / (specs.length - 1))
-            Object.keys(newPointsDict).forEach((key) => {
-                if (key !== spec.key) {
-                    if (excess > 0) {
-                        newPointsDict[key] = newPointsDict[key] - per_spec_adjustment
-                    } else if (excess < 0) {
-                        newPointsDict[key] = newPointsDict[key] + per_spec_adjustment
-                    }
-                }
-            })
-            return newPointsDict
-        })
-        if (handlePointsAllocationsParameters && pointsDict) {
-            handlePointsAllocationsParameters["pointsDict"] = pointsDict
-            handlePointsAllocations(handlePointsAllocationsParameters)
+        const newPointsDict = balancePoints({ newValue, spec, setPointsDict })
+        if (newPointsDict) {
+            handleUpdatePoints(newPointsDict)
         }
     }
 
     const createPointsDict = () => {
         let newPointsDict = {}
         specs && specs.forEach((spec) => newPointsDict[spec.key] = (1 / specs.length))
-        if (handlePointsAllocationsParameters && newPointsDict) {
-            handlePointsAllocationsParameters["pointsDict"] = newPointsDict
-            handlePointsAllocations(handlePointsAllocationsParameters)
+        if (newPointsDict) {
+            handleUpdatePoints(newPointsDict)
         }
         setPointsDict(newPointsDict)
     }

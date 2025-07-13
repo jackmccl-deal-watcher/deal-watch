@@ -10,31 +10,31 @@ export const SPEC_ALLOCATION_MAXIMUM = 0.6
 export const COMPONENT_TYPES_STARTING_ALLOCATIONS = [
     {
         type: ComponentTypes.CPU,
-        allocation: 0.15,
+        starting_allocation: 0.15,
     },
     {
         type: ComponentTypes.VIDEOCARD,
-        allocation: 0.2,
+        starting_allocation: 0.2,
     },
     {
         type: ComponentTypes.MOTHERBOARD,
-        allocation: 0.15,
+        starting_allocation: 0.15,
     },
     {
         type: ComponentTypes.MEMORY,
-        allocation: 0.15,
+        starting_allocation: 0.15,
     },
     {
         type: ComponentTypes.HARD_DRIVE,
-        allocation: 0.15,
+        starting_allocation: 0.15,
     },
     {
         type: ComponentTypes.POWER_SUPPLY,
-        allocation: 0.1,
+        starting_allocation: 0.1,
     },
     {
         type: ComponentTypes.CASE,
-        allocation: 0.1,
+        starting_allocation: 0.1,
     },
 ]
 

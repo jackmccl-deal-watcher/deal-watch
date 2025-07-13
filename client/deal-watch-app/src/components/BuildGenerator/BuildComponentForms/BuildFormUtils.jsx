@@ -1,36 +1,53 @@
 import { CASE_PROPERTIES, MOTHERBOARD_PROPERTIES, POWER_SUPPLY_PROPERTIES } from "../../../component_enums/ComponentPropertiesEnums"
 
-export const handlePointsAllocations = ({ pointsDict, component_type, special_specs, allocations, handleAllocations}) => {
-    let componentAllocationsDict = {...pointsDict}
-    switch (component_type) {
-        case 'case':
-            componentAllocationsDict[CASE_PROPERTIES.FORM_FACTOR] = special_specs.form_factor
-            componentAllocationsDict[CASE_PROPERTIES.COLOR] = {
-                allocation: allocations[component_type]['allocation'],
-                colors: special_specs.color,
-            }
-            break
-        case 'motherboard':
-            componentAllocationsDict[MOTHERBOARD_PROPERTIES.FORM_FACTOR] = special_specs.form_factor
-            break
-        case 'power-supply':
-            componentAllocationsDict[POWER_SUPPLY_PROPERTIES.FORM_FACTOR] = special_specs.form_factor
-            break
+export const handleAllocations = (component_type, component_allocations, setAllocations) => {
+    setAllocations(prevAllocations => {
+        let newAllocationsDict = {...prevAllocations}
+        if (newAllocationsDict?.[component_type]?.['allocation'] && component_allocations?.['allocation'] && (newAllocationsDict[component_type]['allocation'] !== component_allocations['allocation'])) {
+            let sum = 0
+            Object.values(newAllocationsDict).forEach((component) => {
+                if (component?.['allocation']) {
+                    sum += component['allocation']
+                }
+            })
+            const excess = sum - 1
+            const per_spec_adjustment = Math.abs(excess / (COMPONENT_TYPES_STARTING_ALLOCATIONS.length - 1))
+            Object.keys(newAllocationsDict).forEach((key) => {
+                if (key !== component_type) {
+                    if (excess > 0) {
+                        newAllocationsDict[key]['allocation'] = newAllocationsDict[key]['allocation'] - per_spec_adjustment
+                    } else if (excess < 0) {
+                        newAllocationsDict[key]['allocation'] = newAllocationsDict[key]['allocation'] + per_spec_adjustment
+                    }
+                }
+            })
         }
-    componentAllocationsDict['allocation'] = allocations[component_type]['allocation']
-    handleAllocations(component_type, componentAllocationsDict)
+        newAllocationsDict[component_type] = component_allocations
+        return newAllocationsDict
+    })
 }
 
-export const updateComponentAllocation = ({newValue, component_type, allocations, handleAllocations}) => {
-    let componentAllocationsDict = {...allocations[component_type]}
-    componentAllocationsDict['allocation'] = newValue
-    handleAllocations(component_type, componentAllocationsDict)
-}
-
-export const handleSpecialAllocation = ({newAllocation, spec_type, component_type, allocations, handleAllocations}) => {
-    let componentAllocationsDict = {...allocations[component_type]}
-    componentAllocationsDict[spec_type] = newAllocation
-    handleAllocations(component_type, componentAllocationsDict)
+export const balancePoints = ({ newValue, spec_type, setPointsDict }) => {
+    let newPointsDict = {}
+    setPointsDict(prevDict => {
+        newPointsDict = {...prevDict}
+        newPointsDict[spec_type] = newValue
+        let sum = 0
+        Object.values(newPointsDict).forEach((points) => (sum += points))
+        const excess = sum - 1
+        const per_spec_adjustment = Math.abs(excess / (specs.length - 1))
+        Object.keys(newPointsDict).forEach((key) => {
+            if (key !== spec_type) {
+                if (excess > 0) {
+                    newPointsDict[key] = newPointsDict[key] - per_spec_adjustment
+                } else if (excess < 0) {
+                    newPointsDict[key] = newPointsDict[key] + per_spec_adjustment
+                }
+            }
+        })
+        return newPointsDict
+    })
+    return newPointsDict
 }
 
 export const getSliderLabelText = (points) => {
