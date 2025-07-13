@@ -5,17 +5,21 @@ import Slider from '@mui/material/Slider';
 import { COMPONENT_ALLOCATION_MAXIMUM, COMPONENT_ALLOCATION_MINIMUM } from '../BuildGeneratorConstants'
 import MultiSelect from './MultiSelect'
 import { getSliderLabelText } from './BuildFormUtils'
-import { updateComponentAllocation } from './BuildFormUtils'
-import { handleSpecialAllocation } from './BuildFormUtils';
-import { useEffect } from 'react';
+import { useEffect, useState } from 'react';
 
 const ComponentBuildForm = ({ component_data, handleUpdateAllocations, allocations }) => {
-    const [componentAllocations, setComponentAllocations] = useState({})
+    const [trigger, useTrigger] = useState(false)
 
     const handleUpdatePoints = (pointsDict) => {
-        let newAllocationsDict = {...componentAllocations, ...pointsDict}
+        let newAllocationsDict = {...pointsDict}
+        if(pointsDict?.[CASE_PROPERTIES.COLOR]) {
+            newAllocationsDict[CASE_PROPERTIES.COLOR] = {
+                allocation: pointsDict[CASE_PROPERTIES.COLOR],
+                colors: component_data.special_specs[CASE_PROPERTIES.COLOR].currentOption,
+            }
+            component_data.special_specs.color.allocation = pointsDict[CASE_PROPERTIES.COLOR]
+        }
         handleUpdateAllocations(component_data.component_type, newAllocationsDict)
-        setComponentAllocations(newAllocationsDict)
     }
 
     const createComponentAllocations = () => {
@@ -24,51 +28,50 @@ const ComponentBuildForm = ({ component_data, handleUpdateAllocations, allocatio
             newAllocationsDict[main_spec.key] = 1 /  component_data.main_specs.length
         })
         component_data?.special_specs && Object.values(component_data.special_specs).forEach( (special_spec) => {
-            switch (component_data.special_specs.type) {
-                case 'case':
-                    newAllocationsDict[component_data.special_specs.type] = {
+            switch (special_spec.type) {
+                case 'color':
+                    newAllocationsDict[special_spec.type] = {
                         allocation: 1 /  component_data.main_specs.length,
                         colors: [],
                     }
-                    special_spec.currentOption = newAllocationsDict[component_data.special_specs.type]
+                    special_spec.currentOption = newAllocationsDict[special_spec.type]['colors']
+                    special_spec.allocaton = newAllocationsDict[special_spec.type]['allocation']
                     special_spec.setCurrentOption = (newValue) => {
                         let newAllocationsDict = {}
-                        setComponentAllocations( (prevAllocations) => {
-                            newAllocationsDict = {...prevAllocations}
-                            newAllocationsDict[component_data.special_specs.type]['colors'] = newValue
-                            return newAllocationsDict
-                        })
-                        return newAllocationsDict
+                        newAllocationsDict[special_spec.type] = {
+                            allocation: special_spec.allocation,
+                            colors: newValue,
+                        }
+                        handleUpdateAllocations(component_data.component_type, newAllocationsDict)
+                        special_spec.currentOption = newValue
+                        useTrigger(prev => !prev)
                     }
                     break
                 default:
-                    newAllocationsDict[component_data.special_specs.type] = ''
-                    special_spec.currentOption = newAllocationsDict[component_data.special_specs.type]
+                    newAllocationsDict[special_spec.type] = ''
+                    special_spec.currentOption = newAllocationsDict[special_spec.type]
                     special_spec.setCurrentOption = (newValue) => {
                         let newAllocationsDict = {}
-                        setComponentAllocations( (prevAllocations) => {
-                            newAllocationsDict = {...prevAllocations}
-                            newAllocationsDict[component_data.special_specs.type] = newValue
-                            return newAllocationsDict
-                        })
-                        return newAllocationsDict
+                        newAllocationsDict[special_spec.type] = newValue
+                        handleUpdateAllocations(component_data.component_type, newAllocationsDict)
+                        special_spec.currentOption = newValue
+                        useTrigger(prev => !prev)
                     }
             }
         })
         handleUpdateAllocations(component_data.component_type, newAllocationsDict)
-        setComponentAllocations(newAllocationsDict)
     }
 
     useEffect(() => {
         createComponentAllocations()
     }, [])
-
+    
     return(
-        <div>
+        <div className='build-form'>
             { component_data && allocations?.[component_data.component_type]?.['allocation'] ?
-                <div className='build-form'>
+                <div className='build-form-container'>
                     <p>{component_data.component_name}: {getSliderLabelText(allocations[component_data.component_type]['allocation'])}</p>
-                    <Slider min={COMPONENT_ALLOCATION_MINIMUM} max={COMPONENT_ALLOCATION_MAXIMUM} step={0.01} valueLabelDisplay='auto' valueLabelFormat={getSliderLabelText} value={componentAllocations[allocation]} onChange={(e, newValue) => updateComponentAllocation({ newValue, component_type: component_data.component_type, allocations, handleAllocations })}></Slider>
+                    <Slider min={COMPONENT_ALLOCATION_MINIMUM} max={COMPONENT_ALLOCATION_MAXIMUM} step={0.01} valueLabelDisplay='auto' valueLabelFormat={getSliderLabelText} value={allocations[component_data.component_type]['allocation']} onChange={(e, newValue) => handleUpdateAllocations(component_data.component_type, {'allocation': newValue} )}></Slider>
                     <SumSliders specs={component_data.main_specs} handleUpdatePoints={handleUpdatePoints}/>
                     { component_data.special_specs && Object.values(component_data.special_specs).map( ( special_spec ) => {
                         if (special_spec.type === CASE_PROPERTIES.COLOR) {

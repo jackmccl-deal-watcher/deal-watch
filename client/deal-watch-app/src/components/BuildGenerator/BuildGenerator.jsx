@@ -1,34 +1,38 @@
 import { useState, useEffect } from "react"
 import './BuildGenerator.css'
-import CPUBuildForm from "./BuildComponentForms/CPUBuildForm"
-import VideoCardBuildForm from "./BuildComponentForms/VideoCardBuildForm"
-import MotherboardBuildForm from "./BuildComponentForms/MotherboardBuildForm"
-import MemoryBuildForm from "./BuildComponentForms/MemoryBuildForm"
-import HardDriveBuildForm from "./BuildComponentForms/HardDriveBuildForm"
-import PowerSupplyBuildForm from "./BuildComponentForms/PowerSupplyBuildForm"
-import CaseBuildForm from "./BuildComponentForms/CaseBuildForm"
 import { FORM_CONFIG, COMPONENT_TYPES_STARTING_ALLOCATIONS, STARTING_BUDGET } from "./BuildGeneratorConstants"
 import TextField from '@mui/material/TextField';
 import InputAdornment from '@mui/material/InputAdornment';
-import ComponentTypes from "../../component_enums/ComponentTypesEnum"
 import ComponentBuildForm from "./BuildComponentForms/ComponentBuildForm"
 
 const BuildGenerator = () => {
     const [allocations, setAllocations] = useState({})
     const [budget, setBudget] = useState(STARTING_BUDGET)
-
-    const generateBuilds = () => {
-        const allocationsBody = {
-            budget: budget,
-            components: allocations,
-        }
-        console.log(allocationsBody)
-    }
-
-    const makeBuildForms = (config) => {
-        return Object.values(config).map( (component_data) => {
-            const componentFormProp = { handleAllocations, allocations, component_data}
-            return <ComponentBuildForm key={component_data.component_type} {...componentFormProp}/>
+    
+    const handleUpdateAllocations = (component_type, component_allocations) => {
+        setAllocations(prevAllocations => {
+            let newAllocationsDict = {...prevAllocations}
+            if (newAllocationsDict?.[component_type]?.['allocation'] && component_allocations?.['allocation'] && (newAllocationsDict[component_type]['allocation'] !== component_allocations['allocation'])) {
+                let sum = 0
+                Object.values(newAllocationsDict).forEach((component) => {
+                    if (component?.['allocation']) {
+                        sum += component['allocation']
+                    }
+                })
+                const excess = sum - 1
+                const per_spec_adjustment = Math.abs(excess / (COMPONENT_TYPES_STARTING_ALLOCATIONS.length - 1))
+                Object.keys(newAllocationsDict).forEach((key) => {
+                    if (key !== component_type) {
+                        if (excess > 0) {
+                            newAllocationsDict[key]['allocation'] = newAllocationsDict[key]['allocation'] - per_spec_adjustment
+                        } else if (excess < 0) {
+                            newAllocationsDict[key]['allocation'] = newAllocationsDict[key]['allocation'] + per_spec_adjustment
+                        }
+                    }
+                })
+            }
+            newAllocationsDict[component_type] = {...prevAllocations[component_type], ...component_allocations}
+            return newAllocationsDict
         })
     }
 
@@ -46,6 +50,21 @@ const BuildGenerator = () => {
         if (!isNaN(newBudget)) {
             setBudget(newBudget)
         }
+    }
+
+    const makeBuildForms = (config) => {
+        return Object.values(config).map( (component_data) => {
+            const componentFormProp = { component_data, handleUpdateAllocations, allocations }
+            return <ComponentBuildForm key={component_data.component_type} {...componentFormProp}/>
+        })
+    }
+
+    const generateBuilds = () => {
+        const allocationsBody = {
+            budget: budget,
+            components: allocations,
+        }
+        console.log(allocationsBody)
     }
 
     useEffect(() => {

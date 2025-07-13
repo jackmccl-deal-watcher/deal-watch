@@ -8,7 +8,7 @@ const MultiSelect = ({ options, optionsType, currentOptions, setCurrentOptions }
         <div className='multi-select-div'>
             <div className='selected-options'>
                 {
-                    currentOptions.map( (option) => {
+                    currentOptions?.map( (option) => {
                         return <Chip key={option} label={option} onDelete={() => setCurrentOptions(currentOptions.filter((curr_option) => curr_option !== option))}/>
                     })
                 }
