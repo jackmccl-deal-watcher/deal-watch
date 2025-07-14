@@ -69,6 +69,4 @@ export const LABELS_DICT = {
     [ComponentSpecs.EFFICIENCY_RATING]: 'Efficiency Rating',
     [ComponentSpecs.WATTAGE]: 'Wattage',
     [ComponentSpecs.MODULAR]: 'Modular',
-    [ComponentSpecs.THIRTYDAYAVERAGE]: '30-Day Average',
-    [ComponentSpecs.PCPP_PRICE]: 'PCPP Price',
 };

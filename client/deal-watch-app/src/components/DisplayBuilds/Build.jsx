@@ -12,7 +12,7 @@ const Build = ({build}) => {
             case 'number':
                 switch (spec) {
                     case ComponentSpecs.CORES:
-                        return `${value} cores`
+                        return `${value}`
                     case ComponentSpecs.BASE_CLOCK:
                     case ComponentSpecs.BOOST_CLOCK:
                     case ComponentSpecs.SPEED:
@@ -52,7 +52,7 @@ const Build = ({build}) => {
                     <div className='build-form-component-specs'>
                         {
                             Object.entries(value).map( ([spec, value]) => {
-                                return LABELS_DICT[spec] ? <div key={spec}>{displaySpecValue(spec, value)}</div> : null
+                                return LABELS_DICT[spec] ? <div key={spec}>{LABELS_DICT[spec]}: {displaySpecValue(spec, value)}</div> : null
                             })
                         }
                     </div>

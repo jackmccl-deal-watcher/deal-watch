@@ -3,6 +3,7 @@ import { useState, useEffect } from 'react'
 import { evaluatePart } from '../../utils/ApiUtils'
 import ComponentPartForm from './ComponentPartForm';
 import EvaluationScatterChart from './EvaluationScatterChart';
+import LoadingScreen from '../LoadingScreen/LoadingScreen';
 
 const EvaluatePart = () => {
     const [evaluationData, setEvaluationData] = useState([])
@@ -68,6 +69,7 @@ const EvaluatePart = () => {
     return(
         <div className='evaluatepart'>
             <ComponentPartForm handlePartEvaluation={getPartEvaluation}/>
+            <div className='loading'>{ loading ? <LoadingScreen/> : null}</div>
             <p className='evaluatepart-message'>{message}</p>
             <div className='evaluation'>
                 { !loading && evaluationData.X_Y_Points && evaluationData.M_A_Points ?
