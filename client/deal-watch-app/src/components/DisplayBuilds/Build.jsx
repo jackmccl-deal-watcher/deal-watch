@@ -59,6 +59,9 @@ const Build = ({build}) => {
                     <div className='build-form-component-price'>
                         { `$${part_price}` }
                     </div>
+                    <div className='build-form-component-listing'>
+                        { build?.listing?.itemHref ? build.listing.Href : build.listing}
+                    </div>
                 </div>
             )
         })
