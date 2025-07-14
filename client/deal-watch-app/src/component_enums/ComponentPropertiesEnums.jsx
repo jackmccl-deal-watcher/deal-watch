@@ -76,4 +76,5 @@ export const CASE_PROPERTIES = Object.freeze({
     EXTERNAL_BAYS: "external_bays",
     PSU_WATTAGE: 'psu_wattage',
     SIDE_PANEL: 'side_panel',
+    COLORS: 'colors',
 });
