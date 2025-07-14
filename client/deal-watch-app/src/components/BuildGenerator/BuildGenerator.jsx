@@ -12,7 +12,6 @@ import { CASE_PROPERTIES, MOTHERBOARD_PROPERTIES, POWER_SUPPLY_PROPERTIES } from
 
 const BuildGenerator = () => {
     const [allocations, setAllocations] = useState({})
-    const [builds, setBuilds] = useState({})
     const [budget, setBudget] = useState(STARTING_BUDGET)
     const [loading, setLoading] = useState(false)
     const [message, setMessage] = useState('')
