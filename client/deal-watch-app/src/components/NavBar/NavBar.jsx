@@ -43,7 +43,7 @@ const NavBar = () => {
                 </div>
                 : 
                 <div className='navbar-user-loggedout'>
-                    <a href='login'>Login</a>
+                    <a href='/login'>Login</a>
                     <a href='/signup'>Sign Up</a>
                 </div> }
             </div>

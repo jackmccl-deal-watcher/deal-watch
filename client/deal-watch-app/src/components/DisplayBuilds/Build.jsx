@@ -1,8 +1,14 @@
 import { getCapacityLabelText } from "../EvaluatePart/ComponentForms/HardDrivePartForm";
 import { ComponentSpecs, LABELS_DICT } from "./BuildConstants"
 import './Build.css'
+import { useUser } from "../UserProvider/UserProvider";
+import TextField from "@mui/material/TextField";
+import { useState } from "react";
 
 const Build = ({build}) => {
+    const { user, setUser } = useUser()
+    const [name, setName] = useState(build.title)
+    const [saved, setSaved] = useState(false)
     let build_price = 0
 
     const displaySpecValue = (spec, value) => {
@@ -74,6 +80,28 @@ const Build = ({build}) => {
         })
     }
 
+    const saveBuild = () => {
+        setSaved(prev => !prev)
+    }
+
+    const createSaveBuildControls = () => {
+        if (!saved) {
+            return(
+                <div className='save-builds-control'>
+                        <TextField id="standard-basic" label="Build Name" variant="standard" value={name} onChange={(e, newValue) => setName(newValue)} />
+                        <button onClick={saveBuild} className='save-builds-button'>Save Build</button>
+                </div>
+            )
+        } else {
+            return(
+                <div className='save-builds-control'>
+                        <TextField id="standard-basic" label="Build Name" variant="standard" value={name} disabled />
+                        <button onClick={saveBuild} className='save-builds-button'>Unsave Build</button>
+                </div>
+            )
+        }
+    }
+
     return(
         <div className='build'>
             <div className='build-title'>
@@ -84,6 +112,11 @@ const Build = ({build}) => {
             </div>
             <div className='build-price'>
                 Build Price: {`$${Math.round(build_price * 100) / 100}`}
+            </div>
+            <div className='save-builds'>
+                { user ? 
+                    createSaveBuildControls()
+                : 'Login to save builds!'}
             </div>
         </div>
     )
