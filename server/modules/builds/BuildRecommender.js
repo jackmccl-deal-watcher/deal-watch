@@ -25,6 +25,7 @@ const fetchPartsInBudget = async (userAllocations, budget_margin) => {
                 },
             ]
         })
+        console.log(partsInBudget)
         const partsInBudgetPriceFixed = partsInBudget.map((part) => {
             if (part.thirtyDayAverage > 0) {
                 part.pcppPrice = -1

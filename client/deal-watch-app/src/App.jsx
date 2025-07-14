@@ -8,6 +8,8 @@ import Login from './components/Login/Login.jsx'
 import Signup from './components/SignUp/SignUp.jsx'
 import EvaluatePart from './components/EvaluatePart/EvaluatePart.jsx'
 import BuildGenerator from './components/BuildGenerator/BuildGenerator.jsx'
+import DisplayBuilds from './components/DisplayBuilds/DisplayBuilds.jsx'
+import LoadingScreen from './components/LoadingScreen/LoadingScreen.jsx'
 
 function App() {
 
@@ -21,7 +23,9 @@ function App() {
             <Route path='/login' element={<Login/>} />
             <Route path='/signup' element={<Signup/>} />
             <Route path='/parts' element={<EvaluatePart/>} />
-            <Route path='/builds' element={<BuildGenerator/>} />
+            <Route path='/builds/generator' element={<BuildGenerator/>} />
+            <Route path='/builds/display' element={<DisplayBuilds/>} />
+            <Route path='/loading' element={<LoadingScreen/>} />
             <Route path='*' element={<NoMatch/>} />
           </Routes>
         </BrowserRouter>

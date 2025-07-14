@@ -3,6 +3,25 @@ import Slider from '@mui/material/Slider';
 import { HARD_DRIVE_PROPERTIES } from '../../../component_enums/ComponentPropertiesEnums';
 import OptionsDropdown from './OptionsDropdown';
 
+export const getCapacityLabelText = (value) => {
+    const units = [
+        'B', 
+        'KB', 
+        'MB', 
+        'GB', 
+        'TB'
+    ]
+
+    let unitIndex = 0
+    let scaledValue = value
+    while (scaledValue >= 1024 && unitIndex < units.length-1) {
+        unitIndex += 1
+        scaledValue = scaledValue / (2 ** 10)
+    }
+
+    return `${scaledValue} ${units[unitIndex]}`
+}
+
 const HardDrivePartForm = ({ handlePartEvaluation }) => {
     const STORAGE_TYPES = [ 
         'SSD', 
@@ -45,25 +64,6 @@ const HardDrivePartForm = ({ handlePartEvaluation }) => {
     const [storageType, setStorageType] = useState('')
     const [formFactor, setFormFactor] = useState('')
     const [hardDriveInterface, setHardDriveInterface] = useState('')
-
-    function getCapacityLabelText(value) {
-        const units = [
-            'B', 
-            'KB', 
-            'MB', 
-            'GB', 
-            'TB'
-        ]
-
-        let unitIndex = 0
-        let scaledValue = value
-        while (scaledValue >= 1024 && unitIndex < units.length-1) {
-            unitIndex += 1
-            scaledValue = scaledValue / (2 ** 10)
-        }
-
-        return `${scaledValue} ${units[unitIndex]}`
-    }
 
     function calcCapacity(value) {
         return 2 ** value;
