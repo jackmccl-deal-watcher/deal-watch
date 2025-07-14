@@ -1,5 +1,6 @@
 import { useLocation } from "react-router-dom"
 import Build from "./Build"
+import './DisplayBuilds.css'
 
 const DisplayBuilds = () => {
     const location = useLocation()
@@ -20,7 +21,7 @@ const DisplayBuilds = () => {
                     default:
                         throw new Error(`Build type ${key} not found`)
                 }
-                return <Build build={value}/>
+                return <Build key={key} build={value}/>
             })}
         </div>
     )

@@ -98,7 +98,7 @@ const BuildGenerator = () => {
             }
         } finally {
             setLoading(false)
-            navigate('/builds/display', state={ builds })
+            navigate('/builds/display', { state: builds } )
         }
     }
 
