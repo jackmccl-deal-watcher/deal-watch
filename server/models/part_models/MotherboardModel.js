@@ -8,10 +8,10 @@ const MotherboardSchema = new mongoose.Schema({
     form_factor: String,
     ram_slots: Number,
     max_ram: Number,
-    thirtyDayAverage: Number,
-    thirtyDayTime: Number,
-    thirtyDayListingCount: Number,
-    pcppPrice: Number,
+    thirty_day_average: Number,
+    thirty_day_time: Number,
+    thirty_day_listing_count: Number,
+    pcpp_price: Number,
 })
 
 const MotherboardModel = mongoose.model('Motherboard', MotherboardSchema, 'motherboard')

@@ -28,10 +28,10 @@ def populate_cpus():
             "cores": cpu.cores,
             "base_clock": cpu.base_clock.cycles,
             "multithreading": cpu.multithreading,
-            "thirtyDayAverage": 0,
-            "thirtyDayTime": 0,
-            "thirtyDayListingCount": 0,
-            "pcppPrice": float(cpu.price.amount),
+            "thirty_day_average": 0,
+            "thirty_day_time": 0,
+            "thirty_day_listing_count": 0,
+            "pcpp_price": float(cpu.price.amount),
         }
 
         # Uses base_clock as boost_clock if no boost_clock
@@ -64,10 +64,10 @@ def populate_video_cards():
             "brand": videocard.brand,
             "chipset": videocard.chipset,
             "vram": videocard.vram.total,
-            "thirtyDayAverage": 0,
-            "thirtyDayTime": 0,
-            "thirtyDayListingCount": 0,
-            "pcppPrice": float(videocard.price.amount),
+            "thirty_day_average": 0,
+            "thirty_day_time": 0,
+            "thirty_day_listing_count": 0,
+            "pcpp_price": float(videocard.price.amount),
         }
 
         # Set base_clock to 0 if not given
@@ -103,10 +103,10 @@ def populate_motherboards():
             "form_factor": motherboard.form_factor,
             "ram_slots": motherboard.ram_slots,
             "max_ram": motherboard.max_ram.total,
-            "thirtyDayAverage": 0,
-            "thirtyDayTime": 0,
-            "thirtyDayListingCount": 0,
-            "pcppPrice": float(motherboard.price.amount),
+            "thirty_day_average": 0,
+            "thirty_day_time": 0,
+            "thirty_day_listing_count": 0,
+            "pcpp_price": float(motherboard.price.amount),
         }
 
         motherboard_count += 1
@@ -133,10 +133,10 @@ def populate_memorys():
             "first_word_latency": memory.first_word_latency,
             "cas_timing": memory.cas_timing,
             "price_per_gb": float(memory.price_per_gb.amount),
-            "thirtyDayAverage": 0,
-            "thirtyDayTime": 0,
-            "thirtyDayListingCount": 0,
-            "pcppPrice": float(memory.price.amount),
+            "thirty_day_average": 0,
+            "thirty_day_time": 0,
+            "thirty_day_listing_count": 0,
+            "pcpp_price": float(memory.price.amount),
         }
 
         memory_count += 1
@@ -160,10 +160,10 @@ def populate_hard_drives():
             "storage_type": hard_drive.storage_type,
             "form_factor": hard_drive.form_factor,
             "interface": hard_drive.interface,
-            "thirtyDayAverage": 0,
-            "thirtyDayTime": 0,
-            "thirtyDayListingCount": 0,
-            "pcppPrice": float(hard_drive.price.amount),
+            "thirty_day_average": 0,
+            "thirty_day_time": 0,
+            "thirty_day_listing_count": 0,
+            "pcpp_price": float(hard_drive.price.amount),
         }
 
         if hard_drive.platter_rpm:
@@ -197,10 +197,10 @@ def populate_power_supplys():
             "efficiency_rating": power_supply.efficiency_rating,
             "wattage": power_supply.wattage,
             "modular": power_supply.modular,
-            "thirtyDayAverage": 0,
-            "thirtyDayTime": 0,
-            "thirtyDayListingCount": 0,
-            "pcppPrice": float(power_supply.price.amount),
+            "thirty_day_average": 0,
+            "thirty_day_time": 0,
+            "thirty_day_listing_count": 0,
+            "pcpp_price": float(power_supply.price.amount),
         }
 
         power_supply_count += 1
@@ -223,10 +223,10 @@ def populate_cases():
             "color": case.color,
             "external_bays": case.external_bays,
             "internal_bays": case.internal_bays,
-            "thirtyDayAverage": 0,
-            "thirtyDayTime": 0,
-            "thirtyDayListingCount": 0,
-            "pcppPrice": float(case.price.amount),
+            "thirty_day_average": 0,
+            "thirty_day_time": 0,
+            "thirty_day_listing_count": 0,
+            "pcpp_price": float(case.price.amount),
         }
 
         if case.psu_wattage:

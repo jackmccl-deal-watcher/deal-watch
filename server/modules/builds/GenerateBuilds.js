@@ -4,13 +4,9 @@ const { recommendBuild } = require("./BuildRecommender")
 const { addPartListingsToBuild } = require("./PartListing")
 
 const generateBuilds = async (userAllocations) => {
-    const balancedBuild = await recommendBuild(userAllocations, MODE.BALANCED)
-    const balancedBuildWithListings = await addPartListingsToBuild(balancedBuild)
-    const budgetBuild = await recommendBuild(userAllocations, MODE.BUDGET)
-    const budgetBuildWithListings = await addPartListingsToBuild(budgetBuild)
-    const performanceBuild = await recommendBuild(userAllocations, MODE.PERFORMANCE)
-    const performanceBuildWithListings = await addPartListingsToBuild(performanceBuild)
-    builds = {
+    const [ balancedBuild, budgetBuild, performanceBuild ] = await Promise.all([recommendBuild(userAllocations, MODE.BALANCED), recommendBuild(userAllocations, MODE.BUDGET), recommendBuild(userAllocations, MODE.PERFORMANCE)])
+    const [ balancedBuildWithListings, budgetBuildWithListings, performanceBuildWithListings ] = await Promise.all([addPartListingsToBuild(balancedBuild), addPartListingsToBuild(budgetBuild), addPartListingsToBuild(performanceBuild)])
+    const builds = {
         'budget_build': budgetBuildWithListings,
         'balanced_build': balancedBuildWithListings,
         'performance_build': performanceBuildWithListings,
