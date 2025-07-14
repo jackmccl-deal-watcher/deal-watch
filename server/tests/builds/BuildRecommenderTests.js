@@ -1,7 +1,8 @@
 const { TestError } = require("../../errors/TestError")
 const ComponentTypes = require("../../models/part_models/ComponentTypesEnum")
 const { PERFORMANCE_PRIORITIES, COMPARED_KEYS, MODE, ComponentSpecs, RATINGS} = require('../../modules/builds/BuildConstants.js')
-const { generalComparator, getPerformanceAllocations } = require("../../modules/builds/BuildRecommender")
+const { generalComparator } = require("../../modules/builds/BuildRecommender")
+const { getPerformanceAllocations } = require('../../modules/builds/BuildModes.js')
 const { userAllocations500, test_cpus, test_videocards, test_motherboards, test_memorys, test_hard_drives, test_power_supplys, test_cases } = require("./test_builds")
 
 const numberAllocationTester = (test_allocations, parts, component_type) => {
@@ -83,7 +84,7 @@ const test_cpu_builds = () => {
                 boost_clock: 0.7,
             }
         },
-        pcppPrice: {
+        pcpp_price: {
             cpu: {
                 allocation: 0.2,
                 cores: 0.33,
@@ -123,7 +124,7 @@ const test_videocard_builds = () => {
                 boost_clock: 0.5,
             }
         },
-        pcppPrice: {
+        pcpp_price: {
             'video-card': {
                 allocation: 0.2,
                 vram: 0.33,
@@ -175,7 +176,7 @@ const test_motherboard_builds = () => {
                 form_factor: 'Mini-ATX',
             },
         },
-        pcppPrice: {
+        pcpp_price: {
             motherboard: {
                 allocation: 0.15,
                 ram_slots: 0.2,
@@ -207,7 +208,7 @@ const test_memory_builds = () => {
                 module_type: 0.2,
             },
         },
-        pcppPrice: {
+        pcpp_price: {
             memory: {
                 allocation: 0.1,
                 speed: 0.33,
@@ -240,7 +241,7 @@ const test_hard_drive_builds = () => {
                 storage_type: 0.4,
             },
         },
-        pcppPrice: {
+        pcpp_price: {
             'hard-drive': {
                 allocation: 0.1,
                 capacity: .25,
@@ -282,7 +283,7 @@ const test_power_supply_builds = () => {
                 modular: 0.25,
             },
         },
-        pcppPrice: {
+        pcpp_price: {
             'power-supply': {
                 allocation: 0.1,
                 wattage: .2,
@@ -352,7 +353,7 @@ const test_case_builds = () => {
                 },
             },
         },
-        pcppPrice: {
+        pcpp_price: {
             case: {
                 allocation: 0.1,
                 form_factor: 'ATX',

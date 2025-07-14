@@ -15,7 +15,7 @@ const getPriceRange = (part) => {
 const getPartListing = async (part) => {
     const keyword = encodeURI(`${part.brand} ${part.model}`)
     const listingsData = await getListings(keyword, LISTING_LIMIT)
-    if (!(listingsData) || !(listingsData.itemSummaries) || (listingsData.itemSummaries.length === 0)) {
+    if (!(listingsData?.itemSummaries?.length)) {
         return false
     }
     const listingSummaries = listingsData['itemSummaries']
@@ -27,11 +27,7 @@ const getPartListing = async (part) => {
         return false
     }
     const sortedListingSummaries = priceFilteredListings.sort((a, b) => a.price.value - b.price.value)
-    if (sortedListingSummaries.length === 0) {
-        return false
-    } else {
-        return sortedListingSummaries[0]
-    }
+    return sortedListingSummaries[0]
 }
 
 const addPartListingsToBuild = async (build) => {
@@ -39,9 +35,9 @@ const addPartListingsToBuild = async (build) => {
     for (let part of Object.values(buildWithPartListings)) {
         const listing = await getPartListing(part)
         if (listing) {
-            part['listing'] = listing
+            part['listing_info'] = { status: 'has_listing', listing: listing}
         } else {
-            part['listing'] = 'No listing found for part'
+            part['listing_info'] = { status: 'no_listing' }
         }
     }
     return buildWithPartListings

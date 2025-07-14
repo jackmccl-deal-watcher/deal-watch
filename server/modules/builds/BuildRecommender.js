@@ -1,47 +1,17 @@
-const { ComponentSpecs, MODEL_DICT, MODULARITIES, MODULE_TYPES, STORAGE_TYPES, EFFICIENCY_RATINGS, BUDGET_MARGIN, COMPARED_KEYS, PERFORMANCE_PRIORITIES, MODE, BUDGET_PRICE_ALLOCATION, BALANCED_PRICE_ALLOCATION, PERFORMANCE_PRICE_ALLOCATION, PERFORMANCE_ALLOCATION } = require('./BuildConstants.js')
+const { ComponentSpecs, MODULARITIES, MODULE_TYPES, STORAGE_TYPES, EFFICIENCY_RATINGS, BUDGET_MARGIN, COMPARED_KEYS, MODE, PERFORMANCE_ALLOCATION, BUDGET_PRICE_ALLOCATION, BALANCED_PRICE_ALLOCATION, PERFORMANCE_PRICE_ALLOCATION } = require('./BuildConstants.js')
+const { fetchPartsInBudget } = require('./FetchParts.js')
+const { calcMixedRating } = require('./BuildUtils.js')
+const { calcRatingWithPrice, getPerformanceAllocations } = require('./BuildModes.js')
 
-const fetchPartsInBudget = async (userAllocations, budget_margin) => {
-    let partsDict = {}
-    for (let [component_key, component] of Object.entries(userAllocations.components)) {
-        const componentBudget = userAllocations.budget * component.allocation
-        const componentBudgetLow = componentBudget - componentBudget * budget_margin
-        const componentBudgetHigh = componentBudget
-        
-        const componentModel = MODEL_DICT[component_key]
-        const partsInBudget = await componentModel.find( { 
-            $or: [
-                {
-                    $and: [
-                        { thirtyDayAverage: {$gte: componentBudgetLow} },
-                        { thirtyDayAverage: {$lte: componentBudgetHigh} },
-                    ]
-                },
-                {
-                    $and: [
-                        { thirtyDayAverage: -1},
-                        { pcppPrice: {$gte: componentBudgetLow} },
-                        { pcppPrice: {$lte: componentBudgetHigh} },
-                    ]
-                },
-            ]
-        })
-        const partsInBudgetPriceFixed = partsInBudget.map((part) => {
-            if (part.thirtyDayAverage > 0) {
-                part.pcppPrice = -1
-            }
-            return part
-        })
-        partsDict[component_key] = partsInBudgetPriceFixed   
+const calcPartColorScore = (part, color_index, color_preferences) => {
+    let part_color_rating = 0
+    const current_color = color_preferences[color_index]
+    if (part[ComponentSpecs.COLOR] === current_color) {
+        part_color_rating += color_preferences.length - color_index
+    } else if (part[ComponentSpecs.COLOR].includes(current_color) || current_color.includes(part[ComponentSpecs.COLOR])) {
+        part_color_rating += (color_preferences.length - color_index) / 2
     }
-    return partsDict
-}
-
-const calcMixedRating = (a_rating, b_rating, allocation) => {
-    if ((a_rating + b_rating) === 0) {
-        return 0
-    }
-    return Math.sign(a_rating - b_rating) * allocation * (2/3) 
-                + allocation * (1/3) * (a_rating - b_rating) / (a_rating+b_rating)
+    return part_color_rating
 }
 
 const calcColorRating = (a, b, color_allocation_dict) => {
@@ -49,16 +19,8 @@ const calcColorRating = (a, b, color_allocation_dict) => {
     let a_color_rating = 0
     let b_color_rating = 0
     for (let color_index in preferenceColors) {
-        if (a[ComponentSpecs.COLOR] === preferenceColors[color_index]) {
-            a_color_rating += preferenceColors.length - color_index
-        } else if (a[ComponentSpecs.COLOR].includes(preferenceColors[color_index]) || preferenceColors[color_index].includes(a[ComponentSpecs.COLOR])) {
-            a_color_rating += (preferenceColors.length - color_index) / 2
-        }
-        if (b[ComponentSpecs.COLOR] === preferenceColors[color_index]) {
-            b_color_rating += preferenceColors.length - color_index
-        } else if (b[ComponentSpecs.COLOR].includes(preferenceColors[color_index]) || preferenceColors[color_index].includes(b[ComponentSpecs.COLOR])) {
-            b_color_rating += (preferenceColors.length - color_index) / 2
-        }
+        a_color_rating += calcPartColorScore(a, color_index, preferenceColors)
+        b_color_rating += calcPartColorScore(b, color_index, preferenceColors)
     }
     const colorAllocation = color_allocation_dict['allocation']
     return calcMixedRating(a_color_rating, b_color_rating, colorAllocation)
@@ -86,54 +48,6 @@ const calcSlidingQualityRating = (a, b, spec_allocation, quality_levels, spec_ke
     b_key_value_rating += b_key_value_quality_index / quality_levels.length
 
     return calcMixedRating(a_key_value_rating, b_key_value_rating, spec_allocation)
-}
-
-const calcPriceRating = (a, b, priceAllocation) => {
-    let a_price = 0
-    let b_price = 0
-
-    if (a[ComponentSpecs.THIRTYDAYAVERAGE] > 0) {
-        a_price = a[ComponentSpecs.THIRTYDAYAVERAGE]
-    } else {
-        a_price = a[ComponentSpecs.PCPP_PRICE]
-    }
-    if (b[ComponentSpecs.THIRTYDAYAVERAGE] > 0) {
-        b_price = b[ComponentSpecs.THIRTYDAYAVERAGE]
-    } else {
-        b_price = b[ComponentSpecs.PCPP_PRICE]
-    }
-    return calcMixedRating(b_price, a_price, priceAllocation)
-}
-
-const calcRatingWithPrice = (a, b, nonPriceRating, priceAllocation) => {
-    const newNonePriceRating = nonPriceRating * (1-priceAllocation)
-    return newNonePriceRating + calcPriceRating(a, b, priceAllocation)
-}
-
-const getPerformanceAllocations = (componentAllocations, performanceAllocation) => {
-    const componentAllocationsWithPerformance = JSON.parse(JSON.stringify(componentAllocations))
-    for (let component_key of Object.keys(componentAllocations)) {
-        const componentDict = componentAllocationsWithPerformance[component_key]
-        const componentPropertyKeys = Object.keys(componentDict).filter(key => COMPARED_KEYS.includes(key))
-        let numPriorityPropertiesInComponent = 0
-        for (let prop_key of PERFORMANCE_PRIORITIES) {
-            if (componentPropertyKeys.includes(prop_key)) {
-                numPriorityPropertiesInComponent += 1
-            }
-        }
-        for (let key of componentPropertyKeys) {
-            switch (typeof componentDict[key]) {
-                case 'number':
-                    componentDict[key] *= (1-performanceAllocation)
-                case 'dict':
-                    componentDict[key]['allocation'] *= (1-performanceAllocation)
-            }
-            if (PERFORMANCE_PRIORITIES.includes(key)) {
-                componentDict[key] += performanceAllocation / numPriorityPropertiesInComponent
-            }
-        }
-    }
-    return componentAllocationsWithPerformance
 }
 
 const generalComparator = (a, b, componentAllocations, component_key, mode) => {
@@ -203,4 +117,4 @@ const recommendBuild = async (userAllocations, mode) => {
     return build
 }
 
-module.exports = { recommendBuild, generalComparator, getPerformanceAllocations, MODULARITIES, MODULE_TYPES, EFFICIENCY_RATINGS, STORAGE_TYPES, PERFORMANCE_PRIORITIES, COMPARED_KEYS, MODE }
+module.exports = { recommendBuild, generalComparator, calcMixedRating }
