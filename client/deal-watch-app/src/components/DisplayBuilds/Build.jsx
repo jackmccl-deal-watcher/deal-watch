@@ -7,8 +7,9 @@ import { useState } from "react";
 
 const Build = ({build}) => {
     const { user, setUser } = useUser()
-    const [name, setName] = useState(build.title)
+    const [title, setTitle] = useState(build.title)
     const [saved, setSaved] = useState(false)
+    const [message, setMessage] = useState('')
     let build_price = 0
 
     const displaySpecValue = (spec, value) => {
@@ -80,23 +81,33 @@ const Build = ({build}) => {
         })
     }
 
-    const saveBuild = () => {
-        setSaved(prev => !prev)
+    const toggleSaveBuild = async () => {
+        try {
+            const response = await saveBuild(build)
+            if (response.status === 'success') {
+                setSaved(prev => !prev)
+            }
+            message = response.message
+        } catch(error) {
+            console.error(error)
+        }
     }
 
     const createSaveBuildControls = () => {
         if (!saved) {
             return(
                 <div className='save-builds-control'>
-                        <TextField id="standard-basic" label="Build Name" variant="standard" value={name} onChange={(e, newValue) => setName(newValue)} />
-                        <button onClick={saveBuild} className='save-builds-button'>Save Build</button>
+                        <TextField id="standard-basic" label="Build Title" variant="standard" value={title} onChange={(e, newValue) => setTitle(newValue)} />
+                        <button onClick={toggleSaveBuild} className='save-builds-button'>Save Build</button>
+                        <div className='save-builds-control-message'>{message}</div>
                 </div>
             )
         } else {
             return(
                 <div className='save-builds-control'>
-                        <TextField id="standard-basic" label="Build Name" variant="standard" value={name} disabled />
-                        <button onClick={saveBuild} className='save-builds-button'>Unsave Build</button>
+                        <TextField id="standard-basic" label="Build Title" variant="standard" value={title} disabled />
+                        <button onClick={toggleSaveBuild} className='save-builds-button'>Unsave Build</button>
+                        <div className='save-builds-control-message'>{message}</div>
                 </div>
             )
         }

@@ -1,4 +1,3 @@
-const mongoose = require('../Mongoose.js')
 const UserModel = require('../models/UserModel.js')
 const { hashPassword } = require('./argon.js')
 const { UserCreateError } = require('../errors/UserErrors.js')

@@ -3,3 +3,7 @@
     min-width: 500px;
     justify-self: center;
 }
+
+.generate-build-form-submit-button {
+    margin-bottom: 30px;
+}

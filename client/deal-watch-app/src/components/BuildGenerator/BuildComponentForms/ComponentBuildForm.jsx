@@ -32,7 +32,7 @@ const ComponentBuildForm = ({ component_data, handleUpdateAllocations, allocatio
                 case 'color':
                     newAllocationsDict[special_spec.type] = {
                         allocation: 1 /  component_data.main_specs.length,
-                        colors: [],
+                        colors: special_spec.currentOption,
                     }
                     special_spec.currentOption = newAllocationsDict[special_spec.type]['colors']
                     special_spec.allocaton = newAllocationsDict[special_spec.type]['allocation']
@@ -48,7 +48,7 @@ const ComponentBuildForm = ({ component_data, handleUpdateAllocations, allocatio
                     }
                     break
                 default:
-                    newAllocationsDict[special_spec.type] = ''
+                    newAllocationsDict[special_spec.type] = special_spec.currentOption
                     special_spec.currentOption = newAllocationsDict[special_spec.type]
                     special_spec.setCurrentOption = (newValue) => {
                         let newAllocationsDict = {}
@@ -63,7 +63,7 @@ const ComponentBuildForm = ({ component_data, handleUpdateAllocations, allocatio
     }
 
     useEffect(() => {
-        createComponentAllocations()
+        setTimeout(createComponentAllocations, 100)
     }, [])
     
     return(

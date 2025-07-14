@@ -6,7 +6,6 @@ import InputAdornment from '@mui/material/InputAdornment';
 import ComponentBuildForm from "./BuildComponentForms/ComponentBuildForm"
 import { generateBuilds } from "../../utils/ApiUtils";
 import { useNavigate } from "react-router-dom";
-import LoadingScreen from "../LoadingScreen/LoadingScreen";
 import ComponentTypes from "../../component_enums/ComponentTypesEnum";
 import { CASE_PROPERTIES, MOTHERBOARD_PROPERTIES, POWER_SUPPLY_PROPERTIES } from "../../component_enums/ComponentPropertiesEnums";
 
