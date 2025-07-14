@@ -25,7 +25,7 @@ const generateClientAccessToken = async () => {
 
 const getListings = async (keyword, limit) => {
     const clientAccessToken = await generateClientAccessToken()
-    const response = await fetch(`${EBAY_API_BROWSE_URL}/item_summary/search?q=${keyword}&limit=${limit}`, {
+    const response = await fetch(`${EBAY_API_BROWSE_URL}/item_summary/search?q=${keyword}&limit=${limit}&category_ids=58058`, {
         method: 'GET',
         headers: {
             'Authorization': `Bearer ${clientAccessToken}`

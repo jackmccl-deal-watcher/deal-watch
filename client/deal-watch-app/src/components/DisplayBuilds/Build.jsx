@@ -12,7 +12,15 @@ const Build = ({build}) => {
             case 'number':
                 switch (spec) {
                     case ComponentSpecs.CORES:
+                    case ComponentSpecs.RAM_SLOTS:
+                    case ComponentSpecs.CAS_TIMING:
                         return `${value}`
+                    case ComponentSpecs.FIRST_WORD_LATENCY:
+                        return `${value} ns`
+                    case ComponentSpecs.PRICE_PER_GB:
+                        return `$${Math.round(value * 100) / 100}`
+                    case ComponentSpecs.WATTAGE:
+                        return `${value} watts`
                     case ComponentSpecs.BASE_CLOCK:
                     case ComponentSpecs.BOOST_CLOCK:
                     case ComponentSpecs.SPEED:
@@ -45,7 +53,6 @@ const Build = ({build}) => {
             }
 
             build_price += part_price
-
             return(
                 <div key={key} className='build-form-components'>
                     <div className='build-form-component-type'>{LABELS_DICT[key]}:</div>
@@ -60,7 +67,7 @@ const Build = ({build}) => {
                         { `$${part_price}` }
                     </div>
                     <div className='build-form-component-listing'>
-                        { build?.listing?.itemHref ? build.listing.Href : build.listing}
+                        { value?.listing_info?.status === 'has_listing' ? <a href={value.listing_info.listing.itemWebUrl}>{value.listing_info.listing.title}</a> : "No listing link"}
                     </div>
                 </div>
             )

@@ -69,4 +69,5 @@ export const LABELS_DICT = {
     [ComponentSpecs.EFFICIENCY_RATING]: 'Efficiency Rating',
     [ComponentSpecs.WATTAGE]: 'Wattage',
     [ComponentSpecs.MODULAR]: 'Modular',
+    [ComponentSpecs.COLOR]: "Color",
 };
