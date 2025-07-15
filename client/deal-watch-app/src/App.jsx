@@ -7,6 +7,7 @@ import { UserProvider } from './components/UserProvider/UserProvider.jsx'
 import Login from './components/Login/Login.jsx'
 import Signup from './components/SignUp/SignUp.jsx'
 import EvaluatePart from './components/EvaluatePart/EvaluatePart.jsx'
+import BuildGenerator from './components/BuildGenerator/BuildGenerator.jsx'
 
 function App() {
 
@@ -20,6 +21,7 @@ function App() {
             <Route path='/login' element={<Login/>} />
             <Route path='/signup' element={<Signup/>} />
             <Route path='/parts' element={<EvaluatePart/>} />
+            <Route path='/builds' element={<BuildGenerator/>} />
             <Route path='*' element={<NoMatch/>} />
           </Routes>
         </BrowserRouter>

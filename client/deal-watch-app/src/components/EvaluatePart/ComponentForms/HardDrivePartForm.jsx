@@ -1,10 +1,9 @@
 import { useState } from 'react'
 import Slider from '@mui/material/Slider';
 import { HARD_DRIVE_PROPERTIES } from '../../../component_enums/ComponentPropertiesEnums';
-import './ComponentForm.css'
 import OptionsDropdown from './OptionsDropdown';
 
-const HardDriveForm = ({ handlePartEvaluation }) => {
+const HardDrivePartForm = ({ handlePartEvaluation }) => {
     const STORAGE_TYPES = [ 
         'SSD', 
         'HDD', 
@@ -93,4 +92,4 @@ const HardDriveForm = ({ handlePartEvaluation }) => {
     )
 }
 
-export default HardDriveForm
+export default HardDrivePartForm

@@ -1,10 +1,9 @@
 import { useState } from 'react'
 import Slider from '@mui/material/Slider';
 import { MOTHERBOARD_PROPERTIES } from '../../../component_enums/ComponentPropertiesEnums';
-import './ComponentForm.css'
 import OptionsDropdown from './OptionsDropdown';
 
-const MotherboardForm = ({ handlePartEvaluation }) => {
+const MotherboardPartForm = ({ handlePartEvaluation }) => {
     const SOCKETS = [
         '2 x G34',
         '2 x LGA1366',
@@ -120,4 +119,4 @@ const MotherboardForm = ({ handlePartEvaluation }) => {
     )
 }
 
-export default MotherboardForm
+export default MotherboardPartForm

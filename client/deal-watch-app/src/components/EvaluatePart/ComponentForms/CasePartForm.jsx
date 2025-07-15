@@ -1,10 +1,9 @@
 import { useState } from 'react'
 import Slider from '@mui/material/Slider';
 import { CASE_PROPERTIES } from '../../../component_enums/ComponentPropertiesEnums';
-import './ComponentForm.css'
 import OptionsDropdown from './OptionsDropdown';
 
-const CaseForm = ({ handlePartEvaluation }) => {
+const CasePartForm = ({ handlePartEvaluation }) => {
     const FORM_FACTORS = [
         'ATX Mid Tower',
         'ATX Full Tower',
@@ -99,4 +98,4 @@ const CaseForm = ({ handlePartEvaluation }) => {
     )
 }
 
-export default CaseForm
+export default CasePartForm

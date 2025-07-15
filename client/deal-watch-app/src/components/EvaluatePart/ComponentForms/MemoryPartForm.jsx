@@ -1,10 +1,9 @@
 import { useState } from 'react'
 import Slider from '@mui/material/Slider';
 import { MEMORY_PROPERTIES } from '../../../component_enums/ComponentPropertiesEnums';
-import './ComponentForm.css'
 import OptionsDropdown from './OptionsDropdown';
 
-const MemoryForm = ({ handlePartEvaluation }) => {
+const MemoryPartForm = ({ handlePartEvaluation }) => {
     const MODULE_TYPES = [ 
         'DDR', 
         'DDR2', 
@@ -50,4 +49,4 @@ const MemoryForm = ({ handlePartEvaluation }) => {
     )
 }
 
-export default MemoryForm
+export default MemoryPartForm
