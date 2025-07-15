@@ -21,6 +21,6 @@
 
 .build {
     border-radius: 9px;
-    border: solid red 8px;
+    border: solid black 4px;
     max-width: 500px
 }

@@ -3,11 +3,9 @@ import { fetchSavedBuilds } from "../../utils/ApiUtils"
 import Build from "./Build"
 import LoadingScreen from "../LoadingScreen/LoadingScreen"
 import './SavedBuilds.css'
-import { useUser } from "../UserProvider/UserProvider"
 
 const SavedBuilds = () => {
     const [savedBuilds, setSavedBuilds] = useState([])
-    const { user, setUser } = useUser()
     
     const fetchAndSetSavedBuilds = async () => {
         const savedBuildsResponse = await fetchSavedBuilds()
