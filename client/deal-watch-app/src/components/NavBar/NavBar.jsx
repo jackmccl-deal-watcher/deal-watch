@@ -27,7 +27,7 @@ const NavBar = () => {
             <div className='navbar-pages'>
                 <a href='/'>Home</a>
                 <a href='/parts'>Parts</a>
-                <a href='/builds'>Builds</a>
+                <a href='/builds/generator'>Builds</a>
             </div>
             <div className='navbar-user'>
                 { user ? 

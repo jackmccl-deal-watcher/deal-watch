@@ -125,7 +125,7 @@ const PERFORMANCE_PRIORITIES = [
 ]
 
 const MODE = Object.freeze({
-    DEFAULT: 'default',
+    BALANCED: 'balanced',
     BUDGET: 'budget',
     PERFORMANCE: 'performance',
 });

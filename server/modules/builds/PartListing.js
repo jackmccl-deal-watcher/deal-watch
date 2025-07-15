@@ -1,13 +1,14 @@
 const { getListings } = require("../../utils/ebay/EbayUtils")
+const { ComponentSpecs } = require("./BuildConstants")
 
-const LISTING_LIMIT = 100
+const LISTING_LIMIT = 20
 
 const getPriceRange = (part) => {
     let price = 0
-    if (part['thirtyDayAverage'] > 0) {
-        price = part['thirtyDayAverage']
+    if (part[ComponentSpecs.THIRTY_DAY_AVERAGE] > 0) {
+        price = part[ComponentSpecs.THIRTY_DAY_AVERAGE]
     } else {
-        price = part['pcppPrice']
+        price = part[ComponentSpecs.PCPP_PRICE]
     }
     return { priceRangeLow: (price - price * 0.1), priceRangeHigh: (price + price * 0.1) }
 }

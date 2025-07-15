@@ -4,10 +4,18 @@ import { FORM_CONFIG, COMPONENT_TYPES_STARTING_ALLOCATIONS, STARTING_BUDGET, ALL
 import TextField from '@mui/material/TextField';
 import InputAdornment from '@mui/material/InputAdornment';
 import ComponentBuildForm from "./BuildComponentForms/ComponentBuildForm"
+import { generateBuilds } from "../../utils/ApiUtils";
+import { useNavigate } from "react-router-dom";
+import LoadingScreen from "../LoadingScreen/LoadingScreen";
+import ComponentTypes from "../../component_enums/ComponentTypesEnum";
+import { CASE_PROPERTIES, MOTHERBOARD_PROPERTIES, POWER_SUPPLY_PROPERTIES } from "../../component_enums/ComponentPropertiesEnums";
 
 const BuildGenerator = () => {
     const [allocations, setAllocations] = useState({})
     const [budget, setBudget] = useState(STARTING_BUDGET)
+    const [loading, setLoading] = useState(false)
+    const [message, setMessage] = useState('')
+    const navigate = useNavigate()
     
     const handleUpdateAllocations = (component_type, component_allocations) => {
         setAllocations(prevAllocations => {
@@ -59,12 +67,38 @@ const BuildGenerator = () => {
         })
     }
 
-    const generateBuilds = () => {
+    const getGeneratedBuilds = async () => {
+        if (allocations?.[ComponentTypes.MOTHERBOARD]?.[MOTHERBOARD_PROPERTIES.SOCKET] 
+            && allocations?.[ComponentTypes.MOTHERBOARD]?.[MOTHERBOARD_PROPERTIES.FORM_FACTOR]
+            && allocations?.[ComponentTypes.POWER_SUPPLY]?.[POWER_SUPPLY_PROPERTIES.FORM_FACTOR]
+            && allocations?.[ComponentTypes.CASE]?.[CASE_PROPERTIES.FORM_FACTOR]) {
+            setMessage('Generating builds...')
+        } else {
+            setMessage('Please ensure all fields are filled!')
+            return
+        }
         const allocationsBody = {
             budget: budget,
             components: allocations,
         }
-        console.log(allocationsBody)
+        let builds = {}
+        let buildsResponse = {}
+        setLoading(true)
+        navigate('/loading')
+        try {
+            buildsResponse = await generateBuilds(allocationsBody)
+            switch (buildsResponse['status']) {
+                case 'success':
+                    setMessage(`${buildsResponse['message']}`)
+                    builds = buildsResponse['builds']
+                case 'error':
+                    setMessage(`Error: ${buildsResponse['message']}`)
+                    return
+            }
+        } finally {
+            setLoading(false)
+            navigate('/builds/display', { state: builds } )
+        }
     }
 
     useEffect(() => {
@@ -72,7 +106,7 @@ const BuildGenerator = () => {
     }, [])
 
     return(
-        <div className='build-gen'>
+        <div className='builds-gen'>
             { allocations ? 
                 <div className='build-gen-forms'>
                     <TextField 
@@ -87,9 +121,10 @@ const BuildGenerator = () => {
                         }}
                     />
                     {makeBuildForms(FORM_CONFIG)}
-                    <button className='generate-build-form-submit-button' onClick={generateBuilds}>Generate Builds</button>
+                    <button className='generate-build-form-submit-button' onClick={getGeneratedBuilds}>Generate Builds</button>
                 </div> : null
             }
+            <div className='message'>{message}</div>
         </div>
     )
 }

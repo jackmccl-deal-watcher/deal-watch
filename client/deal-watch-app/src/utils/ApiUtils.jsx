@@ -67,3 +67,19 @@ export const evaluatePart = async (part) => {
         console.error(error)
     }
 }
+
+export const generateBuilds = async (user_allocations) => {
+    try {
+        const response = await fetch(`${API_URL}/builds/generate_builds`, {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json',
+            },
+            credentials: 'include',
+            body: JSON.stringify(user_allocations),
+        });
+        return await response.json()
+    } catch (error) {
+        console.error(error)
+    }
+}
