@@ -1,5 +1,5 @@
-import ComponentTypes from "../../component_enums/ComponentTypesEnum"
-import { CPU_PROPERTIES, VIDEOCARD_PROPERTIES, MOTHERBOARD_PROPERTIES, MEMORY_PROPERTIES, HARD_DRIVE_PROPERTIES, POWER_SUPPLY_PROPERTIES, CASE_PROPERTIES } from "../../component_enums/ComponentPropertiesEnums"
+import ComponentTypes from "../../enums/ComponentTypesEnum"
+import { CPU_PROPERTIES, VIDEOCARD_PROPERTIES, MOTHERBOARD_PROPERTIES, MEMORY_PROPERTIES, HARD_DRIVE_PROPERTIES, POWER_SUPPLY_PROPERTIES, CASE_PROPERTIES } from "../../enums/ComponentPropertiesEnums"
 
 export const COMPONENT_ALLOCATION_MINIMUM = 0.1
 export const COMPONENT_ALLOCATION_MAXIMUM = 0.3

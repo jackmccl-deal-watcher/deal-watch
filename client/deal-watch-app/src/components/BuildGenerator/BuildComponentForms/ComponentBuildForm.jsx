@@ -1,11 +1,12 @@
 import SumSliders from '../SumSliders'
 import OptionsDropdown from '../../EvaluatePart/ComponentForms/OptionsDropdown'
-import { CASE_PROPERTIES } from '../../../component_enums/ComponentPropertiesEnums'
+import { CASE_PROPERTIES } from '../../../enums/ComponentPropertiesEnums'
 import Slider from '@mui/material/Slider';
 import { COMPONENT_ALLOCATION_MAXIMUM, COMPONENT_ALLOCATION_MINIMUM } from '../BuildGeneratorConstants'
 import MultiSelect from './MultiSelect'
 import { getSliderLabelText } from './BuildFormUtils'
 import { useEffect, useState } from 'react';
+import { ComponentSpecs } from '../../DisplayBuilds/BuildConstants';
 
 const ComponentBuildForm = ({ component_data, handleUpdateAllocations, allocations }) => {
     const [trigger, useTrigger] = useState(false)
@@ -29,13 +30,13 @@ const ComponentBuildForm = ({ component_data, handleUpdateAllocations, allocatio
         })
         component_data?.special_specs && Object.values(component_data.special_specs).forEach( (special_spec) => {
             switch (special_spec.type) {
-                case 'color':
+                case ComponentSpecs.COLOR:
                     newAllocationsDict[special_spec.type] = {
                         allocation: 1 /  component_data.main_specs.length,
                         colors: special_spec.currentOption,
                     }
-                    special_spec.currentOption = newAllocationsDict[special_spec.type]['colors']
-                    special_spec.allocaton = newAllocationsDict[special_spec.type]['allocation']
+                    special_spec.currentOption = newAllocationsDict[special_spec.type][ComponentSpecs.COLORS]
+                    special_spec.allocaton = newAllocationsDict[special_spec.type][ComponentSpecs.ALLOCATION]
                     special_spec.setCurrentOption = (newValue) => {
                         let newAllocationsDict = {}
                         newAllocationsDict[special_spec.type] = {
@@ -49,7 +50,6 @@ const ComponentBuildForm = ({ component_data, handleUpdateAllocations, allocatio
                     break
                 default:
                     newAllocationsDict[special_spec.type] = special_spec.currentOption
-                    special_spec.currentOption = newAllocationsDict[special_spec.type]
                     special_spec.setCurrentOption = (newValue) => {
                         let newAllocationsDict = {}
                         newAllocationsDict[special_spec.type] = newValue
@@ -68,10 +68,10 @@ const ComponentBuildForm = ({ component_data, handleUpdateAllocations, allocatio
     
     return(
         <div className='build-form'>
-            { component_data && allocations?.[component_data.component_type]?.['allocation'] ?
+            { component_data && allocations?.[component_data.component_type]?.[ComponentSpecs.ALLOCATION] ?
                 <div className='build-form-container'>
-                    <p>{component_data.component_name}: {getSliderLabelText(allocations[component_data.component_type]['allocation'])}</p>
-                    <Slider min={COMPONENT_ALLOCATION_MINIMUM} max={COMPONENT_ALLOCATION_MAXIMUM} step={0.01} valueLabelDisplay='auto' valueLabelFormat={getSliderLabelText} value={allocations[component_data.component_type]['allocation']} onChange={(e, newValue) => handleUpdateAllocations(component_data.component_type, {'allocation': newValue} )}></Slider>
+                    <p>{component_data.component_name}: {getSliderLabelText(allocations[component_data.component_type][ComponentSpecs.ALLOCATION])}</p>
+                    <Slider min={COMPONENT_ALLOCATION_MINIMUM} max={COMPONENT_ALLOCATION_MAXIMUM} step={0.01} valueLabelDisplay='auto' valueLabelFormat={getSliderLabelText} value={allocations[component_data.component_type][ComponentSpecs.ALLOCATION]} onChange={(e, newValue) => handleUpdateAllocations(component_data.component_type, {[ComponentSpecs.ALLOCATION]: newValue} )}></Slider>
                     <SumSliders specs={component_data.main_specs} handleUpdatePoints={handleUpdatePoints}/>
                     { component_data.special_specs && Object.values(component_data.special_specs).map( ( special_spec ) => {
                         if (special_spec.type === CASE_PROPERTIES.COLOR) {

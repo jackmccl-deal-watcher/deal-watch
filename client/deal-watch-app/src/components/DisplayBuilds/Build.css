@@ -18,3 +18,9 @@
     justify-self: center;
     gap: 20px;
 }
+
+.build {
+    border-radius: 9px;
+    border: solid red 8px;
+    max-width: 500px
+}

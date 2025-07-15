@@ -1,6 +1,6 @@
 import { useState } from 'react'
 import Slider from '@mui/material/Slider';
-import { MOTHERBOARD_PROPERTIES } from '../../../component_enums/ComponentPropertiesEnums';
+import { MOTHERBOARD_PROPERTIES } from '../../../enums/ComponentPropertiesEnums';
 import OptionsDropdown from './OptionsDropdown';
 
 const MotherboardPartForm = ({ handlePartEvaluation }) => {

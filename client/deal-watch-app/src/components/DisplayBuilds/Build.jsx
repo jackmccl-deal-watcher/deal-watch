@@ -5,6 +5,8 @@ import { useUser } from "../UserProvider/UserProvider";
 import TextField from "@mui/material/TextField";
 import { useState } from "react";
 import { saveBuild, unSaveBuild } from "../../utils/ApiUtils";
+import { VARIABLE_TYPES } from "../../enums/VariableTypeEnums";
+import { STATUS_CODES } from "../../enums/StatusEnums";
 
 const Build = ({build}) => {
     const { user, setUser } = useUser()
@@ -19,9 +21,9 @@ const Build = ({build}) => {
 
     const displaySpecValue = (spec, value) => {
         switch (typeof value) {
-            case 'string':
+            case VARIABLE_TYPES.STRING:
                 return value
-            case 'number':
+            case VARIABLE_TYPES.NUMBER:
                 switch (spec) {
                     case ComponentSpecs.CORES:
                     case ComponentSpecs.RAM_SLOTS:
@@ -54,7 +56,7 @@ const Build = ({build}) => {
 
     const displayBuildInfo = () => {
         return Object.entries(build).map( ([key, value]) => {
-            if (typeof value !== 'object') {
+            if (typeof value !== VARIABLE_TYPES.OBJECT) {
                 return
             }
             let part_price = 0
@@ -95,7 +97,7 @@ const Build = ({build}) => {
             } else {
                 response = await unSaveBuild(build)
             }
-            if (response.status === 'success') {
+            if (response.status === STATUS_CODES.SUCCESS) {
                 setSaved(prev => !prev)
             }
             setMessage(response.message)

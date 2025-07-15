@@ -1,4 +1,4 @@
-import { CASE_PROPERTIES, CPU_PROPERTIES, HARD_DRIVE_PROPERTIES, MEMORY_PROPERTIES, MOTHERBOARD_PROPERTIES, POWER_SUPPLY_PROPERTIES, VIDEOCARD_PROPERTIES } from "../../component_enums/ComponentPropertiesEnums";
+import { CASE_PROPERTIES, CPU_PROPERTIES, HARD_DRIVE_PROPERTIES, MEMORY_PROPERTIES, MOTHERBOARD_PROPERTIES, POWER_SUPPLY_PROPERTIES, VIDEOCARD_PROPERTIES } from "../../enums/ComponentPropertiesEnums";
 
 export const ComponentSpecs = Object.freeze({
     TYPE: 'cpu',
@@ -32,12 +32,14 @@ export const ComponentSpecs = Object.freeze({
     WATTAGE: 'wattage',
     MODULAR: "modular",
     COLOR: 'color',
+    COLORS: 'colors',
     INTERNAL_BAYS: 'internal_bays',
     EXTERNAL_BAYS: "external_bays",
     PSU_WATTAGE: 'psu_wattage',
     SIDE_PANEL: 'side_panel',
     THIRTY_DAY_AVERAGE: 'thirty_day_average',
     PCPP_PRICE: 'pcpp_price',
+    ALLOCATION: 'allocation',
 })
 
 export const LABELS_DICT = {

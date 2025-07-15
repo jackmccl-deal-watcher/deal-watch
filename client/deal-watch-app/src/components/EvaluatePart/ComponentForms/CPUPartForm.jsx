@@ -1,6 +1,6 @@
 import { useState } from 'react'
 import Slider from '@mui/material/Slider';
-import { CPU_PROPERTIES } from '../../../component_enums/ComponentPropertiesEnums';
+import { CPU_PROPERTIES } from '../../../enums/ComponentPropertiesEnums';
 
 const CPUPartForm = ({ handlePartEvaluation }) => {
     const [cores, setCores] = useState(4)

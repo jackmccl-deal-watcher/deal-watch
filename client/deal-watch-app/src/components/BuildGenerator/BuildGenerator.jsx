@@ -6,8 +6,10 @@ import InputAdornment from '@mui/material/InputAdornment';
 import ComponentBuildForm from "./BuildComponentForms/ComponentBuildForm"
 import { generateBuilds } from "../../utils/ApiUtils";
 import { useNavigate } from "react-router-dom";
-import ComponentTypes from "../../component_enums/ComponentTypesEnum";
-import { CASE_PROPERTIES, MOTHERBOARD_PROPERTIES, POWER_SUPPLY_PROPERTIES } from "../../component_enums/ComponentPropertiesEnums";
+import ComponentTypes from "../../enums/ComponentTypesEnum";
+import { CASE_PROPERTIES, MOTHERBOARD_PROPERTIES, POWER_SUPPLY_PROPERTIES } from "../../enums/ComponentPropertiesEnums";
+import { ComponentSpecs } from "../DisplayBuilds/BuildConstants";
+import { STATUS_CODES } from "../../enums/StatusEnums";
 
 const BuildGenerator = () => {
     const [allocations, setAllocations] = useState({})
@@ -19,11 +21,11 @@ const BuildGenerator = () => {
     const handleUpdateAllocations = (component_type, component_allocations) => {
         setAllocations(prevAllocations => {
             let newAllocationsDict = {...prevAllocations}
-            if (newAllocationsDict?.[component_type]?.['allocation'] && component_allocations?.['allocation'] && (newAllocationsDict[component_type]['allocation'] !== component_allocations['allocation'])) {
+            if (newAllocationsDict?.[component_type]?.[ComponentSpecs.ALLOCATION] && component_allocations?.[ComponentSpecs.ALLOCATION] && (newAllocationsDict[component_type][ComponentSpecs.ALLOCATION] !== component_allocations[ComponentSpecs.ALLOCATION])) {
                 let sum = 0
                 Object.values(newAllocationsDict).forEach((component) => {
-                    if (component?.['allocation']) {
-                        sum += component['allocation']
+                    if (component?.[ComponentSpecs.ALLOCATION]) {
+                        sum += component[ComponentSpecs.ALLOCATION]
                     }
                 })
                 const excess = sum - 1
@@ -31,9 +33,9 @@ const BuildGenerator = () => {
                 Object.keys(newAllocationsDict).forEach((key) => {
                     if (key !== component_type) {
                         if (excess > 0) {
-                            newAllocationsDict[key]['allocation'] = newAllocationsDict[key]['allocation'] - per_spec_adjustment
+                            newAllocationsDict[key][ComponentSpecs.ALLOCATION] = newAllocationsDict[key][ComponentSpecs.ALLOCATION] - per_spec_adjustment
                         } else if (excess < 0) {
-                            newAllocationsDict[key]['allocation'] = newAllocationsDict[key]['allocation'] + per_spec_adjustment
+                            newAllocationsDict[key][ComponentSpecs.ALLOCATION] = newAllocationsDict[key][ComponentSpecs.ALLOCATION] + per_spec_adjustment
                         }
                     }
                 })
@@ -47,7 +49,7 @@ const BuildGenerator = () => {
         let newAllocationsDict = {}
         COMPONENT_TYPES_STARTING_ALLOCATIONS.forEach((component_type_dict) => {
             newAllocationsDict[component_type_dict.type] = {}
-            newAllocationsDict[component_type_dict.type]['allocation'] = component_type_dict.starting_allocation
+            newAllocationsDict[component_type_dict.type][ComponentSpecs.ALLOCATION] = component_type_dict.starting_allocation
         })
         setAllocations(newAllocationsDict)
     }
@@ -87,10 +89,10 @@ const BuildGenerator = () => {
         try {
             buildsResponse = await generateBuilds(allocationsBody)
             switch (buildsResponse['status']) {
-                case 'success':
+                case STATUS_CODES.SUCCESS:
                     setMessage(`${buildsResponse['message']}`)
                     builds = buildsResponse['builds']
-                case 'error':
+                case STATUS_CODES.ERROR:
                     setMessage(`Error: ${buildsResponse['message']}`)
                     return
             }

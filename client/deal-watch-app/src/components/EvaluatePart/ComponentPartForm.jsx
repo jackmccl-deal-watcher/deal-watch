@@ -1,5 +1,5 @@
 import { useState } from 'react'
-import ComponentTypes from "../../component_enums/ComponentTypesEnum"
+import ComponentTypes from "../../enums/ComponentTypesEnum"
 import InputLabel from '@mui/material/InputLabel';
 import MenuItem from '@mui/material/MenuItem';
 import FormControl from '@mui/material/FormControl';

@@ -1,6 +1,6 @@
 import { useState } from 'react'
 import Slider from '@mui/material/Slider';
-import { HARD_DRIVE_PROPERTIES } from '../../../component_enums/ComponentPropertiesEnums';
+import { HARD_DRIVE_PROPERTIES } from '../../../enums/ComponentPropertiesEnums';
 import OptionsDropdown from './OptionsDropdown';
 
 export const getCapacityLabelText = (value) => {
