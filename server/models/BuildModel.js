@@ -1,8 +1,10 @@
-const mongoose = require('../Mongoose.js')
+const mongoose = require('../Mongoose.js');
+const UserModel = require('./UserModel.js')
+const Schema = mongoose.Schema
 
 const BuildSchema = new mongoose.Schema({
-    _id: String,
     title: String,
+    user: { type: Schema.Types.ObjectId, ref: 'User' },
     cpu: {
         type: Object,
         properties: {
@@ -134,6 +136,6 @@ const BuildSchema = new mongoose.Schema({
     },
 });
 
-const BuildModel = mongoose.model('Build', BuildSchema)
+const BuildModel = mongoose.model('Builds', BuildSchema, 'builds')
 
 module.exports = BuildModel

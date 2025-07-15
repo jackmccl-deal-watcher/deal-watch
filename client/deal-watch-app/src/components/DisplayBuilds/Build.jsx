@@ -4,11 +4,16 @@ import './Build.css'
 import { useUser } from "../UserProvider/UserProvider";
 import TextField from "@mui/material/TextField";
 import { useState } from "react";
+import { saveBuild, unSaveBuild } from "../../utils/ApiUtils";
 
 const Build = ({build}) => {
     const { user, setUser } = useUser()
     const [title, setTitle] = useState(build.title)
-    const [saved, setSaved] = useState(false)
+    let initially_saved = false
+    if(build?.saved) {
+        initially_saved = true
+    }
+    const [saved, setSaved] = useState(initially_saved)
     const [message, setMessage] = useState('')
     let build_price = 0
 
@@ -49,7 +54,7 @@ const Build = ({build}) => {
 
     const displayBuildInfo = () => {
         return Object.entries(build).map( ([key, value]) => {
-            if (key === 'title') {
+            if (typeof value !== 'object') {
                 return
             }
             let part_price = 0
@@ -81,24 +86,34 @@ const Build = ({build}) => {
         })
     }
 
-    const toggleSaveBuild = async () => {
+    const handleToggleSaveBuild = async () => {
         try {
-            const response = await saveBuild(build)
+            let response = null
+            build.title = title
+            if (!saved) {
+                response = await saveBuild(build)
+            } else {
+                response = await unSaveBuild(build)
+            }
             if (response.status === 'success') {
                 setSaved(prev => !prev)
             }
-            message = response.message
+            setMessage(response.message)
         } catch(error) {
             console.error(error)
         }
+    }
+
+    const handleTitleChange = (e) => {
+        setTitle(e.target.value)
     }
 
     const createSaveBuildControls = () => {
         if (!saved) {
             return(
                 <div className='save-builds-control'>
-                        <TextField id="standard-basic" label="Build Title" variant="standard" value={title} onChange={(e, newValue) => setTitle(newValue)} />
-                        <button onClick={toggleSaveBuild} className='save-builds-button'>Save Build</button>
+                        <TextField id="standard-basic" label="Build Title" variant="standard" value={title} onChange={handleTitleChange} />
+                        <button onClick={handleToggleSaveBuild} className='save-builds-button'>Save Build</button>
                         <div className='save-builds-control-message'>{message}</div>
                 </div>
             )
@@ -106,17 +121,16 @@ const Build = ({build}) => {
             return(
                 <div className='save-builds-control'>
                         <TextField id="standard-basic" label="Build Title" variant="standard" value={title} disabled />
-                        <button onClick={toggleSaveBuild} className='save-builds-button'>Unsave Build</button>
+                        <button onClick={handleToggleSaveBuild} className='save-builds-button'>Un-save Build</button>
                         <div className='save-builds-control-message'>{message}</div>
                 </div>
             )
         }
     }
-
     return(
         <div className='build'>
             <div className='build-title'>
-                {build.title}
+                {title}
             </div>
             <div className='build-parts'>
                 {displayBuildInfo()}

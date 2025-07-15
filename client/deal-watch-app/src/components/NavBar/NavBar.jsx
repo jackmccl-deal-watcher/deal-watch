@@ -35,7 +35,6 @@ const NavBar = () => {
                     <button onClick={toggleUserDropdown} className="dropdown-button">{user}</button>
                     { showUserDropdown ?
                     <div id="user-dropdown-options" className="dropdown-content">
-                        <a href="/parts/favorites">Favorite Parts</a>
                         <a href="/builds/saved">Saved Builds</a>
                         <a onClick={handleLogout}>Logout</a>
                     </div>

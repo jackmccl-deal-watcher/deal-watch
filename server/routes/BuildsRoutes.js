@@ -1,6 +1,6 @@
 const express = require('express')
 const { generateBuilds } = require('../modules/builds/GenerateBuilds')
-const { saveBuild } = require('../utils/BuildsUtils')
+const { saveBuild, unSaveBuild, getSavedBuilds } = require('../utils/BuildsUtils')
 
 const router = express.Router()
 
@@ -17,9 +17,27 @@ router.post('/generate_builds', async (req, res, next) => {
 router.post('/save_build', async (req, res, next) => {
     try {
         const build = req.body
-        console.log(build)
-        const savedBuild = await saveBuild(build)
-        res.status(200).json({ 'status': 'success', 'message': `Build ${build.title} successfully saved!`, 'saved_build': savedBuild })
+        const response_message = await saveBuild(build, req.session.user)
+        res.status(200).json(response_message)
+    } catch (error) {
+        next(error)
+    }
+})
+
+router.post('/unsave_build', async (req, res, next) => {
+    try {
+        const build = req.body
+        const response_message = await unSaveBuild(build, req.session.user)
+        res.status(200).json(response_message)
+    } catch (error) {
+        next(error)
+    }
+})
+
+router.get('/saved_builds', async (req, res, next) => {
+    try {
+        const savedBuilds = await getSavedBuilds(req.session.user)
+        res.status(200).json({ 'status': 'success', 'message': `Saved builds for ${req.session.user} successfully fetched!`, 'saved_builds': savedBuilds })
     } catch (error) {
         next(error)
     }

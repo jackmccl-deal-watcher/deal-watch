@@ -1,0 +1,6 @@
+.saved-builds {
+    display: flex;
+    flex-direction: row;
+    gap: 30px;
+    justify-content: center;
+}
