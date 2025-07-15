@@ -1,6 +1,6 @@
 import { useState, useEffect } from "react"
 import './BuildGenerator.css'
-import { FORM_CONFIG, COMPONENT_TYPES_STARTING_ALLOCATIONS, STARTING_BUDGET } from "./BuildGeneratorConstants"
+import { FORM_CONFIG, COMPONENT_TYPES_STARTING_ALLOCATIONS, STARTING_BUDGET, ALLOCATION } from "./BuildGeneratorConstants"
 import TextField from '@mui/material/TextField';
 import InputAdornment from '@mui/material/InputAdornment';
 import ComponentBuildForm from "./BuildComponentForms/ComponentBuildForm"
@@ -20,11 +20,11 @@ const BuildGenerator = () => {
     const handleUpdateAllocations = (component_type, component_allocations) => {
         setAllocations(prevAllocations => {
             let newAllocationsDict = {...prevAllocations}
-            if (newAllocationsDict?.[component_type]?.['allocation'] && component_allocations?.['allocation'] && (newAllocationsDict[component_type]['allocation'] !== component_allocations['allocation'])) {
+            if (newAllocationsDict?.[component_type]?.[ALLOCATION] && component_allocations?.[ALLOCATION] && (newAllocationsDict[component_type][ALLOCATION] !== component_allocations[ALLOCATION])) {
                 let sum = 0
                 Object.values(newAllocationsDict).forEach((component) => {
-                    if (component?.['allocation']) {
-                        sum += component['allocation']
+                    if (component?.[ALLOCATION]) {
+                        sum += component[ALLOCATION]
                     }
                 })
                 const excess = sum - 1
@@ -32,9 +32,9 @@ const BuildGenerator = () => {
                 Object.keys(newAllocationsDict).forEach((key) => {
                     if (key !== component_type) {
                         if (excess > 0) {
-                            newAllocationsDict[key]['allocation'] = newAllocationsDict[key]['allocation'] - per_spec_adjustment
+                            newAllocationsDict[key][ALLOCATION] = newAllocationsDict[key][ALLOCATION] - per_spec_adjustment
                         } else if (excess < 0) {
-                            newAllocationsDict[key]['allocation'] = newAllocationsDict[key]['allocation'] + per_spec_adjustment
+                            newAllocationsDict[key][ALLOCATION] = newAllocationsDict[key][ALLOCATION] + per_spec_adjustment
                         }
                     }
                 })
@@ -48,7 +48,7 @@ const BuildGenerator = () => {
         let newAllocationsDict = {}
         COMPONENT_TYPES_STARTING_ALLOCATIONS.forEach((component_type_dict) => {
             newAllocationsDict[component_type_dict.type] = {}
-            newAllocationsDict[component_type_dict.type]['allocation'] = component_type_dict.starting_allocation
+            newAllocationsDict[component_type_dict.type][ALLOCATION] = component_type_dict.starting_allocation
         })
         setAllocations(newAllocationsDict)
     }
