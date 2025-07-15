@@ -182,6 +182,8 @@ export const SOCKETS = [
     'sTRX4'
 ]
 
+export const ALLOCATION = 'allocation'
+
 export const POWER_SUPPLY_FORM_FACTORS = [ 
     'ATX', 
     'BTX', 

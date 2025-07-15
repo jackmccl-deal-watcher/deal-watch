@@ -37,8 +37,9 @@ const Build = ({build}) => {
                         return `${value} watts`
                     case ComponentSpecs.BASE_CLOCK:
                     case ComponentSpecs.BOOST_CLOCK:
-                    case ComponentSpecs.SPEED:
                         return `${Math.round(value / 1000000000 * 100) / 100} GHz`
+                    case ComponentSpecs.SPEED:
+                        return `${Math.round(value / 1000000 * 100) / 100} MHz`
                     case ComponentSpecs.VRAM:
                     case ComponentSpecs.MODULE_SIZE:
                     case ComponentSpecs.TOTAL_SIZE:

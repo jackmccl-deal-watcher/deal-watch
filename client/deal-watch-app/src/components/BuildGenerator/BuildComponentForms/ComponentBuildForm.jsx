@@ -26,7 +26,7 @@ const ComponentBuildForm = ({ component_data, handleUpdateAllocations, allocatio
     const createComponentAllocations = () => {
         let newAllocationsDict = {}
         component_data?.main_specs?.forEach( (main_spec) => {
-            newAllocationsDict[main_spec.key] = 1 /  component_data.main_specs.length
+            newAllocationsDict[main_spec.key] = 1 / component_data.main_specs.length
         })
         component_data?.special_specs && Object.values(component_data.special_specs).forEach( (special_spec) => {
             switch (special_spec.type) {
