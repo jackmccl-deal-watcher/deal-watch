@@ -70,7 +70,7 @@ const ToolTipText = ({main_text, tool_tip}) => {
             </div>
             <div className='tool-tip' onAnimationEnd={handleAnimationEnd} onMouseOver={maintainPersistantToolTip} onMouseLeave={endPersistantToolTip}>
                 <p className='tool-tip-description'>{tool_tip.DESCRIPTION}</p>
-                <a className='tool-tip-wiki' href={tool_tip.WIKI}>{tool_tip.WIKI}</a>
+                { tool_tip.WIKI ? <a className='tool-tip-wiki' href={tool_tip.WIKI}>{tool_tip.WIKI}</a> : null }
                 <div className='tool-tip-status-circle'></div>
                 <div className='tool-tip-status-completed-circle'></div>
             </div>
