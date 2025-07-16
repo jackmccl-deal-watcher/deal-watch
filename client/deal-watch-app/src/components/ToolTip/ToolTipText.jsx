@@ -1,5 +1,19 @@
 import './ToolTipText.css'
 
+export const VISIBILITY_MODES = Object.freeze({
+    VISIBLE: 'visible',
+    HIDDEN: 'hidden',
+});
+
+export const BORDER_MODES = Object.freeze({
+    NONE: 'none',
+    BLACK_OUTLINE: '1px solid black',
+});
+
+const VISIBILITY_PROPERTY = 'visibility'
+const BORDER_PROPERTY = 'border'
+const STATUS_CIRCLE_ANIMATED_CLASS = 'status-circle-animated'
+
 const ToolTipText = ({main_text, tool_tip}) => {
     let visible_long = false
     let force_visible = false
@@ -17,28 +31,31 @@ const ToolTipText = ({main_text, tool_tip}) => {
     const showToolTip = (e) => {
         const tool_tip_element = e.target.parentNode.children[1]
         if (tool_tip_element) {
-            tool_tip_element.style.setProperty('visibility', 'visible')
+            tool_tip_element.style.setProperty(VISIBILITY_PROPERTY, VISIBILITY_MODES.VISIBLE)
             const status_circle = tool_tip_element.children[2]
             if (status_circle) {
-                status_circle.classList.add('status-circle-animated')
-                status_circle.style.setProperty('visibility', 'visible')
+                status_circle.classList.add(STATUS_CIRCLE_ANIMATED_CLASS)
+                status_circle.style.setProperty(VISIBILITY_PROPERTY, VISIBILITY_MODES.VISIBLE)
             }
         }
     }
+
     const setElementsHidden = (elements) => {
         for (let element of elements) {
-            element.style.setProperty('border', 'none');
-            element.style.setProperty('visibility', 'hidden')
+            element.style.setProperty(BORDER_PROPERTY, BORDER_MODES.NONE);
+            element.style.setProperty(VISIBILITY_PROPERTY, VISIBILITY_MODES.HIDDEN)
         }
     }
+
     const mainTextHandleHideToolTip = (e) => {
         const tool_tip_element = e.target.parentNode.children[1]
         tool_tip_element && setTimeout(() => hideToolTip(tool_tip_element), 200)
     }
+
     const hideToolTip = (tool_tip_element) => {
         if (!force_visible && tool_tip_element) {
             const status_circle = tool_tip_element.children[2]
-            status_circle && status_circle.classList.remove('status-circle-animated')
+            status_circle && status_circle.classList.remove(STATUS_CIRCLE_ANIMATED_CLASS)
             const status_completed_circle = tool_tip_element.children[3]
             if (visible_long) {
                 setTimeout(() => {
@@ -50,16 +67,17 @@ const ToolTipText = ({main_text, tool_tip}) => {
             }
         }
     }
+
     const handleAnimationEnd = (e) => {
         const status_circle = e.target
         if (status_circle) {
-            e.target.classList.remove('status-circle-animated')
+            e.target.classList.remove(STATUS_CIRCLE_ANIMATED_CLASS)
             const status_completed_circle = e.target.parentNode.children[3]
-            status_completed_circle && status_completed_circle.style.setProperty('visibility', 'visible')
+            status_completed_circle && status_completed_circle.style.setProperty(VISIBILITY_PROPERTY, VISIBILITY_MODES.VISIBLE)
             visible_long = true
             const tool_tip_element = e.target.parentNode
             if(tool_tip_element) {
-                tool_tip_element.style.setProperty('border', '1px solid black');
+                tool_tip_element.style.setProperty(BORDER_PROPERTY, BORDER_MODES.BLACK_OUTLINE);
             }
         }
     }

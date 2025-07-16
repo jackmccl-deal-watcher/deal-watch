@@ -31,10 +31,6 @@
     inherits: false;
 }
 
-/* .tool-tip-text:hover .tool-tip {
-    --visibility: visible;
-} */
-
 .status-circle-animated {
     display: inline-block;
     position: absolute;
@@ -46,7 +42,6 @@
         #F5F5F5 var(--progress) 100%,
         transparent
     );
-    /* will-change: transform, background-image; */
     width: 20px;
     height: 20px;
     mask: radial-gradient(closest-side, transparent 70%, black 71%);
@@ -75,7 +70,6 @@
         blue 0% 100%,
         transparent
     );
-    /* will-change: transform, background-image; */
     width: 20px;
     height: 20px;
     mask: radial-gradient(closest-side, transparent 70%, black 71%);
