@@ -3,6 +3,17 @@ import './ToolTipText.css'
 
 const ToolTipText = ({main_text, tool_tip}) => {
     let visible_long = false
+    let force_visible = false
+    
+    const maintainPersistantToolTip = (e) => {
+        force_visible = true
+    }
+
+    const endPersistantToolTip = (e) => {
+        force_visible = false
+        const tool_tip_element = e.target
+        hideToolTip(tool_tip_element)
+    }
 
     const showToolTip = (e) => {
         const tool_tip_element = e.target.parentNode.children[1]
@@ -20,9 +31,12 @@ const ToolTipText = ({main_text, tool_tip}) => {
             element.style.setProperty('visibility', 'hidden')
         }
     }
-    const hideToolTip = (e) => {
+    const mainTextHandleHideToolTip = (e) => {
         const tool_tip_element = e.target.parentNode.children[1]
-        if (tool_tip_element) {
+        tool_tip_element && setTimeout(() => hideToolTip(tool_tip_element), 200)
+    }
+    const hideToolTip = (tool_tip_element) => {
+        if (!force_visible && tool_tip_element) {
             const status_circle = tool_tip_element.children[2]
             status_circle && status_circle.classList.remove('status-circle-animated')
             const status_completed_circle = tool_tip_element.children[3]
@@ -47,10 +61,10 @@ const ToolTipText = ({main_text, tool_tip}) => {
     }
     return(
         <div className='tool-tip-text'>
-            <div className='tool-tip-main-text' onMouseOver={showToolTip} onMouseLeave={hideToolTip}>
+            <div className='tool-tip-main-text' onMouseOver={showToolTip} onMouseLeave={mainTextHandleHideToolTip}>
                 {main_text}
             </div>
-            <div className='tool-tip' onAnimationEnd={handleAnimationEnd}>
+            <div className='tool-tip' onAnimationEnd={handleAnimationEnd} onMouseOver={maintainPersistantToolTip} onMouseLeave={endPersistantToolTip}>
                 <p className='tool-tip-description'>{tool_tip.DESCRIPTION}</p>
                 <a className='tool-tip-wiki' href={tool_tip.WIKI}>{tool_tip.WIKI}</a>
                 <div className='tool-tip-status-circle'></div>
