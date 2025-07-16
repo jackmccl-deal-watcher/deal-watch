@@ -1,5 +1,4 @@
 const { test_cpu, test_videocard, test_motherboard, test_memory, test_hard_drive, test_power_supply, test_case } = require('./test_parts.js')
-const { TestError } = require('../../errors/TestError.js')
 const { getComparabilityScores } = require('../../modules/parts/ComparabilityScores.js')
 const { getComparableParts } = require('../../modules/parts/ComparableParts.js')
 
