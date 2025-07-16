@@ -2,6 +2,9 @@ import { useState } from 'react'
 import Slider from '@mui/material/Slider';
 import { POWER_SUPPLY_PROPERTIES } from '../../../enums/ComponentPropertiesEnums';
 import OptionsDropdown from './OptionsDropdown';
+import { TOOL_TIPCS_DICT } from '../../../enums/ComponentToolTipsEnum';
+import ComponentTypes from '../../../enums/ComponentTypesEnum';
+import ToolTipText from '../../ToolTip/ToolTipText';
 
 const PowerSupplyPartForm = ({ handlePartEvaluation }) => {
     const FORM_FACTORS = [ 
@@ -48,11 +51,11 @@ const PowerSupplyPartForm = ({ handlePartEvaluation }) => {
 
     return(
         <div className='component-form'>
-            <p className='component-form-input-label'>Wattage: {getWattageLabelText(wattage)}</p>
+            <div className='component-form-input-label'><ToolTipText main_text={`Wattage: ${getWattageLabelText(wattage)}`} tool_tip={TOOL_TIPCS_DICT[ComponentTypes.POWER_SUPPLY][POWER_SUPPLY_PROPERTIES.WATTAGE]}/></div>
             <Slider min={150} max={2000} step={50} valueLabelDisplay='auto' valueLabelFormat={getWattageLabelText} value={wattage} onChange={(e, newValue) => setWattage(newValue)}></Slider>
-            <OptionsDropdown options={FORM_FACTORS} optionsType={'Form Factor'} currentOptions={formFactor} setCurrentOption={setFormFactor}/>
-            <OptionsDropdown options={EFFICIENCY_RATINGS} optionsType={'Efficiency Rating'} currentOptions={efficiencyRating} setCurrentOption={setEfficiencyRating}/>
-            <OptionsDropdown options={MODULARITIES} optionsType={'Modularity'} currentOptions={modular} setCurrentOption={setModular}/>
+            <OptionsDropdown options={FORM_FACTORS} optionsType={'Form Factor'} currentOptions={formFactor} setCurrentOption={setFormFactor} component_type={ComponentTypes.POWER_SUPPLY} spec_type={POWER_SUPPLY_PROPERTIES.FORM_FACTOR}/>
+            <OptionsDropdown options={EFFICIENCY_RATINGS} optionsType={'Efficiency Rating'} currentOptions={efficiencyRating} setCurrentOption={setEfficiencyRating} component_type={ComponentTypes.POWER_SUPPLY} spec_type={POWER_SUPPLY_PROPERTIES.EFFICIENCY_RATING}/>
+            <OptionsDropdown options={MODULARITIES} optionsType={'Modularity'} currentOptions={modular} setCurrentOption={setModular} component_type={ComponentTypes.POWER_SUPPLY} spec_type={POWER_SUPPLY_PROPERTIES.MODULAR}/>
             <button className='component-form-submit-button' onClick={powerSupplyEvaluate}>Evaluate</button>
         </div>
     )

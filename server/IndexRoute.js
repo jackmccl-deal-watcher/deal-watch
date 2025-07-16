@@ -30,7 +30,7 @@ const PORT = process.env.PORT
 // Start routes and middlewares
 
 const cors_options = {
-    origin: 'http://localhost:5173',
+    origin: process.env.ALLOWED_ORIGIN,
     credentials: true,
 }
 

@@ -1,4 +1,3 @@
-import { useState } from 'react'
 import './ToolTipText.css'
 
 const ToolTipText = ({main_text, tool_tip}) => {
@@ -28,6 +27,7 @@ const ToolTipText = ({main_text, tool_tip}) => {
     }
     const setElementsHidden = (elements) => {
         for (let element of elements) {
+            element.style.setProperty('border', 'none');
             element.style.setProperty('visibility', 'hidden')
         }
     }
@@ -57,6 +57,10 @@ const ToolTipText = ({main_text, tool_tip}) => {
             const status_completed_circle = e.target.parentNode.children[3]
             status_completed_circle && status_completed_circle.style.setProperty('visibility', 'visible')
             visible_long = true
+            const tool_tip_element = e.target.parentNode
+            if(tool_tip_element) {
+                tool_tip_element.style.setProperty('border', '1px solid black');
+            }
         }
     }
     return(

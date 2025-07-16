@@ -76,9 +76,9 @@ const ComponentBuildForm = ({ component_data, handleUpdateAllocations, allocatio
                     <SumSliders specs={component_data.main_specs} component_type={component_data.component_type} handleUpdatePoints={handleUpdatePoints}/>
                     { component_data.special_specs && Object.values(component_data.special_specs).map( ( special_spec ) => {
                         if (special_spec.type === CASE_PROPERTIES.COLOR) {
-                            return <MultiSelect key={special_spec.type} options={special_spec.options} optionsType={special_spec.optionsType} currentOptions={special_spec.currentOption} setCurrentOptions={special_spec.setCurrentOption}/>
+                            return <MultiSelect key={special_spec.type} options={special_spec.options} optionsType={special_spec.optionsType} currentOptions={special_spec.currentOption} setCurrentOptions={special_spec.setCurrentOption} component_type={component_data.component_type} spec_type={special_spec.type}/>
                         } else {
-                            return <OptionsDropdown key={special_spec.type} options={special_spec.options} optionsType={special_spec.optionsType} currentOption={special_spec.currentOption} setCurrentOption={special_spec.setCurrentOption}/>
+                            return <OptionsDropdown key={special_spec.type} options={special_spec.options} optionsType={special_spec.optionsType} currentOption={special_spec.currentOption} setCurrentOption={special_spec.setCurrentOption} component_type={component_data.component_type} spec_type={special_spec.type}/>
                         }
                     })}
                 </div> : null
