@@ -1,5 +1,5 @@
-import ComponentTypes from "../../component_enums/ComponentTypesEnum"
-import { CPU_PROPERTIES, VIDEOCARD_PROPERTIES, MOTHERBOARD_PROPERTIES, MEMORY_PROPERTIES, HARD_DRIVE_PROPERTIES, POWER_SUPPLY_PROPERTIES, CASE_PROPERTIES } from "../../component_enums/ComponentPropertiesEnums"
+import ComponentTypes from "../../enums/ComponentTypesEnum"
+import { CPU_PROPERTIES, VIDEOCARD_PROPERTIES, MOTHERBOARD_PROPERTIES, MEMORY_PROPERTIES, HARD_DRIVE_PROPERTIES, POWER_SUPPLY_PROPERTIES, CASE_PROPERTIES } from "../../enums/ComponentPropertiesEnums"
 
 export const COMPONENT_ALLOCATION_MINIMUM = 0.1
 export const COMPONENT_ALLOCATION_MAXIMUM = 0.3
@@ -214,14 +214,14 @@ export const FORM_CONFIG = {
                 type: MOTHERBOARD_PROPERTIES.FORM_FACTOR,
                 options: MOTHERBOARD_FORM_FACTORS,
                 optionsType: 'Form Factor',
-                currentOption: null,
+                currentOption: 'ATX',
                 setCurrentOption: null,
             },
             [MOTHERBOARD_PROPERTIES.SOCKET]: {
                 type: MOTHERBOARD_PROPERTIES.SOCKET,
                 options: SOCKETS,
                 optionsType: 'Socket',
-                currentOption: null,
+                currentOption: 'LGA1151',
                 setCurrentOption: null,
             }
         }
@@ -245,7 +245,7 @@ export const FORM_CONFIG = {
                 type: POWER_SUPPLY_PROPERTIES.FORM_FACTOR,
                 options: POWER_SUPPLY_FORM_FACTORS,
                 optionsType: 'Form Factor',
-                currentOption: null,
+                currentOption: 'ATX',
                 setCurrentOption: null,
             },
         }
@@ -259,14 +259,14 @@ export const FORM_CONFIG = {
                 type: CASE_PROPERTIES.FORM_FACTOR,
                 options: CASE_FORM_FACTORS,
                 optionsType: 'Form Factor',
-                currentOption: null,
+                currentOption: 'ATX Mid Tower',
                 setCurrentOption: null,
             },
             [CASE_PROPERTIES.COLOR]: {
                 type: CASE_PROPERTIES.COLOR,
                 options: COLORS,
                 optionsType: 'Colors',
-                currentOption: null,
+                currentOption: ['Black'],
                 setCurrentOption: null,
             }
         }

@@ -83,3 +83,43 @@ export const generateBuilds = async (user_allocations) => {
         console.error(error)
     }
 }
+
+export const saveBuild = async (build) => {
+    try {
+        const response = await fetch(`${API_URL}/builds/save_build`, {
+            method: 'POST',
+            body: JSON.stringify(build),
+            credentials: 'include',
+            headers: { 'Content-Type': 'application/json' },
+        })
+        return await response.json()
+    } catch (error) {
+        console.error(error)
+    }
+}
+
+export const unSaveBuild = async (build) => {
+    try {
+        const response = await fetch(`${API_URL}/builds/unsave_build`, {
+            method: 'POST',
+            body: JSON.stringify(build),
+            credentials: 'include',
+            headers: { 'Content-Type': 'application/json' },
+        })
+        return await response.json()
+    } catch (error) {
+        console.error(error)
+    }
+}
+
+export const fetchSavedBuilds = async () => {
+    try {
+        const response = await fetch(`${API_URL}/builds/saved_builds`, {
+            method: 'GET',
+            credentials: 'include',
+        })
+        return await response.json()
+    } catch (error) {
+        console.error(error)
+    }
+}

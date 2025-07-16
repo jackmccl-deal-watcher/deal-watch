@@ -1,15 +1,29 @@
 import { getCapacityLabelText } from "../EvaluatePart/ComponentForms/HardDrivePartForm";
 import { ComponentSpecs, LABELS_DICT } from "./BuildConstants"
 import './Build.css'
+import { useUser } from "../UserProvider/UserProvider";
+import TextField from "@mui/material/TextField";
+import { useState } from "react";
+import { saveBuild, unSaveBuild } from "../../utils/ApiUtils";
+import { VARIABLE_TYPES } from "../../enums/VariableTypeEnums";
+import { STATUS_CODES } from "../../enums/StatusEnums";
 
 const Build = ({build}) => {
+    const { user, setUser } = useUser()
+    const [title, setTitle] = useState(build.title)
+    let initially_saved = false
+    if(build?.saved) {
+        initially_saved = true
+    }
+    const [saved, setSaved] = useState(initially_saved)
+    const [message, setMessage] = useState('')
     let build_price = 0
 
     const displaySpecValue = (spec, value) => {
         switch (typeof value) {
-            case 'string':
+            case VARIABLE_TYPES.STRING:
                 return value
-            case 'number':
+            case VARIABLE_TYPES.NUMBER:
                 switch (spec) {
                     case ComponentSpecs.CORES:
                     case ComponentSpecs.RAM_SLOTS:
@@ -43,7 +57,7 @@ const Build = ({build}) => {
 
     const displayBuildInfo = () => {
         return Object.entries(build).map( ([key, value]) => {
-            if (key === 'title') {
+            if (typeof value !== VARIABLE_TYPES.OBJECT) {
                 return
             }
             let part_price = 0
@@ -75,16 +89,62 @@ const Build = ({build}) => {
         })
     }
 
+    const handleToggleSaveBuild = async () => {
+        try {
+            let response = null
+            build.title = title
+            if (!saved) {
+                response = await saveBuild(build)
+            } else {
+                response = await unSaveBuild(build)
+            }
+            if (response.status === STATUS_CODES.SUCCESS) {
+                setSaved(prev => !prev)
+            }
+            setMessage(response.message)
+        } catch(error) {
+            console.error(error)
+        }
+    }
+
+    const handleTitleChange = (e) => {
+        setTitle(e.target.value)
+    }
+
+    const createSaveBuildControls = () => {
+        if (!saved) {
+            return(
+                <div className='save-builds-control'>
+                        <TextField id="standard-basic" label="Build Title" variant="standard" value={title} onChange={handleTitleChange} />
+                        <button onClick={handleToggleSaveBuild} className='save-builds-button'>Save Build</button>
+                        <div className='save-builds-control-message'>{message}</div>
+                </div>
+            )
+        } else {
+            return(
+                <div className='save-builds-control'>
+                        <TextField id="standard-basic" label="Build Title" variant="standard" value={title} disabled />
+                        <button onClick={handleToggleSaveBuild} className='save-builds-button'>Un-save Build</button>
+                        <div className='save-builds-control-message'>{message}</div>
+                </div>
+            )
+        }
+    }
     return(
         <div className='build'>
             <div className='build-title'>
-                {build.title}
+                {title}
             </div>
             <div className='build-parts'>
                 {displayBuildInfo()}
             </div>
             <div className='build-price'>
                 Build Price: {`$${Math.round(build_price * 100) / 100}`}
+            </div>
+            <div className='save-builds'>
+                { user ? 
+                    createSaveBuildControls()
+                : 'Login to save builds!'}
             </div>
         </div>
     )

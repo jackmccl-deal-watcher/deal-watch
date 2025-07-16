@@ -5,3 +5,22 @@
     margin-top: 30px;
     margin-bottom: 30px;
 }
+
+.save-builds {
+    margin-top: 30px;
+    margin-bottom: 30px;
+}
+
+.save-builds-control {
+    display: flex;
+    flex-direction: column;
+    width: 300px;
+    justify-self: center;
+    gap: 20px;
+}
+
+.build {
+    border-radius: 9px;
+    border: solid black 4px;
+    max-width: 500px
+}

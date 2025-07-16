@@ -1,6 +1,6 @@
 import { useState } from 'react'
 import Slider from '@mui/material/Slider';
-import { VIDEOCARD_PROPERTIES } from '../../../component_enums/ComponentPropertiesEnums';
+import { VIDEOCARD_PROPERTIES } from '../../../enums/ComponentPropertiesEnums';
 
 const VideoCardPartForm = ({ handlePartEvaluation }) => {
     const [vram, setVram] = useState(6000000000)

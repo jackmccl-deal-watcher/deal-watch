@@ -2,6 +2,7 @@ import TextField from '@mui/material/TextField';
 import Autocomplete from '@mui/material/Autocomplete';
 import Chip from '@mui/material/Chip';
 import './MultiSelect.css'
+import { VARIABLE_TYPES } from '../../../enums/VariableTypeEnums';
 
 const MultiSelect = ({ options, optionsType, currentOptions, setCurrentOptions }) => {
     return(
@@ -17,7 +18,7 @@ const MultiSelect = ({ options, optionsType, currentOptions, setCurrentOptions }
                 disablePortal
                 options={options}
                 getOptionLabel={(option) => {
-                    if (typeof option === 'string') {
+                    if (typeof option === VARIABLE_TYPES.STRING) {
                         return option
                     } else {
                         return ''
