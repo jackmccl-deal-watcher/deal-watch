@@ -6,3 +6,13 @@
 .sum-sliders-container {
     max-width: 500px;
 }
+
+.sum-slider-div {
+    max-width: 250px;
+}
+
+/* .sum-sliders-title {
+    display: flex;
+    flex-direction: row;
+    width: 30px;
+} */

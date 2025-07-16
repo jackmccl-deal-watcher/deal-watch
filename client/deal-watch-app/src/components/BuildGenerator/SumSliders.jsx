@@ -3,8 +3,10 @@ import Slider from '@mui/material/Slider';
 import './SumSliders.css'
 import { SPEC_ALLOCATION_MAXIMUM, SPEC_ALLOCATION_MINIMUM } from "./BuildGeneratorConstants";
 import { getSliderLabelText } from "./BuildComponentForms/BuildFormUtils";
+import ToolTipText from "../ToolTip/ToolTipText";
+import { TOOL_TIPCS_DICT } from "../../enums/ComponentToolTipsEnum";
 
-const SumSliders = ({ specs, handleUpdatePoints }) => {
+const SumSliders = ({ specs, component_type, handleUpdatePoints }) => {
     const [pointsDict, setPointsDict] = useState({})
 
     const balancePoints = ({ newValue, spec_type, setPointsDict }) => {
@@ -55,7 +57,7 @@ const SumSliders = ({ specs, handleUpdatePoints }) => {
     const createSliderDiv = (spec) => {
         return (
             <div key={spec.key} className='sum-slider-div'>
-                <p className='sum-slider-title'>{spec.tag}: {getSliderLabelText(pointsDict[spec.key])}</p>
+                <div className='sum-slider-title'> <ToolTipText main_text={`${spec.tag}: ${getSliderLabelText(pointsDict[spec.key])}`} tool_tip={TOOL_TIPCS_DICT[component_type][spec.key]}/></div>
                 <Slider min={SPEC_ALLOCATION_MINIMUM} max={SPEC_ALLOCATION_MAXIMUM} step={0.01} valueLabelDisplay='auto' valueLabelFormat={getSliderLabelText} value={pointsDict[spec.key]} onChange={(e, newValue) => updatePointsDict({ spec, newValue })}></Slider>
             </div>
         )

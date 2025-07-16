@@ -1,0 +1,82 @@
+.tool-tip-text {
+    height: 30px;
+    justify-content: center;
+    max-width: 150px;
+    justify-self: center;
+}
+
+.tool-tip-main-text {
+    position: relative;
+    align-items: center;
+}
+
+.tool-tip {
+    visibility: hidden;
+    z-index: 1;
+    position: relative;
+    transform: translateY(-100%);
+    margin-top: -40px;
+    background-color: #F5F5F5;
+    border-radius: 9px;
+    max-width: 500px;
+    padding: 10px;
+    justify-self: center;
+    animation: 0;
+} 
+
+/* Modified from https://stackoverflow.com/questions/65111664/how-do-i-animate-a-css-gradient-stop-with-a-smooth-transition-to-transparent */
+@property --progress {
+    syntax: '<percentage>';
+    initial-value: 100%;
+    inherits: false;
+}
+
+/* .tool-tip-text:hover .tool-tip {
+    --visibility: visible;
+} */
+
+.status-circle-animated {
+    display: inline-block;
+    position: absolute;
+    top: 0;
+    right: 0;
+    border-radius: 100%;
+    background-image: conic-gradient(
+        blue 0% var(--progress),
+        #F5F5F5 var(--progress) 100%,
+        transparent
+    );
+    /* will-change: transform, background-image; */
+    width: 20px;
+    height: 20px;
+    mask: radial-gradient(closest-side, transparent 70%, black 71%);
+    animation: conic-gradient 2s 0s none running;
+    animation-fill-mode: forwards;
+}
+
+@keyframes conic-gradient {
+    0% {
+        --progress: 0%;
+    }
+
+    100% {
+        --progress: 100%;
+    }
+}
+
+.tool-tip-status-completed-circle {
+    visibility: hidden;
+    display: inline-block;
+    position: absolute;
+    top: 0;
+    right: 0;
+    border-radius: 100%;
+    background-image: conic-gradient(
+        blue 0% 100%,
+        transparent
+    );
+    /* will-change: transform, background-image; */
+    width: 20px;
+    height: 20px;
+    mask: radial-gradient(closest-side, transparent 70%, black 71%);
+}

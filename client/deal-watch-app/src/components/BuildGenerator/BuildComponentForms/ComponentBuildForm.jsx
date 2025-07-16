@@ -7,6 +7,8 @@ import MultiSelect from './MultiSelect'
 import { getSliderLabelText } from './BuildFormUtils'
 import { useEffect, useState } from 'react';
 import { ComponentSpecs } from '../../DisplayBuilds/BuildConstants';
+import { TOOL_TIPCS_DICT } from '../../../enums/ComponentToolTipsEnum';
+import ToolTipText from '../../ToolTip/ToolTipText';
 
 const ComponentBuildForm = ({ component_data, handleUpdateAllocations, allocations }) => {
     const [trigger, useTrigger] = useState(false)
@@ -65,14 +67,13 @@ const ComponentBuildForm = ({ component_data, handleUpdateAllocations, allocatio
     useEffect(() => {
         setTimeout(createComponentAllocations, 100)
     }, [])
-    
     return(
         <div className='build-form'>
             { component_data && allocations?.[component_data.component_type]?.[ComponentSpecs.ALLOCATION] ?
                 <div className='build-form-container'>
-                    <p>{component_data.component_name}: {getSliderLabelText(allocations[component_data.component_type][ComponentSpecs.ALLOCATION])}</p>
+                    <div className='build-form-component-type'><ToolTipText main_text={`${component_data.component_name}: ${getSliderLabelText(allocations[component_data.component_type][ComponentSpecs.ALLOCATION])}`} tool_tip={TOOL_TIPCS_DICT[component_data.component_type][component_data.component_type]}/></div>
                     <Slider min={COMPONENT_ALLOCATION_MINIMUM} max={COMPONENT_ALLOCATION_MAXIMUM} step={0.01} valueLabelDisplay='auto' valueLabelFormat={getSliderLabelText} value={allocations[component_data.component_type][ComponentSpecs.ALLOCATION]} onChange={(e, newValue) => handleUpdateAllocations(component_data.component_type, {[ComponentSpecs.ALLOCATION]: newValue} )}></Slider>
-                    <SumSliders specs={component_data.main_specs} handleUpdatePoints={handleUpdatePoints}/>
+                    <SumSliders specs={component_data.main_specs} component_type={component_data.component_type} handleUpdatePoints={handleUpdatePoints}/>
                     { component_data.special_specs && Object.values(component_data.special_specs).map( ( special_spec ) => {
                         if (special_spec.type === CASE_PROPERTIES.COLOR) {
                             return <MultiSelect key={special_spec.type} options={special_spec.options} optionsType={special_spec.optionsType} currentOptions={special_spec.currentOption} setCurrentOptions={special_spec.setCurrentOption}/>
