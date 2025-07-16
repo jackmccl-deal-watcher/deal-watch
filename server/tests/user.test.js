@@ -3,7 +3,7 @@ const UserModel = require('../models/UserModel.js')
 const { verifyPassword } = require('../utils/argon.js')
 const { getUser, createUser } = require('../utils/UserUtils.js')
 
-test('tests database connection readyState', async () => {
+test('tests database connection readyState is connected', async () => {
     await new Promise(resolve => setTimeout(resolve, 100)); 
     expect(mongoose.connection.readyState).toBe(1)
 }, 10000)
