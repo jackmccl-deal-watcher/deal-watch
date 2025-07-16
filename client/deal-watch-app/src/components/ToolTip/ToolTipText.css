@@ -24,7 +24,7 @@
     animation: 0;
 } 
 
-/* Modified from https://stackoverflow.com/questions/65111664/how-do-i-animate-a-css-gradient-stop-with-a-smooth-transition-to-transparent */
+/* Referenced https://stackoverflow.com/questions/65111664/how-do-i-animate-a-css-gradient-stop-with-a-smooth-transition-to-transparent */
 @property --progress {
     syntax: '<percentage>';
     initial-value: 100%;
