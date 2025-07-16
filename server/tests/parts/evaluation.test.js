@@ -1,6 +1,5 @@
 const { ebayDateToJSDate, ebayPriceToNumber } = require('../../utils/ebay/EbayScraper.js')
-const { evaluatePart, removeIntraPriceOutliers } = require('../../modules/parts/EvaluatePart.js')
-const { TestError } = require('../../errors/TestError.js')
+const { removeIntraPriceOutliers } = require('../../modules/parts/EvaluatePart.js')
 const outlier_test_listings = [
     {
     title: 'EVGA GeForce RTX 2070 XC ULTRA GAMING 8GB GDDR6 Graphics Card rgb ray tracing',
@@ -117,58 +116,27 @@ const outlier_test_listings_key = [
     },
 ]
 
-const ebayPriceToNumber_test = () => {
+test('tests ebayPriceToNumber function', () => {
     const expected_number_1 = 30
     const test_input_1 = "$20.00 to $40.00"
     const result_1 = ebayPriceToNumber(test_input_1)
     const expected_number_2 = 50.32
     const test_input_2 = "$50.32"
     const result_2 = ebayPriceToNumber(test_input_2)
-    if (Math.abs(result_1 - expected_number_1) < 0.00005
-        && Math.abs(result_2 - expected_number_2 < 0.00005)) {
-        console.log("ebayPriceToNumber_test: Passed")
-        return true
-    } else {
-        console.log("ebayPriceToNumber_test: Failed")
-        throw new TestError("ebayPriceToNumber_test: Failed")
-    }
-}
+    expect(Math.abs(result_1 - expected_number_1)).toBeLessThan(0.00005)
+    expect(Math.abs(result_2 - expected_number_2)).toBeLessThan(0.00005)
+})
 
-const ebayDateToJSDate_test = () => {
+test('tests ebayDateToJSDate function', () => {
     const expected_date = new Date(`Jun 12, 1971`)
     const test_input = 'Sold  Jun 12, 1971'
     const result = ebayDateToJSDate(test_input)
     // less than 1 millisecond off
-    if (Math.abs(result - expected_date) < 1) {
-        console.log("ebayDateToJSDate_test: Passed")
-        return true
-    } else {
-        console.log("ebayDateToJSDate_test: Failed")
-        throw new TestError("ebayDateToJSDate_test: Failed")
-    }
-}
+    expect(Math.abs(result - expected_date)).toBeLessThan(1)
+})
 
 
-const removePriceOutliers_test = () => {
+test('tests removePriceOutliers function', () => {
     const result = removeIntraPriceOutliers(outlier_test_listings)
-    if (result.every) {
-        console.log("removeIntraPriceOutliers_test: Passed")
-        return true
-    } else {
-        console.log("removeIntraPriceOutliers_test: Failed")
-        throw new TestError("removeIntraPriceOutliers_test: Failed")
-    }
-}
-
-const running_tests = async () => {
-    try {
-        ebayPriceToNumber_test()
-        ebayDateToJSDate_test()
-        removePriceOutliers_test()
-    } catch (error) {
-        console.error(error)
-    }
-    process.exit(0)
-}
-
-running_tests()
+    expect(result.sort()).toEqual(outlier_test_listings_key.sort())
+})

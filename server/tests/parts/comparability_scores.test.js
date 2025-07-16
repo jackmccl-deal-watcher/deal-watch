@@ -2,7 +2,7 @@ const { test_cpu, test_videocard, test_motherboard, test_memory, test_hard_drive
 const { getComparabilityScores } = require('../../modules/parts/ComparabilityScores.js')
 const { getComparableParts } = require('../../modules/parts/ComparableParts.js')
 
-test('tests getComparabilityScoresCPUs', async () => {
+test('tests getComparabilityScoresCPUs function', async () => {
     const comparableCPUs = await getComparableParts(test_cpu);
     const scoredComparableCPUs = getComparabilityScores(comparableCPUs, test_cpu);
     let avg_comparable_score_sums = 0;
@@ -15,7 +15,7 @@ test('tests getComparabilityScoresCPUs', async () => {
     expect(Math.abs(1 - avg_comparable_score_sums)).toBeLessThan(0.000000001);
 });
 
-test('tests getComparabilityScoresVideoCards', async () => {
+test('tests getComparabilityScoresVideoCards function', async () => {
     const comparableVideoCards = await getComparableParts(test_videocard);
     const scoredComparableVideoCards = getComparabilityScores(comparableVideoCards, test_videocard);
     let avg_comparable_score_sums = 0;
@@ -28,7 +28,7 @@ test('tests getComparabilityScoresVideoCards', async () => {
     expect(Math.abs(1 - avg_comparable_score_sums)).toBeLessThan(0.000000001);
 });
 
-test('tests getComparabilityScoresMotherboards', async () => {
+test('tests getComparabilityScoresMotherboards function', async () => {
     const comparableMotherboards = await getComparableParts(test_motherboard);
     const scoredComparableMotherboards = getComparabilityScores(comparableMotherboards, test_motherboard);
     let avg_comparable_score_sums = 0;
@@ -41,7 +41,7 @@ test('tests getComparabilityScoresMotherboards', async () => {
     expect(Math.abs(1 - avg_comparable_score_sums)).toBeLessThan(0.000000001);
 });
 
-test('tests getComparabilityScoresMemorys', async () => {
+test('tests getComparabilityScoresMemorys function', async () => {
     const comparableMemorys = await getComparableParts(test_memory);
     const scoredComparableMemorys = getComparabilityScores(comparableMemorys, test_memory);
     let avg_comparable_score_sums = 0;
@@ -54,7 +54,7 @@ test('tests getComparabilityScoresMemorys', async () => {
     expect(Math.abs(1 - avg_comparable_score_sums)).toBeLessThan(0.000000001);
 });
 
-test('tests getComparabilityScoresHardDrives', async () => {
+test('tests getComparabilityScoresHardDrives function', async () => {
     const comparableHardDrives = await getComparableParts(test_hard_drive);
     const scoredComparableHardDrives = getComparabilityScores(comparableHardDrives, test_hard_drive);
     let avg_comparable_score_sums = 0;
@@ -67,7 +67,7 @@ test('tests getComparabilityScoresHardDrives', async () => {
     expect(Math.abs(1 - avg_comparable_score_sums)).toBeLessThan(0.000000001);
 });
 
-test('tests getComparabilityScoresPowerSupplys', async () => {
+test('tests getComparabilityScoresPowerSupplys function', async () => {
     const comparablePowerSupplys = await getComparableParts(test_power_supply);
     const scoredComparablePowerSupplys = getComparabilityScores(comparablePowerSupplys, test_power_supply);
     let avg_comparable_score_sums = 0;
@@ -80,7 +80,7 @@ test('tests getComparabilityScoresPowerSupplys', async () => {
     expect(Math.abs(1 - avg_comparable_score_sums)).toBeLessThan(0.000000001);
 });
 
-test('tests getComparabilityScoresCases', async () => {
+test('tests getComparabilityScoresCases function', async () => {
     const comparableCases = await getComparableParts(test_case);
     const scoredComparableCases = getComparabilityScores(comparableCases, test_case);
     let avg_comparable_score_sums = 0;
