@@ -30,7 +30,7 @@ const PORT = process.env.PORT
 // Start routes and middlewares
 
 const cors_options = {
-    origin: 'http://localhost:5173',
+    origin: process.env.ALLOWED_ORIGIN,
     credentials: true,
 }
 
@@ -56,7 +56,7 @@ app.use(ErrorMiddleware)
 
 
 app.listen(PORT, () => {
-    console.log(`Server is running on http://localhost:${PORT}`)
+    console.log(`Server is running on port: ${PORT}`)
 })
 
 app.get('/', (req, res, next) => {
