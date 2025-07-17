@@ -3,4 +3,4 @@ const config = {
     "preset": "jest-puppeteer",
 };
 
-module.exports = config;
+module.exports = config

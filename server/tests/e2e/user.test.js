@@ -1,9 +1,10 @@
-const mongoose = require('./Mongoose.js')
-const UserModel = require('./UserModel.js')
+const mongoose = require('../../Mongoose.js')
+const UserModel = require('../../models/UserModel.js')
+require('dotenv').config({ path: require('find-config')('.env') })
 
 describe('Sign Up', () => {
     beforeAll(async () => {
-        await page.goto(import.meta.env.VITE_HOSTED_SITE);
+        await page.goto(process.env.HOSTED_SITE);
     })
     test('Login and signup buttons exist', async () => {
         await expect(page.$('#login-button')).toBeDefined()
