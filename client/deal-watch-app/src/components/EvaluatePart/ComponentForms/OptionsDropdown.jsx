@@ -11,8 +11,8 @@ const OptionsDropdown = ({ options, optionsType, currentOption, setCurrentOption
             <Autocomplete
                 disablePortal
                 options={options}
-                sx={{ width: 300 }}
                 value={currentOption}
+                sx={{ width: 300 }}
                 onChange={ (event, newValue) => setCurrentOption(newValue)}
                 renderInput={(params) => <TextField {...params} label={optionsType} />}
             />

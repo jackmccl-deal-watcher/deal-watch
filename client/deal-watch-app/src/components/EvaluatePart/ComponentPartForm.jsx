@@ -36,20 +36,20 @@ const ComponentPartForm = ({ handlePartEvaluation }) => {
     }
 
     return (
-        <div className='component-part-form'>
-            <FormControl variant="filled" sx={{ m: 1, minWidth: 120 }}>
+        <div id='component-part-form' className='component-part-form'>
+            <FormControl id='component-part-form-type-selector' variant="filled" sx={{ m: 1, minWidth: 120 }}>
                 <InputLabel>Component Type:</InputLabel>
                 <Select
                     value={componentType}
                     onChange={(e) => setComponentType(e.target.value)}
                 >
-                    <MenuItem value={ComponentTypes.CPU}>{ComponentTypes.CPU}</MenuItem>
-                    <MenuItem value={ComponentTypes.VIDEOCARD}>{ComponentTypes.VIDEOCARD}</MenuItem>
-                    <MenuItem value={ComponentTypes.MOTHERBOARD}>{ComponentTypes.MOTHERBOARD}</MenuItem>
-                    <MenuItem value={ComponentTypes.MEMORY}>{ComponentTypes.MEMORY}</MenuItem>
-                    <MenuItem value={ComponentTypes.HARD_DRIVE}>{ComponentTypes.HARD_DRIVE}</MenuItem>
-                    <MenuItem value={ComponentTypes.POWER_SUPPLY}>{ComponentTypes.POWER_SUPPLY}</MenuItem>
-                    <MenuItem value={ComponentTypes.CASE}>{ComponentTypes.CASE}</MenuItem>
+                    <MenuItem id='component-form-cpu' value={ComponentTypes.CPU}>{ComponentTypes.CPU}</MenuItem>
+                    <MenuItem id='component-form-video-card' value={ComponentTypes.VIDEOCARD}>{ComponentTypes.VIDEOCARD}</MenuItem>
+                    <MenuItem id='component-form-motherboard' value={ComponentTypes.MOTHERBOARD}>{ComponentTypes.MOTHERBOARD}</MenuItem>
+                    <MenuItem id='component-form-memory' value={ComponentTypes.MEMORY}>{ComponentTypes.MEMORY}</MenuItem>
+                    <MenuItem id='component-form-hard-drive' value={ComponentTypes.HARD_DRIVE}>{ComponentTypes.HARD_DRIVE}</MenuItem>
+                    <MenuItem id='component-form-power-supply' value={ComponentTypes.POWER_SUPPLY}>{ComponentTypes.POWER_SUPPLY}</MenuItem>
+                    <MenuItem id='component-form-case' value={ComponentTypes.CASE}>{ComponentTypes.CASE}</MenuItem>
                 </Select>
             </FormControl>
             <div className='evaluate-part-component-form'>

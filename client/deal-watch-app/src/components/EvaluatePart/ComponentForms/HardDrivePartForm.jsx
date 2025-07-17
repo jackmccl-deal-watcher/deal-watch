@@ -64,9 +64,9 @@ const HardDrivePartForm = ({ handlePartEvaluation }) => {
         'mSATA'
     ]
     const [capacity, setCapacity] = useState(40)
-    const [storageType, setStorageType] = useState('')
-    const [formFactor, setFormFactor] = useState('')
-    const [hardDriveInterface, setHardDriveInterface] = useState('')
+    const [storageType, setStorageType] = useState('SSD')
+    const [formFactor, setFormFactor] = useState('2.5"')
+    const [hardDriveInterface, setHardDriveInterface] = useState('SATA 6 Gb/s')
 
     function calcCapacity(value) {
         return 2 ** value;
@@ -87,9 +87,9 @@ const HardDrivePartForm = ({ handlePartEvaluation }) => {
         <div className='component-form'>
             <div className='component-form-input-label'><ToolTipText main_text={`Capacity: ${getCapacityLabelText(calcCapacity(capacity))}`} tool_tip={TOOL_TIPCS_DICT[ComponentTypes.HARD_DRIVE][HARD_DRIVE_PROPERTIES.CAPACITY]}/></div>
             <Slider min={30} max={44} scale={calcCapacity} valueLabelDisplay='auto' valueLabelFormat={getCapacityLabelText} value={capacity} onChange={(e, newValue) => setCapacity(newValue)}></Slider>
-            <OptionsDropdown options={STORAGE_TYPES} optionsType={'Storage Type'} currentOptions={storageType} setCurrentOption={setStorageType} component_type={ComponentTypes.HARD_DRIVE} spec_type={HARD_DRIVE_PROPERTIES.STORAGE_TYPE}/>
-            <OptionsDropdown options={FORM_FACTORS} optionsType={'Form Factor'} currentOptions={formFactor} setCurrentOption={setFormFactor} component_type={ComponentTypes.HARD_DRIVE} spec_type={HARD_DRIVE_PROPERTIES.FORM_FACTOR}/>
-            <OptionsDropdown options={hardDriveInterfaces} optionsType={'Interface'} currentOptions={hardDriveInterface} setCurrentOption={setHardDriveInterface} component_type={ComponentTypes.HARD_DRIVE} spec_type={HARD_DRIVE_PROPERTIES.INTERFACE}/>
+            <OptionsDropdown options={STORAGE_TYPES} optionsType={'Storage Type'} currentOption={storageType} setCurrentOption={setStorageType} component_type={ComponentTypes.HARD_DRIVE} spec_type={HARD_DRIVE_PROPERTIES.STORAGE_TYPE}/>
+            <OptionsDropdown options={FORM_FACTORS} optionsType={'Form Factor'} currentOption={formFactor} setCurrentOption={setFormFactor} component_type={ComponentTypes.HARD_DRIVE} spec_type={HARD_DRIVE_PROPERTIES.FORM_FACTOR}/>
+            <OptionsDropdown options={hardDriveInterfaces} optionsType={'Interface'} currentOption={hardDriveInterface} setCurrentOption={setHardDriveInterface} component_type={ComponentTypes.HARD_DRIVE} spec_type={HARD_DRIVE_PROPERTIES.INTERFACE}/>
             <button className='component-form-submit-button' onClick={hardDriveEvaluate}>Evaluate</button>
         </div>
     )

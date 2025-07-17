@@ -26,7 +26,7 @@ const NavBar = () => {
         <div className='navbar'>
             <div className='navbar-pages'>
                 <a href='/'>Home</a>
-                <a href='/parts'>Parts</a>
+                <a id='parts-page-link' href='/parts'>Parts</a>
                 <a href='/builds/generator'>Builds</a>
             </div>
             <div className='navbar-user'>

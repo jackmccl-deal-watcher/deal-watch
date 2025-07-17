@@ -73,8 +73,8 @@ const CasePartForm = ({ handlePartEvaluation }) => {
     ]
 
     const [internalBays, setInternalBays] = useState(2)
-    const [formFactor, setFormFactor] = useState('')
-    const [color, setColor] = useState('')
+    const [formFactor, setFormFactor] = useState('ATX Mid Tower')
+    const [color, setColor] = useState('Black')
 
     const getInternalBaysLabelText = (internal_bays) => {
         return `${internal_bays} bays`
@@ -94,8 +94,8 @@ const CasePartForm = ({ handlePartEvaluation }) => {
         <div className='component-form'>
             <div className='component-form-input-label'><ToolTipText main_text={`Interal Bays: ${getInternalBaysLabelText(internalBays)}`} tool_tip={TOOL_TIPCS_DICT[ComponentTypes.CASE][CASE_PROPERTIES.INTERNAL_BAYS]}/></div>
             <Slider min={0} max={10} valueLabelDisplay='auto' valueLabelFormat={getInternalBaysLabelText} value={internalBays} onChange={(e, newValue) => setInternalBays(newValue)}></Slider>
-            <OptionsDropdown options={FORM_FACTORS} optionsType={'Form Factor'} currentOptions={formFactor} setCurrentOption={setFormFactor} component_type={ComponentTypes.CASE} spec_type={CASE_PROPERTIES.FORM_FACTOR}/>
-            <OptionsDropdown options={COLORS} optionsType={'Color'} currentOptions={color} setCurrentOption={setColor} component_type={ComponentTypes.CASE} spec_type={CASE_PROPERTIES.COLOR}/>
+            <OptionsDropdown options={FORM_FACTORS} optionsType={'Form Factor'} currentOption={formFactor} setCurrentOption={setFormFactor} component_type={ComponentTypes.CASE} spec_type={CASE_PROPERTIES.FORM_FACTOR}/>
+            <OptionsDropdown options={COLORS} optionsType={'Color'} currentOption={color} setCurrentOption={setColor} component_type={ComponentTypes.CASE} spec_type={CASE_PROPERTIES.COLOR}/>
             <button className='component-form-submit-button' onClick={caseEvaluate}>Evaluate</button>
         </div>
     )

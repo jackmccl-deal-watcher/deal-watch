@@ -16,7 +16,7 @@ const MemoryPartForm = ({ handlePartEvaluation }) => {
 
     const [speed, setSpeed] = useState(2400000000)
     const [totalSize, setTotalSize] = useState(4)
-    const [moduleType, setModuleType] = useState('')
+    const [moduleType, setModuleType] = useState('DDR4')
 
     const getSpeedLabelText = (speed) => {
         return `${Math.round(speed/1000000000 * 100) / 100} GHz`
@@ -46,7 +46,7 @@ const MemoryPartForm = ({ handlePartEvaluation }) => {
             <Slider min={2000000000} max={4800000000} valueLabelDisplay='auto' valueLabelFormat={getSpeedLabelText} value={speed} onChange={(e, newValue) => setSpeed(newValue)}></Slider>
             <div className='component-form-input-label'><ToolTipText main_text={`Total Size: ${getTotalSizeLabelText(totalSize)}`} tool_tip={TOOL_TIPCS_DICT[ComponentTypes.MEMORY][MEMORY_PROPERTIES.TOTAL_SIZE]}/></div>
             <Slider min={1} max={6} step={1} valueLabelDisplay='auto' valueLabelFormat={getTotalSizeLabelText} value={totalSize} onChange={(e, newValue) => setTotalSize(newValue)}></Slider>
-            <OptionsDropdown options={MODULE_TYPES} optionsType={'Module Type'} currentOptions={moduleType} setCurrentOption={setModuleType} component_type={ComponentTypes.MEMORY} spec_type={MEMORY_PROPERTIES.MODULE_TYPE}/>
+            <OptionsDropdown options={MODULE_TYPES} optionsType={'Module Type'} currentOption={moduleType} setCurrentOption={setModuleType} component_type={ComponentTypes.MEMORY} spec_type={MEMORY_PROPERTIES.MODULE_TYPE}/>
             <button className='component-form-submit-button' onClick={memoryEvaluate}>Evaluate</button>
         </div>
     )
