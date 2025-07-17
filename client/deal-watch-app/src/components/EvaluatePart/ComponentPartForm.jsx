@@ -52,7 +52,9 @@ const ComponentPartForm = ({ handlePartEvaluation }) => {
                     <MenuItem value={ComponentTypes.CASE}>{ComponentTypes.CASE}</MenuItem>
                 </Select>
             </FormControl>
-            {selectComponentForm()}
+            <div className='evaluate-part-component-form'>
+                {selectComponentForm()}
+            </div>
         </div>
     )
 }

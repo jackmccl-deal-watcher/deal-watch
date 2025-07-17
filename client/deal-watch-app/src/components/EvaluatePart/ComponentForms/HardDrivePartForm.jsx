@@ -2,6 +2,9 @@ import { useState } from 'react'
 import Slider from '@mui/material/Slider';
 import { HARD_DRIVE_PROPERTIES } from '../../../enums/ComponentPropertiesEnums';
 import OptionsDropdown from './OptionsDropdown';
+import { TOOL_TIPCS_DICT } from '../../../enums/ComponentToolTipsEnum';
+import ComponentTypes from '../../../enums/ComponentTypesEnum';
+import ToolTipText from '../../ToolTip/ToolTipText';
 
 export const getCapacityLabelText = (value) => {
     const units = [
@@ -82,11 +85,11 @@ const HardDrivePartForm = ({ handlePartEvaluation }) => {
 
     return(
         <div className='component-form'>
-            <p className='component-form-input-label'>Capacity: {getCapacityLabelText(calcCapacity(capacity))}</p>
+            <div className='component-form-input-label'><ToolTipText main_text={`Capacity: ${getCapacityLabelText(calcCapacity(capacity))}`} tool_tip={TOOL_TIPCS_DICT[ComponentTypes.HARD_DRIVE][HARD_DRIVE_PROPERTIES.CAPACITY]}/></div>
             <Slider min={30} max={44} scale={calcCapacity} valueLabelDisplay='auto' valueLabelFormat={getCapacityLabelText} value={capacity} onChange={(e, newValue) => setCapacity(newValue)}></Slider>
-            <OptionsDropdown options={STORAGE_TYPES} optionsType={'Storage Type'} currentOptions={storageType} setCurrentOption={setStorageType}/>
-            <OptionsDropdown options={FORM_FACTORS} optionsType={'Form Factor'} currentOptions={formFactor} setCurrentOption={setFormFactor}/>
-            <OptionsDropdown options={hardDriveInterfaces} optionsType={'Interface'} currentOptions={hardDriveInterface} setCurrentOption={setHardDriveInterface}/>
+            <OptionsDropdown options={STORAGE_TYPES} optionsType={'Storage Type'} currentOptions={storageType} setCurrentOption={setStorageType} component_type={ComponentTypes.HARD_DRIVE} spec_type={HARD_DRIVE_PROPERTIES.STORAGE_TYPE}/>
+            <OptionsDropdown options={FORM_FACTORS} optionsType={'Form Factor'} currentOptions={formFactor} setCurrentOption={setFormFactor} component_type={ComponentTypes.HARD_DRIVE} spec_type={HARD_DRIVE_PROPERTIES.FORM_FACTOR}/>
+            <OptionsDropdown options={hardDriveInterfaces} optionsType={'Interface'} currentOptions={hardDriveInterface} setCurrentOption={setHardDriveInterface} component_type={ComponentTypes.HARD_DRIVE} spec_type={HARD_DRIVE_PROPERTIES.INTERFACE}/>
             <button className='component-form-submit-button' onClick={hardDriveEvaluate}>Evaluate</button>
         </div>
     )

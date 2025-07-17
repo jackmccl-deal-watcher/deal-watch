@@ -2,6 +2,9 @@ import { useState } from 'react'
 import Slider from '@mui/material/Slider';
 import { MOTHERBOARD_PROPERTIES } from '../../../enums/ComponentPropertiesEnums';
 import OptionsDropdown from './OptionsDropdown';
+import { TOOL_TIPCS_DICT } from '../../../enums/ComponentToolTipsEnum';
+import ComponentTypes from '../../../enums/ComponentTypesEnum';
+import ToolTipText from '../../ToolTip/ToolTipText';
 
 const MotherboardPartForm = ({ handlePartEvaluation }) => {
     const SOCKETS = [
@@ -108,12 +111,12 @@ const MotherboardPartForm = ({ handlePartEvaluation }) => {
 
     return(
         <div className='component-form'>
-            <p className='component-form-input-label'>Ram Slots: {getRamSlotsLabelText(ramSlots)}</p>
+            <div className='component-form-input-label'><ToolTipText main_text={`Ram Slots: ${getRamSlotsLabelText(ramSlots)}`} tool_tip={TOOL_TIPCS_DICT[ComponentTypes.MOTHERBOARD][MOTHERBOARD_PROPERTIES.RAM_SLOTS]}/></div>
             <Slider min={2} max={16} step={2} valueLabelDisplay='auto' valueLabelFormat={getRamSlotsLabelText} value={ramSlots} onChange={(e, newValue) => setRamSlots(newValue)}></Slider>
-            <p className='component-form-input-label'>Max Ram: {getMaxRamLabelText(maxRam)}</p>
+            <div className='component-form-input-label'><ToolTipText main_text={`Max Ram: ${getMaxRamLabelText(maxRam)}`} tool_tip={TOOL_TIPCS_DICT[ComponentTypes.MOTHERBOARD][MOTHERBOARD_PROPERTIES.RAM_SLOTS]}/></div>
             <Slider min={2} max={9} step={1} scale={calcMaxRam} valueLabelDisplay='auto' valueLabelFormat={getMaxRamLabelText} value={maxRam} onChange={(e, newValue) => setMaxRam(newValue)}></Slider>
-            <OptionsDropdown options={SOCKETS} optionsType={'Socket'} currentOptions={socket} setCurrentOption={setSocket}/>
-            <OptionsDropdown options={FORM_FACTORS} optionsType={'Form Factor'} currentOptions={formFactor} setCurrentOption={setFormFactor}/>
+            <OptionsDropdown options={SOCKETS} optionsType={'Socket'} currentOptions={socket} setCurrentOption={setSocket} component_type={ComponentTypes.MOTHERBOARD} spec_type={MOTHERBOARD_PROPERTIES.SOCKET}/>
+            <OptionsDropdown options={FORM_FACTORS} optionsType={'Form Factor'} currentOptions={formFactor} setCurrentOption={setFormFactor} component_type={ComponentTypes.MOTHERBOARD} spec_type={MOTHERBOARD_PROPERTIES.FORM_FACTOR}/>
             <button className='component-form-submit-button' onClick={motherboardEvaluate}>Evaluate</button>
         </div>
     )

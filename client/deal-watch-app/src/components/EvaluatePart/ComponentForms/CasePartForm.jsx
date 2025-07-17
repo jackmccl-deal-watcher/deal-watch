@@ -2,6 +2,9 @@ import { useState } from 'react'
 import Slider from '@mui/material/Slider';
 import { CASE_PROPERTIES } from '../../../enums/ComponentPropertiesEnums';
 import OptionsDropdown from './OptionsDropdown';
+import ToolTipText from '../../ToolTip/ToolTipText';
+import { TOOL_TIPCS_DICT } from '../../../enums/ComponentToolTipsEnum';
+import ComponentTypes from '../../../enums/ComponentTypesEnum';
 
 const CasePartForm = ({ handlePartEvaluation }) => {
     const FORM_FACTORS = [
@@ -89,10 +92,10 @@ const CasePartForm = ({ handlePartEvaluation }) => {
 
     return(
         <div className='component-form'>
-            <p className='component-form-input-label'>Internal Bays: {getInternalBaysLabelText(internalBays)}</p>
+            <div className='component-form-input-label'><ToolTipText main_text={`Interal Bays: ${getInternalBaysLabelText(internalBays)}`} tool_tip={TOOL_TIPCS_DICT[ComponentTypes.CASE][CASE_PROPERTIES.INTERNAL_BAYS]}/></div>
             <Slider min={0} max={10} valueLabelDisplay='auto' valueLabelFormat={getInternalBaysLabelText} value={internalBays} onChange={(e, newValue) => setInternalBays(newValue)}></Slider>
-            <OptionsDropdown options={FORM_FACTORS} optionsType={'Form Factor'} currentOptions={formFactor} setCurrentOption={setFormFactor}/>
-            <OptionsDropdown options={COLORS} optionsType={'Color'} currentOptions={color} setCurrentOption={setColor}/>
+            <OptionsDropdown options={FORM_FACTORS} optionsType={'Form Factor'} currentOptions={formFactor} setCurrentOption={setFormFactor} component_type={ComponentTypes.CASE} spec_type={CASE_PROPERTIES.FORM_FACTOR}/>
+            <OptionsDropdown options={COLORS} optionsType={'Color'} currentOptions={color} setCurrentOption={setColor} component_type={ComponentTypes.CASE} spec_type={CASE_PROPERTIES.COLOR}/>
             <button className='component-form-submit-button' onClick={caseEvaluate}>Evaluate</button>
         </div>
     )

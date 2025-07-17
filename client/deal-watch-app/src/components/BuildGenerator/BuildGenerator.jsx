@@ -110,17 +110,19 @@ const BuildGenerator = () => {
         <div className='builds-gen'>
             { allocations ? 
                 <div className='build-gen-forms'>
-                    <TextField 
-                        label="Budget" 
-                        value={budget} 
-                        onChange={updateBudget}
-                        variant="outlined"
-                        slotProps={{
-                            input: {
-                                startAdornment: <InputAdornment position="start">$</InputAdornment>,
-                            },
-                        }}
-                    />
+                    <div className='budget-input'>
+                        <TextField 
+                            label="Budget" 
+                            value={budget} 
+                            onChange={updateBudget}
+                            variant="outlined"
+                            slotProps={{
+                                input: {
+                                    startAdornment: <InputAdornment position="start">$</InputAdornment>,
+                                },
+                            }}
+                        />
+                    </div>
                     {makeBuildForms(FORM_CONFIG)}
                     <button className='generate-build-form-submit-button' onClick={getGeneratedBuilds}>Generate Builds</button>
                 </div> : null

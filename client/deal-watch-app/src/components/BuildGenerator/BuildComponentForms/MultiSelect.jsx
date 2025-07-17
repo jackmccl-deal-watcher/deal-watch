@@ -3,10 +3,13 @@ import Autocomplete from '@mui/material/Autocomplete';
 import Chip from '@mui/material/Chip';
 import './MultiSelect.css'
 import { VARIABLE_TYPES } from '../../../enums/VariableTypeEnums';
+import { TOOL_TIPCS_DICT } from '../../../enums/ComponentToolTipsEnum';
+import ToolTipText from '../../ToolTip/ToolTipText';
 
-const MultiSelect = ({ options, optionsType, currentOptions, setCurrentOptions }) => {
+const MultiSelect = ({ options, optionsType, currentOptions, setCurrentOptions, component_type, spec_type }) => {
     return(
         <div className='multi-select-div'>
+            <ToolTipText main_text={optionsType} tool_tip={TOOL_TIPCS_DICT[component_type][spec_type]}/>
             <div className='selected-options'>
                 {
                     currentOptions?.map( (option) => {

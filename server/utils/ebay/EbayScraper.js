@@ -15,7 +15,7 @@ const ebayDateToJSDate = (ebay_date) => {
     return new Date(`${month} ${day}, ${year}`)
 }
 
-const getRecentlySoldListings = async (keyword, day_limit, listing_limit) => {
+const getRecentlySoldListings = async (keyword, day_limit, listing_limit, logging) => {
     try {
         let page_number = 1
         const TIME_LIMIT_IN_MILLISECONDS = day_limit * 24 * 60 * 60 * 1000
@@ -58,10 +58,10 @@ const getRecentlySoldListings = async (keyword, day_limit, listing_limit) => {
                 }
             })
 
-            if (!scrape) {
+            if (!scrape && logging) {
                 console.log(`Hit listing limit for ${keyword}, pages pulled: ${page_number}, listings pulled: ${recentlySoldListingsData.length}`)
             } else if (next_page_btn.length === 0) {
-                console.log(`Ran out of pages for ${keyword}, pages pulled: ${page_number}, listings pulled: ${recentlySoldListingsData.length}`)
+                logging && console.log(`Ran out of pages for ${keyword}, pages pulled: ${page_number}, listings pulled: ${recentlySoldListingsData.length}`)
                 scrape = false
             }
 
