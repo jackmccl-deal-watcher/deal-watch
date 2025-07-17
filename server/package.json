@@ -19,6 +19,7 @@
   },
   "type": "commonjs",
   "devDependencies": {
-    "jest": "^30.0.4"
+    "jest": "^30.0.4",
+    "jest-puppeteer": "^11.0.0"
   }
 }

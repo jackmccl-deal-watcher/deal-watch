@@ -40,10 +40,10 @@ const Login = () => {
                 <form className='login-content-form' onSubmit={handleLogin}>
                     <h1>Login</h1>
                     <p>Username:</p>
-                    <input type='text' name='username' value={username} onChange={updateUsername}></input>
+                    <input id='login-username-input' type='text' name='username' value={username} onChange={updateUsername}></input>
                     <p>Password:</p>
-                    <input type='password' name='password' value={password} onChange={updatePassword}></input>
-                    <button className='login-button'>Login</button>
+                    <input id='login-password-input' type='password' name='password' value={password} onChange={updatePassword}></input>
+                    <button id='login-form-submit-button' className='login-button'>Login</button>
                     { message ? <p>{message}</p> : null}
                 </form>
             </div>
