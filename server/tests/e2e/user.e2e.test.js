@@ -2,17 +2,17 @@ const mongoose = require('../../Mongoose.js')
 const UserModel = require('../../models/UserModel.js')
 require('dotenv').config({ path: require('find-config')('.env') })
 
+const test_username = "test_user_e2e_1"
+const test_password = "test_password_1"
+
 describe('Sign Up', () => {
     beforeAll(async () => {
         await page.goto(process.env.HOSTED_SITE, { waitUntil: 'networkidle0'});
         expect(await page.title()).not.toBe('');
+        await UserModel.deleteMany({ 'username': test_username })
     })
+    
     test('Test signup e2e', async () => {
-        const test_username = "test_user_1"
-        const test_password = "test_password_1"
-
-        await UserModel.findOneAndDelete({ 'username': test_username })
-
         const signup_button = await page.$('#signup-button')
         await expect(signup_button).not.toBeNull()
         await signup_button.click()
@@ -54,9 +54,6 @@ describe('Sign Up', () => {
     })
 
     test('Test login e2e', async () => {
-        const test_username = "test_user_1"
-        const test_password = "test_password_1"
-
         const login_button = await page.$('#login-button')
         await expect(login_button).not.toBeNull()
         await login_button.click()
@@ -81,5 +78,9 @@ describe('Sign Up', () => {
 
         const logged_in_username = await page.$eval('#user-dropdown-button', button => button.textContent);
         await expect(logged_in_username).toBe(test_username)
+    })
+
+    afterAll(async () => {
+        await UserModel.deleteMany({ 'username': test_username })
     })
 })
