@@ -32,18 +32,18 @@ const NavBar = () => {
             <div className='navbar-user'>
                 { user ? 
                 <div id='navbar-user-loggedin' className='dropdown'>
-                    <button onClick={toggleUserDropdown} className="dropdown-button">{user}</button>
+                    <button id='user-dropdown-button' onClick={toggleUserDropdown} className="dropdown-button">{user}</button>
                     { showUserDropdown ?
                     <div id="user-dropdown-options" className="dropdown-content">
                         <a href="/builds/saved">Saved Builds</a>
-                        <a onClick={handleLogout}>Logout</a>
+                        <a id='user-logout-button' onClick={handleLogout}>Logout</a>
                     </div>
                     : null }
                 </div>
                 : 
                 <div className='navbar-user-loggedout'>
-                    <a href='/login'>Login</a>
-                    <a href='/signup'>Sign Up</a>
+                    <a id='login-button' href='/login'>Login</a>
+                    <a id='signup-button' href='/signup'>Sign Up</a>
                 </div> }
             </div>
         </div>
