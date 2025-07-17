@@ -14,14 +14,11 @@
     "nodemon": "^3.1.10"
   },
   "scripts": {
-    "test": "echo \"Error: no test specified\" && exit 1",
-    "start": "node ./IndexRoute.js"
+    "start": "node ./IndexRoute.js",
+    "test": "jest"
   },
   "type": "commonjs",
   "devDependencies": {
     "jest": "^30.0.4"
-  },
-  "scripts": {
-    "test": "jest"
   }
 }
