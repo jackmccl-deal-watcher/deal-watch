@@ -40,10 +40,10 @@ const Signup = () => {
                 <form className='signup-content-form' onSubmit={handleSignup}>
                     <h1>Signup</h1>
                     <p>Username:</p>
-                    <input type='text' name='username' value={username} onChange={updateUsername}></input>
+                    <input id='signup-username-input' type='text' name='username' value={username} onChange={updateUsername}></input>
                     <p>Password:</p>
-                    <input type='password' name='password' value={password} onChange={updatePassword}></input>
-                    <button className='signup-button'>Signup</button>
+                    <input id='signup-password-input' type='password' name='password' value={password} onChange={updatePassword}></input>
+                    <button id='signup-form-submit-button' className='signup-button'>Signup</button>
                     { message ? <p>{message}</p> : null}
                 </form>
             </div>
