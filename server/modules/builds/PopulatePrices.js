@@ -1,4 +1,4 @@
-const { MODELS, LISTING_DAY_AGE_LIMIT, MAX_LISTING_LIMIT } = require('./BuildConstants.js')
+const { MODELS, LISTING_DAY_AGE_LIMIT, MAX_LISTING_LIMIT, LOGGING } = require('./BuildConstants.js')
 
 const populatePrices = async (models, prev_listing_limit) => {
     for(let model of models) {
@@ -15,7 +15,7 @@ const populatePrices = async (models, prev_listing_limit) => {
             }
             part_count += 1
             const keyword = part.brand + ' ' + part.model
-            const listingData = await getRecentlySoldListings(keyword, LISTING_DAY_AGE_LIMIT, MAX_LISTING_LIMIT)
+            const listingData = await getRecentlySoldListings(keyword, LISTING_DAY_AGE_LIMIT, MAX_LISTING_LIMIT, LOGGING)
             if (listingData.length < 4) {
                 part.thirty_day_average = -1
                 part.thirty_day_time = new Date().getTime()
