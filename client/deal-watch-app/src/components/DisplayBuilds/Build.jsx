@@ -115,7 +115,7 @@ const Build = ({build}) => {
         if (!saved) {
             return(
                 <div className='save-builds-control'>
-                        <TextField id="standard-basic" label="Build Title" variant="standard" value={title} onChange={handleTitleChange} />
+                        <TextField className='save-build-textfield' slotProps={{'htmlInput': {'className': ` save-builds-title-input`}}} label="Build Title" variant="standard" value={title} onChange={handleTitleChange} />
                         <button onClick={handleToggleSaveBuild} className='save-builds-button'>Save Build</button>
                         <div className='save-builds-control-message'>{message}</div>
                 </div>
@@ -123,7 +123,7 @@ const Build = ({build}) => {
         } else {
             return(
                 <div className='save-builds-control'>
-                        <TextField id="standard-basic" label="Build Title" variant="standard" value={title} disabled />
+                        <TextField className='save-build-textfield' slotProps={{'htmlInput': {'className': ` save-builds-title-input`}}} label="Build Title" variant="standard" value={title} disabled />
                         <button onClick={handleToggleSaveBuild} className='save-builds-button'>Un-save Build</button>
                         <div className='save-builds-control-message'>{message}</div>
                 </div>

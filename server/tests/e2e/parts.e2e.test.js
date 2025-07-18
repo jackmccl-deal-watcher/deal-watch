@@ -1,11 +1,6 @@
-const ComponentTypes = require('./ComponentTypesEnum.js')
+const ComponentTypes = require('./ComponentTypesEnum.js');
+const { delay } = require('./e2e_test_utils.js');
 require('dotenv').config({ path: require('find-config')('.env') })
-
-const delay = (time) => {
-    return new Promise( (resolve) => { 
-        setTimeout(resolve, time)
-    });
-}
 
 describe('Parts', () => {
     beforeAll(async () => {
