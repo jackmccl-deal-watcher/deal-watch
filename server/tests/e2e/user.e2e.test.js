@@ -1,42 +1,26 @@
 const mongoose = require('../../Mongoose.js')
 const UserModel = require('../../models/UserModel.js')
+const { signup_test_util } = require('./e2e_test_utils.js')
 require('dotenv').config({ path: require('find-config')('.env') })
 
-const test_username = "test_user_e2e_1"
-const test_password = "test_password_1"
+const TEST_USERNAME = "test_user_e2e_1"
+const TEST_PASSWORD = "test_password_1"
 
 describe('Sign Up', () => {
     beforeAll(async () => {
         await page.goto(process.env.HOSTED_SITE, { waitUntil: 'networkidle0'});
         expect(await page.title()).not.toBe('');
-        await UserModel.deleteMany({ 'username': test_username })
+        await UserModel.deleteMany({ 'username': TEST_USERNAME })
     })
     
     test('Test signup e2e', async () => {
-        const signup_button = await page.$('#signup-button')
-        await expect(signup_button).not.toBeNull()
-        await signup_button.click()
-        await page.waitForNavigation({ waitUntil: 'networkidle0' })
-
-        const signup_username_input = await page.$('#signup-username-input')
-        const signup_password_input = await page.$('#signup-password-input')
-        const signup_form_submit_button = await page.$('#signup-form-submit-button')
-
-        await expect(signup_username_input).not.toBeNull()
-        await expect(signup_password_input).not.toBeNull()
-        await expect(signup_form_submit_button).not.toBeNull()
-
-        await signup_username_input.type(test_username)
-        await signup_password_input.type(test_password)
-
-        await signup_form_submit_button.click()
-        await page.waitForNavigation({ waitUntil: 'networkidle0' })
+        await signup_test_util(TEST_USERNAME, TEST_PASSWORD)
 
         const user_dropdown_button = page.$('#user-dropdown-button')
         await expect(user_dropdown_button).not.toBeNull()
 
         const logged_in_username = await page.$eval('#user-dropdown-button', button => button.textContent);
-        await expect(logged_in_username).toBe(test_username)
+        await expect(logged_in_username).toBe(TEST_USERNAME)
     })
 
     test('Test logout e2e', async () => {
@@ -67,8 +51,8 @@ describe('Sign Up', () => {
         await expect(login_password_input).not.toBeNull()
         await expect(login_form_submit_button).not.toBeNull()
 
-        await login_username_input.type(test_username)
-        await login_password_input.type(test_password)
+        await login_username_input.type(TEST_USERNAME)
+        await login_password_input.type(TEST_PASSWORD)
 
         await login_form_submit_button.click()
         await page.waitForNavigation({ waitUntil: 'networkidle0' })
@@ -77,10 +61,12 @@ describe('Sign Up', () => {
         await expect(user_dropdown_button).not.toBeNull()
 
         const logged_in_username = await page.$eval('#user-dropdown-button', button => button.textContent);
-        await expect(logged_in_username).toBe(test_username)
+        await expect(logged_in_username).toBe(TEST_USERNAME)
     })
 
     afterAll(async () => {
-        await UserModel.deleteMany({ 'username': test_username })
+        await UserModel.deleteMany({ 'username': TEST_USERNAME })
     })
 })
+
+module.exports = signup_test_util
