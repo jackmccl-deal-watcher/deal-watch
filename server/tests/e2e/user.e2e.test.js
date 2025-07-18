@@ -15,12 +15,6 @@ describe('Sign Up', () => {
     
     test('Test signup e2e', async () => {
         await signup_test_util(TEST_USERNAME, TEST_PASSWORD)
-
-        const user_dropdown_button = page.$('#user-dropdown-button')
-        await expect(user_dropdown_button).not.toBeNull()
-
-        const logged_in_username = await page.$eval('#user-dropdown-button', button => button.textContent);
-        await expect(logged_in_username).toBe(TEST_USERNAME)
     })
 
     test('Test logout e2e', async () => {

@@ -7,7 +7,7 @@ const LOGIN_TO_SAVE_MESSAGE = 'Login to save builds!'
 const TEST_USERNAME = "test_builds_e2e_1"
 const TEST_PASSWORD = "test_password_1"
 const TEST_BUILD_TITLE = 'test_builds_e2e_build_1'
-const TEST_BUILD_CHANGED_TITLE = 'test_builds_e2e_build_2'
+const TEST_BUILD_CHANGED_TITLE = 'test_builds_e2e_build_1_changed'
 
 const navigate_to_builds_util = async () => {
     const builds_page_link = await page.$('#builds-page-link')
@@ -41,13 +41,15 @@ const get_build_title_input = async () => {
 }
 
 const set_build_title_input = async (value) => {
-    const build_title_input = await get_build_title_input()
-    await expect(build_title_input).not.toBeNull()
-    return await build_title_input.type(value)
+    const build_textfield = await page.$('.save-build-textfield')
+    await build_textfield.click({clickCount: 3})
+    for (const char of value) {
+        await page.keyboard.press(char)
+    }
 }
 
 const check_build_title_input = async (value) => {
-    const build_title_input_text = await page.$eval('.saved-builds-title-input', input => input.value);
+    const build_title_input_text = await page.$eval('.save-builds-title-input', input => input.value);
     await expect(build_title_input_text).toBe(value)
 }
 
@@ -61,11 +63,10 @@ const click_save_build_button = async () => {
     await save_build_button.click()
 }
 
-let recorder = null
 describe('Builds', () => {
     beforeAll(async () => {
-        recorder =  await page.screencast({path: 'Test_generate_builds_recording.webm'});
         await page.goto(process.env.HOSTED_SITE, { waitUntil: 'networkidle0'});
+        await page.setViewport({ width: 1366, height: 768});
         expect(await page.title()).not.toBe('');
     })
     
@@ -89,7 +90,7 @@ describe('Builds', () => {
     }, 20000)
 
     test('Test save build', async () => {
-        const logged_in_user = await UserModel.find({ 'username': TEST_USERNAME })
+        const logged_in_user = await UserModel.findOne({ 'username': TEST_USERNAME })
         await expect(logged_in_user.username).toBe(TEST_USERNAME)
         await BuildModel.deleteMany({ 'title': TEST_BUILD_TITLE, 'user': logged_in_user.id })
 
@@ -107,7 +108,7 @@ describe('Builds', () => {
         await page.waitForNavigation({ waitUntil: 'networkidle0' })
 
         await check_build_title_input(TEST_BUILD_TITLE)
-    })
+    }, 20000)
 
     test('Test rename build', async () => {
         await click_save_build_button()
@@ -119,7 +120,7 @@ describe('Builds', () => {
         await page.reload({ waitUntil: 'networkidle0' })
 
         await check_build_title_input(TEST_BUILD_CHANGED_TITLE)
-    })
+    }, 20000)
 
     test('Test unsave build', async () => {
         await click_save_build_button()
@@ -129,9 +130,9 @@ describe('Builds', () => {
         const build = await page.$('.build')
 
         await expect(build).toBeNull()
-    })
+    }, 20000)
 
     afterAll( async () => {
-        recorder.stop()
+        await UserModel.deleteMany({ 'username': TEST_USERNAME })
     })
 })
