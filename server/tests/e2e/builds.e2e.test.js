@@ -4,8 +4,10 @@ const { signup_test_util } = require('./e2e_test_utils');
 require('dotenv').config({ path: require('find-config')('.env') })
 
 const LOGIN_TO_SAVE_MESSAGE = 'Login to save builds!'
-const test_username = "test_builds_e2e_1"
-const test_password = "test_password_1"
+const TEST_USERNAME = "test_builds_e2e_1"
+const TEST_PASSWORD = "test_password_1"
+const TEST_BUILD_TITLE = 'test_builds_e2e_build_1'
+const TEST_BUILD_CHANGED_TITLE = 'test_builds_e2e_build_2'
 
 const navigate_to_builds_util = async () => {
     const builds_page_link = await page.$('#builds-page-link')
@@ -38,8 +40,25 @@ const get_build_title_input = async () => {
     return await page.$('.save-builds-title-input')
 }
 
+const set_build_title_input = async (value) => {
+    const build_title_input = await get_build_title_input()
+    await expect(build_title_input).not.toBeNull()
+    return await build_title_input.type(value)
+}
+
+const check_build_title_input = async (value) => {
+    const build_title_input_text = await page.$eval('.saved-builds-title-input', input => input.value);
+    await expect(build_title_input_text).toBe(value)
+}
+
 const get_save_build_button = async () => {
     return await page.$('.save-builds-button')
+}
+
+const click_save_build_button = async () => {
+    const save_build_button = await get_save_build_button()
+    await expect(save_build_button).not.toBeNull()
+    await save_build_button.click()
 }
 
 let recorder = null
@@ -62,30 +81,21 @@ describe('Builds', () => {
     }, 20000)
 
     test('Test generate builds logged in', async () => {
-        await signup_test_util(test_username, test_password)
+        await signup_test_util(TEST_USERNAME, TEST_PASSWORD)
 
         await generate_builds_util()   
         
-        const save_builds_title_input = get_build_title_input();
-        await expect(save_builds_title_input).not.toBeNull()
+        await get_build_title_input();
     }, 20000)
 
     test('Test save build', async () => {
-        const test_build_title = 'test_builds_e2e_build_1'
-        const test_build_changed_title = 'test_builds_e2e_build_2'
+        const logged_in_user = await UserModel.find({ 'username': TEST_USERNAME })
+        await expect(logged_in_user.username).toBe(TEST_USERNAME)
+        await BuildModel.deleteMany({ 'title': TEST_BUILD_TITLE, 'user': logged_in_user.id })
 
-        const save_builds_title_input = get_build_title_input();
-        await expect(save_builds_title_input).not.toBeNull()
+        await set_build_title_input(TEST_BUILD_TITLE)
 
-        const logged_in_user = await UserModel.find({ 'username': test_username })
-        await expect(logged_in_user.username).toBe(test_username)
-        await BuildModel.deleteMany({ 'title': test_build_title, 'user': logged_in_user.id })
-
-        await save_builds_title_input.type(test_build_title)
-
-        const save_builds_button = await page.$('.save-builds-button')
-        await expect(save_builds_button).not.toBeNull()
-        await save_builds_button.click()
+        await click_save_build_button()
 
         const user_dropdown_button = await page.$('#user-dropdown-button')
         await expect(user_dropdown_button).not.toBeNull()
@@ -96,24 +106,29 @@ describe('Builds', () => {
         await nav_saved_builds_button.click()
         await page.waitForNavigation({ waitUntil: 'networkidle0' })
 
-        const saved_build_title_input = await page.$('.save-builds-title-input');
-        await expect(saved_build_title_input).not.toBeNull()
-        const saved_build_title_input_text = await page.$eval('.saved-builds-title-input', input => input.value);
-        await expect(saved_build_title_input_text).toBe(test_build_title)
-
-        const saved_build_toggle_save_button = await page.$('.save-builds-button')
-        await expect(saved_build_toggle_save_button).not.toBeNull()
-        await saved_build_toggle_save_button.click()
-
-        await saved_build_title_input.type(test_build_changed_title)
-
-        await saved_build_toggle_save_button.click()
-
-        await page.reload({ waitUntil: 'networkidle0' })
+        await check_build_title_input(TEST_BUILD_TITLE)
     })
 
     test('Test rename build', async () => {
+        await click_save_build_button()
 
+        await set_build_title_input(TEST_BUILD_CHANGED_TITLE)
+
+        await click_save_build_button()
+
+        await page.reload({ waitUntil: 'networkidle0' })
+
+        await check_build_title_input(TEST_BUILD_CHANGED_TITLE)
+    })
+
+    test('Test unsave build', async () => {
+        await click_save_build_button()
+
+        await page.reload({ waitUntil: 'networkidle0' })
+
+        const build = await page.$('.build')
+
+        await expect(build).toBeNull()
     })
 
     afterAll( async () => {
