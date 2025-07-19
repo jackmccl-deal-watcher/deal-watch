@@ -34,4 +34,15 @@ const getListings = async (keyword, limit) => {
     return await response.json()
 }
 
-module.exports = { getListings }
+const checkRateLimit = async (api) => {
+    const clientAccessToken = await generateClientAccessToken()
+    const response = await fetch(`https://api.ebay.com/developer/analytics/v1_beta/rate_limit/?api_name=${api}`, {
+        method: 'GET',
+        headers: {
+            'Authorization': `Bearer ${clientAccessToken}`
+        }
+    })
+    return await response.json()
+}
+
+module.exports = { getListings, checkRateLimit }
