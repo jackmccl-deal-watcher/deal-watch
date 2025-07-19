@@ -42,7 +42,9 @@ const calcSlidingQualityRatingTester = (test_allocations, test_ratings, parts, c
                 const prev_part_rating = sortedParts[part_index-1][spec_type]
                 const prev_part_rating_index = ratings.indexOf(prev_part_rating)
                 expect(prev_part_rating_index).toBeGreaterThan(-1)
-                expect(prev_part_rating_index > part_rating_index && sortedParts[part_rating_index]['model'] !== 'form_factor').toBe(false)
+                if (sortedParts[part_rating_index]['model'] !== 'form_factor') {
+                    expect(prev_part_rating_index).toBeLessThanOrEqual(part_rating_index)
+                }
             }
         })
     }

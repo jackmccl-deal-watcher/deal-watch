@@ -51,7 +51,7 @@ describe('Sign Up', () => {
         await login_form_submit_button.click()
         await page.waitForNavigation({ waitUntil: 'networkidle0' })
 
-        const user_dropdown_button = page.$('#user-dropdown-button')
+        const user_dropdown_button = await page.$('#user-dropdown-button')
         await expect(user_dropdown_button).not.toBeNull()
 
         const logged_in_username = await page.$eval('#user-dropdown-button', button => button.textContent);
