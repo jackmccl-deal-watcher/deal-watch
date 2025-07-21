@@ -55,9 +55,11 @@ describe('User', () => {
 
         const user_dropdown_button = page.$('#user-dropdown-button')
         await expect(user_dropdown_button).not.toBeNull()
-        
+
         const logged_in_username = await page.$eval('#user-dropdown-button', button => button.textContent);
-        await expect(logged_in_username).toBe(TEST_USERNAME)
+        console.log(logged_in_username)
+        console.log(TEST_USERNAME)
+        expect(logged_in_username).toBe(TEST_USERNAME)
     })
 
     test('Test user logout', async () => {
@@ -100,6 +102,18 @@ describe('User', () => {
 
         await signup_test_util('', TEST_PASSWORD)
         await check_message_util('Username and password required!')
+        await page.reload()
+    })
+
+    test('Test signup w/ duplicate username/password', async () => {
+        await UserModel.deleteMany({ 'username': TEST_USERNAME })
+        await signup_test_util(TEST_USERNAME, TEST_PASSWORD)
+        await page.waitForNavigation({ waitUntil: 'networkidle0' })
+
+        await logout_test_util()
+        
+        await signup_test_util(TEST_USERNAME, TEST_PASSWORD)
+        await check_message_util(`User ${TEST_USERNAME} already exists!`)
         await page.reload()
     })
 
