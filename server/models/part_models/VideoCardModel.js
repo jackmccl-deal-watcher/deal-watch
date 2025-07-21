@@ -14,6 +14,7 @@ const VideoCardSchema = new mongoose.Schema({
     thirty_day_listing_count: Number,
     pcpp_price: Number,
     recently_sold_listings: [RecentlySoldListingSchema],
+    recently_sold_listings_date: Date,
 })
 
 const VideoCardModel = mongoose.model('VideoCard', VideoCardSchema, 'video-card')

@@ -22,6 +22,7 @@ const getRecentlySoldListings = async (keyword, day_limit, listing_limit, loggin
 
         let recentlySoldListingsData = []
         let scrape = true
+        let stale_listing_count = 0
         while (scrape) {
             const url = `https://www.ebay.com/sch/i.html?_nkw=${keyword}&_sacat=0&_from=R40&rt=nc&LH_Sold=1&LH_Complete=1&_pgn=${page_number}`
             const response = await fetch(url, {method: 'GET',})
@@ -33,7 +34,7 @@ const getRecentlySoldListings = async (keyword, day_limit, listing_limit, loggin
             // First two s-item__info class divs are used to display options at top of listings page
             const recentlySoldListings = soup.findAll('div', 's-item__info')?.slice(2)
             recentlySoldListings?.every( (listing) => {
-                if (recentlySoldListingsData.length >= listing_limit) {
+                if (recentlySoldListingsData.length >= listing_limit || stale_listing_count > 5) {
                     scrape = false
                     return false
                 }
@@ -50,6 +51,9 @@ const getRecentlySoldListings = async (keyword, day_limit, listing_limit, loggin
                 }
                 // Skip listing if it's more than 3 months old
                 // If less than a full page of listings, could be related listings, only include title matches
+                if (ebayDateToJSDate(ebay_sold_date) < ((new Date()).getTime() - TIME_LIMIT_IN_MILLISECONDS)) {
+                    stale_listing_count += 1
+                }
                 if (!(ebayDateToJSDate(ebay_sold_date) < ((new Date()).getTime() - TIME_LIMIT_IN_MILLISECONDS))
                         && !(isNaN(listing_data.sold_price))
                         && (next_page_btn.length > 0 || title.includes(keyword))) {

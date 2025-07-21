@@ -1,12 +1,10 @@
 const { PartEvaluationError } = require('../../errors/PartEvaluationError.js')
-const { getRecentlySoldListings } = require('../../utils/ebay/EbayScraper.js')
+const { handleListings } = require('../../utils/ebay/EbayCaching.js')
+const { sortBySoldDate } = require('../../utils/ebay/EbayListingUtils.js')
 const { getComparabilityScores } = require('./ComparabilityScores.js')
 const { getComparableParts } = require('./ComparableParts.js')
 
 const MINIMUM_LISTINGS = 10
-const LISTING_DAY_AGE_LIMIT = 90
-const MAX_LISTING_LIMIT = 500
-const LOGGING = false
 
 const calcQuartileInfo = (listings) => {
     const listingsSortedByPrice = listings.sort((a, b) => {
@@ -54,15 +52,8 @@ const removeInterPriceOutliers = (comparable_parts) => {
     return comparablePartsOutlierListingsRemoved
 }
 
-const sortBySoldDate = async (listingData) => {
-    return sortedByDateListingData = listingData.sort( (a, b) => {
-        return b.sold_date-a.sold_date
-    })
-}
-
 const getListingData = async (part) => {
-    const keyword = part.brand + ' ' + part.model
-    const recentlySoldListings = await getRecentlySoldListings(keyword, LISTING_DAY_AGE_LIMIT, MAX_LISTING_LIMIT, LOGGING)
+    const recentlySoldListings = await handleListings(part)
     if (recentlySoldListings.length === 0) {
         return []
     }
@@ -138,4 +129,4 @@ const evaluatePart = async (part) => {
     return evaluation
 }
 
-module.exports = { evaluatePart, removeIntraPriceOutliers, removeInterPriceOutliers, sortBySoldDate }
+module.exports = { evaluatePart, removeIntraPriceOutliers, removeInterPriceOutliers }

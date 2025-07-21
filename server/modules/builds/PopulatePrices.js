@@ -14,8 +14,7 @@ const populatePrices = async (models, prev_listing_limit) => {
                 continue
             }
             part_count += 1
-            const keyword = part.brand + ' ' + part.model
-            const listingData = await getRecentlySoldListings(keyword, LISTING_DAY_AGE_LIMIT, MAX_LISTING_LIMIT, LOGGING)
+            const listingData = await handleListings(part)
             if (listingData.length < 4) {
                 part.thirty_day_average = -1
                 part.thirty_day_time = new Date().getTime()
