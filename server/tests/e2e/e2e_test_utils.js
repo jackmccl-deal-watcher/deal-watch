@@ -7,8 +7,11 @@ const delay = (time) => {
     });
 }
 
-const signup_test_util = async (username, password) => {
-    await UserModel.deleteMany({ 'username': username })
+const signup_test_util = async (username, password, wipe_user=true) => {
+    if (wipe_user) {
+        await UserModel.deleteMany({ 'username': username })
+    }
+    await page.waitForSelector('#signup-button')
     const signup_button = await page.$('#signup-button')
     await expect(signup_button).not.toBeNull()
     await signup_button.click()
@@ -31,7 +34,7 @@ const signup_test_util = async (username, password) => {
 }
 
 const check_message_util = async (correct_message) => {
-    await delay(500)
+    await page.waitForSelector('#message')
     const actual_message = await page.$eval('#message', message_div => message_div.textContent);
     await expect(actual_message).toBe(correct_message)
 }

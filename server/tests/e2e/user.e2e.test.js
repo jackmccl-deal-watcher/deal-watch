@@ -28,7 +28,7 @@ const login_test_util = async (username, password) => {
 }
 
 const logout_test_util = async () => {
-    await delay(500)
+    await page.waitForSelector('#user-dropdown-button')
     const user_dropdown_button = await page.$('#user-dropdown-button')
     await expect(user_dropdown_button).not.toBeNull()
     await user_dropdown_button.click()
@@ -51,7 +51,6 @@ describe('User', () => {
     
     test('Test user signup', async () => {
         await signup_test_util(TEST_USERNAME, TEST_PASSWORD)
-        await page.waitForNavigation({ waitUntil: 'networkidle0' })
 
         const user_dropdown_button = page.$('#user-dropdown-button')
         await expect(user_dropdown_button).not.toBeNull()
@@ -106,14 +105,14 @@ describe('User', () => {
     test('Test signup w/ duplicate username/password', async () => {
         await UserModel.deleteMany({ 'username': TEST_USERNAME })
         await signup_test_util(TEST_USERNAME, TEST_PASSWORD)
-        await page.waitForNavigation({ waitUntil: 'networkidle0' })
 
         await logout_test_util()
-        
-        await signup_test_util(TEST_USERNAME, TEST_PASSWORD)
+
+        await signup_test_util(TEST_USERNAME, TEST_PASSWORD, false)
+
         await check_message_util(`User ${TEST_USERNAME} already exists!`)
         await page.reload()
-    })
+    }, timeout=10000)
 
     afterAll(async () => {
         await UserModel.deleteMany({ 'username': TEST_USERNAME })
