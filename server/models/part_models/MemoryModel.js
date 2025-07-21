@@ -1,4 +1,5 @@
 const mongoose = require('../../Mongoose.js')
+const RecentlySoldListingSchema = require('./RecentlySoldListing.js')
 
 const MemorySchema = new mongoose.Schema({
     type: String,
@@ -16,6 +17,7 @@ const MemorySchema = new mongoose.Schema({
     thirty_day_time: Number,
     thirty_day_listing_count: Number,
     pcpp_price: Number,
+    recently_sold_listings: [RecentlySoldListingSchema],
 })
 
 const MemoryModel = mongoose.model('Memory', MemorySchema, 'memory')

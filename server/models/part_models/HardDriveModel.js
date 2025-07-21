@@ -1,4 +1,5 @@
 const mongoose = require('../../Mongoose.js')
+const RecentlySoldListingSchema = require('./RecentlySoldListing.js')
 
 const HardDriveSchema = new mongoose.Schema({
     type: String,
@@ -13,6 +14,7 @@ const HardDriveSchema = new mongoose.Schema({
     thirty_day_time: Number,
     thirty_day_listing_count: Number,
     pcpp_price: Number,
+    recently_sold_listings: [RecentlySoldListingSchema],
 })
 
 const HardDriveModel = mongoose.model('HardDrive', HardDriveSchema, 'hard-drive')
