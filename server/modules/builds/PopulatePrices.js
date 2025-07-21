@@ -26,6 +26,7 @@ const updatePrices = async (partDocument, listingData) => {
     partDocument.thirty_day_time = new Date().getTime()
     partDocument.thirty_day_listing_count = listingDataPriceOutliersRemoved.length
     await partDocument.save()
+    return listingDataPriceOutliersRemoved.length
 }
 
 const populatePrices = async (models, prev_listing_limit) => {
@@ -40,8 +41,8 @@ const populatePrices = async (models, prev_listing_limit) => {
             }
             part_count += 1
             const listingData = await handleListings(part)
-            await updatePrices(part, listingData)
-            total_listing_count += listingDataPriceOutliersRemoved.length
+            const listingDataOutliersRemovedLength = await updatePrices(part, listingData)
+            total_listing_count += listingDataOutliersRemovedLength
         }
         console.log(`Finished populating ${model.collection.collectionName} with ${part_count} parts and ${total_listing_count} listings`)
     }
