@@ -1,6 +1,6 @@
 const UserModel = require('../../models/UserModel');
 const BuildModel = require('../../models/BuildModel')
-const { signup_test_util } = require('./e2e_test_utils');
+const { signup_test_util, check_message_util, delay } = require('./e2e_test_utils');
 require('dotenv').config({ path: require('find-config')('.env') })
 
 const LOGIN_TO_SAVE_MESSAGE = 'Login to save builds!'
@@ -19,12 +19,16 @@ const navigate_to_builds_util = async () => {
     await expect(budget_input_field).not.toBeNull() 
 }
 
-const generate_builds_util = async () => {
-    await navigate_to_builds_util()
-
+const click_generate_builds_util = async () => {
     const generate_builds_button = await page.$('.generate-build-form-submit-button')
     await expect(generate_builds_button).not.toBeNull()
     await generate_builds_button.click()
+}
+
+const generate_builds_util = async () => {
+    await navigate_to_builds_util()
+
+    await click_generate_builds_util()
     await page.waitForNavigation({ waitUntil: 'networkidle0' })
 
     const loading_circle = await page.waitForSelector('.loading-screen', { timeout: 1000 } )
@@ -42,6 +46,7 @@ const get_build_title_input = async () => {
 
 const set_build_title_input = async (value) => {
     const build_textfield = await page.$('.save-build-textfield')
+    await expect(build_textfield).not.toBeNull()
     await build_textfield.click({clickCount: 3})
     for (const char of value) {
         await page.keyboard.press(char)
@@ -63,11 +68,13 @@ const click_save_build_button = async () => {
     await save_build_button.click()
 }
 
+let recorder = null
 describe('Builds', () => {
     beforeAll(async () => {
         await page.goto(process.env.HOSTED_SITE, { waitUntil: 'networkidle0'});
         await page.setViewport({ width: 1366, height: 768});
         expect(await page.title()).not.toBe('');
+        recorder = await page.screencast({path: 'recording.webm'});
     })
     
     test('Test builds navbar link', async () => {
@@ -132,7 +139,31 @@ describe('Builds', () => {
         await expect(build).toBeNull()
     }, 20000)
 
+    test('Test budget < $200', async () => {
+        await navigate_to_builds_util()
+
+        const budget_input = await page.$('.budget-input')
+        await expect(budget_input).not.toBeNull()
+        await budget_input.click({clickCount: 3})
+        for (const char of '199') {
+            await page.keyboard.press(char)
+        }
+        await click_generate_builds_util()
+        await check_message_util('Budget must be at least $200!')
+    })
+
+    test('Test empty multi-select field', async () => {
+        await navigate_to_builds_util()
+
+        const multi_select_clear = await page.$('.css-120dh41-MuiSvgIcon-root')
+        await multi_select_clear.click()
+
+        await click_generate_builds_util()
+        await check_message_util('Please ensure all fields are filled!')
+    })
+
     afterAll( async () => {
         await UserModel.deleteMany({ 'username': TEST_USERNAME })
+        await recorder.stop();
     })
 })

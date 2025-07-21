@@ -36,12 +36,11 @@ const removeIntraPriceOutliers = (listings) => {
 
 const removeInterPriceOutliers = (comparable_parts) => {
     let listings = []
-    comparable_parts.map( (comparable_part) => {
+    comparable_parts.forEach( (comparable_part) => {
         comparable_part.listing_data.map( (listing) => {
             listings.push(listing)
         })
     })
-
     const { lower_quartile_price, upper_quartile_price, interquartile_range } = calcQuartileInfo(listings)
     const comparablePartsOutlierListingsRemoved = comparable_parts.map( (comparable_part) => {
         let copy_comparable_part = comparable_part
@@ -112,7 +111,11 @@ const evaluatePart = async (part) => {
     }
 
     const comparablePartsWithListingData = (await Promise.all(comparablePartsWithListingDataPromises)).filter(value => value !== undefined)
-    
+
+    if (comparablePartsWithListingData.length === 0) {
+        throw new PartEvaluationError(`No comparable parts with enough listing data!`)
+    }
+
     const comparablePartsWithInterPartListingOutliersRemoved = removeInterPriceOutliers(comparablePartsWithListingData)
     
     const comparablePartsFewListingsRemoved = comparablePartsWithInterPartListingOutliersRemoved.filter( (comparable_part) => {
