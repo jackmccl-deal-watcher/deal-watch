@@ -1,4 +1,4 @@
-const { removeIntraPriceOutliers } = require('../../modules/builds/BuildUtils.js')
+const { removeIntraPriceOutliers } = require('../../modules/parts/EvaluatePartUtils.js')
 const { ebayDateToJSDate, ebayPriceToNumber } = require('../../utils/ebay/EbayScraper.js')
 const outlier_test_listings = [
     {

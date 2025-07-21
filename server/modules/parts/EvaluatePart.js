@@ -1,7 +1,7 @@
 const { PartEvaluationError } = require('../../errors/PartEvaluationError.js')
 const { handleListings } = require('../../utils/ebay/EbayCaching.js')
 const { sortBySoldDate } = require('../../utils/ebay/EbayListingUtils.js')
-const { removeIntraPriceOutliers, removeInterPriceOutliers } = require('../builds/BuildUtils.js')
+const { removeIntraPriceOutliers, removeInterPriceOutliers } = require('./EvaluatePartUtils.js')
 const { getComparabilityScores } = require('./ComparabilityScores.js')
 const { getComparableParts } = require('./ComparableParts.js')
 

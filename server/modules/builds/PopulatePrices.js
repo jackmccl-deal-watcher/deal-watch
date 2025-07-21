@@ -1,5 +1,5 @@
 const { MODELS } = require('./BuildConstants.js')
-const { removeIntraPriceOutliers } = require('./BuildUtils.js')
+const { removeIntraPriceOutliers } = require('../parts/EvaluatePartUtils.js')
 
 const THIRTY_DAYS_IN_MS = 30 * 24 * 60 * 60 * 1000
 
