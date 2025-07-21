@@ -77,19 +77,17 @@ const save_build_util = async (test_username, test_build_title, wipe_builds) => 
     if (wipe_builds) {
         await BuildModel.deleteMany({ 'title': test_build_title, 'user': logged_in_user.id })
     }
-    
+
     await set_build_title_input(test_build_title)
 
     await click_save_build_button()
 }
 
-let recorder = null
 describe('Builds', () => {
     beforeAll(async () => {
         await page.goto(process.env.HOSTED_SITE, { waitUntil: 'networkidle0'});
         await page.setViewport({ width: 1366, height: 768});
         expect(await page.title()).not.toBe('');
-        recorder = await page.screencast({path: 'recording.webm'});
     })
     
     test('Test builds navbar link', async () => {
@@ -183,6 +181,5 @@ describe('Builds', () => {
 
     afterAll( async () => {
         await UserModel.deleteMany({ 'username': TEST_USERNAME })
-        await recorder.stop();
     })
 })

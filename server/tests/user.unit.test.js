@@ -28,7 +28,7 @@ describe('User unit tests', () => {
         expect(user.password).toBe(TEST_PASSWORD)
     })
 
-    test('tests createUser function by checking username and verifyingpassword', async () => {
+    test('tests createUser function by checking username and verifying password', async () => {
         await createUser(TEST_USERNAME, TEST_PASSWORD)
     
         const user = await UserModel.findOne({ 'username': TEST_USERNAME }, 'username password')
