@@ -39,6 +39,7 @@ export const COMPONENT_TYPES_STARTING_ALLOCATIONS = [
 ]
 
 export const STARTING_BUDGET = 500
+export const MIN_BUDGET = 200
 
 export const COLORS = [
     'Black',

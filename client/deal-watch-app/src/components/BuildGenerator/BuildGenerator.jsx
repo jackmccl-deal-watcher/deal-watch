@@ -1,6 +1,6 @@
 import { useState, useEffect } from "react"
 import './BuildGenerator.css'
-import { FORM_CONFIG, COMPONENT_TYPES_STARTING_ALLOCATIONS, STARTING_BUDGET } from "./BuildGeneratorConstants"
+import { FORM_CONFIG, COMPONENT_TYPES_STARTING_ALLOCATIONS, STARTING_BUDGET, MIN_BUDGET } from "./BuildGeneratorConstants"
 import TextField from '@mui/material/TextField';
 import InputAdornment from '@mui/material/InputAdornment';
 import ComponentBuildForm from "./BuildComponentForms/ComponentBuildForm"
@@ -69,8 +69,8 @@ const BuildGenerator = () => {
     }
 
     const getGeneratedBuilds = async () => {
-        if (budget < 200) {
-            setMessage('Budget must be at least $200!')
+        if (budget < MIN_BUDGET) {
+            setMessage(`Budget must be at least $${MIN_BUDGET}!`)
             return
         } else if (allocations?.[ComponentTypes.MOTHERBOARD]?.[MOTHERBOARD_PROPERTIES.SOCKET] 
             && allocations?.[ComponentTypes.MOTHERBOARD]?.[MOTHERBOARD_PROPERTIES.FORM_FACTOR]
