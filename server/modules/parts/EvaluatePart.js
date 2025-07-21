@@ -54,6 +54,12 @@ const removeInterPriceOutliers = (comparable_parts) => {
     return comparablePartsOutlierListingsRemoved
 }
 
+const sortBySoldDate = async (listingData) => {
+    return sortedByDateListingData = listingData.sort( (a, b) => {
+        return b.sold_date-a.sold_date
+    })
+}
+
 const getListingData = async (part) => {
     const keyword = part.brand + ' ' + part.model
     const recentlySoldListings = await getRecentlySoldListings(keyword, LISTING_DAY_AGE_LIMIT, MAX_LISTING_LIMIT, LOGGING)
@@ -71,9 +77,7 @@ const getListingData = async (part) => {
         return titleRemovedListing
     })
     // Newest to oldest
-    const sortedByDateListingData = listingData.sort( (a, b) => {
-        return b.sold_date-a.sold_date
-    })
+    const sortedByDateListingData = sortBySoldDate(listingData)
     return sortedByDateListingData
 }
 
@@ -134,4 +138,4 @@ const evaluatePart = async (part) => {
     return evaluation
 }
 
-module.exports = { evaluatePart, removeIntraPriceOutliers, removeInterPriceOutliers }
+module.exports = { evaluatePart, removeIntraPriceOutliers, removeInterPriceOutliers, sortBySoldDate }
