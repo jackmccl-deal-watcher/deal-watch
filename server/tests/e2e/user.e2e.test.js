@@ -57,8 +57,6 @@ describe('User', () => {
         await expect(user_dropdown_button).not.toBeNull()
 
         const logged_in_username = await page.$eval('#user-dropdown-button', button => button.textContent);
-        console.log(logged_in_username)
-        console.log(TEST_USERNAME)
         expect(logged_in_username).toBe(TEST_USERNAME)
     })
 
