@@ -1,4 +1,5 @@
 const ModelTypesEnum = require("../../models/part_models/ModelTypesEnum")
+const updatePrices = require("../../modules/builds/PopulatePrices")
 const { sortBySoldDate } = require("./EbayListingUtils")
 const { getRecentlySoldListings } = require("./EbayScraper")
 
@@ -58,9 +59,10 @@ const handleListings = async (part) => {
         addedTitles.add(listing.title)
         return !alreadyAdded
     })
-    
+
     partDocument.recently_sold_listings = allFreshListingsNoDuplicates
     await partDocument.save()
+    await updatePrices(partDocument, allFreshListingsNoDuplicates)
     return allFreshListingsNoDuplicates
 }
 

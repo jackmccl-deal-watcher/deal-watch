@@ -1,5 +1,5 @@
+const { removeIntraPriceOutliers } = require('../../modules/builds/BuildUtils.js')
 const { ebayDateToJSDate, ebayPriceToNumber } = require('../../utils/ebay/EbayScraper.js')
-const { removeIntraPriceOutliers } = require('../../modules/parts/EvaluatePart.js')
 const outlier_test_listings = [
     {
     title: 'EVGA GeForce RTX 2070 XC ULTRA GAMING 8GB GDDR6 Graphics Card rgb ray tracing',

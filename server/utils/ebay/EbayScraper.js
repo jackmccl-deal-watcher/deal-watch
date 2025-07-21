@@ -24,7 +24,7 @@ const getRecentlySoldListings = async (keyword, day_limit, listing_limit, loggin
         let scrape = true
         let stale_listing_count = 0
         while (scrape) {
-            const url = `https://www.ebay.com/sch/i.html?_nkw=${keyword}&_sacat=0&_from=R40&rt=nc&LH_Sold=1&LH_Complete=1&_pgn=${page_number}`
+            const url = `https://www.ebay.com/sch/i.html?_nkw=${keyword}&_sacat=0&_from=R40&rt=nc&LH_Sold=1&LH_Complete=1&_pgn=${page_number}&category_ids=58058`
             const response = await fetch(url, {method: 'GET',})
             const html_text = await response.text()
 
