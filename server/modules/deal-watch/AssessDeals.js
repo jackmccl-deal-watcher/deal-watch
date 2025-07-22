@@ -36,8 +36,7 @@ const assessDeals = async () => {
             console.error(error)
         }
     }
-    console.log(assessedPCListings)
     return assessedPCListings
 }
-assessDeals()
+
 module.exports = assessDeals
