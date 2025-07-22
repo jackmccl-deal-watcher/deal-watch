@@ -1,6 +1,6 @@
 const UserModel = require('../../models/UserModel');
 const BuildModel = require('../../models/BuildModel')
-const { signup_test_util } = require('./e2e_test_utils');
+const { signup_test_util, check_message_util, delay } = require('./e2e_test_utils');
 require('dotenv').config({ path: require('find-config')('.env') })
 
 const LOGIN_TO_SAVE_MESSAGE = 'Login to save builds!'
@@ -19,12 +19,16 @@ const navigate_to_builds_util = async () => {
     await expect(budget_input_field).not.toBeNull() 
 }
 
-const generate_builds_util = async () => {
-    await navigate_to_builds_util()
-
+const click_generate_builds_util = async () => {
     const generate_builds_button = await page.$('.generate-build-form-submit-button')
     await expect(generate_builds_button).not.toBeNull()
     await generate_builds_button.click()
+}
+
+const generate_builds_util = async () => {
+    await navigate_to_builds_util()
+
+    await click_generate_builds_util()
     await page.waitForNavigation({ waitUntil: 'networkidle0' })
 
     const loading_circle = await page.waitForSelector('.loading-screen', { timeout: 1000 } )
@@ -41,7 +45,8 @@ const get_build_title_input = async () => {
 }
 
 const set_build_title_input = async (value) => {
-    const build_textfield = await page.$('.save-build-textfield')
+    const build_textfield = await page.waitForSelector('.save-build-textfield')
+    await expect(build_textfield).not.toBeNull()
     await build_textfield.click({clickCount: 3})
     for (const char of value) {
         await page.keyboard.press(char)
@@ -61,6 +66,21 @@ const click_save_build_button = async () => {
     const save_build_button = await get_save_build_button()
     await expect(save_build_button).not.toBeNull()
     await save_build_button.click()
+}
+
+const save_build_util = async (test_username, test_build_title, wipe_builds) => {
+    await navigate_to_builds_util()
+
+    await click_generate_builds_util()
+    const logged_in_user = await UserModel.findOne({ 'username': test_username })
+    await expect(logged_in_user.username).toBe(test_username)
+    if (wipe_builds) {
+        await BuildModel.deleteMany({ 'title': test_build_title, 'user': logged_in_user.id })
+    }
+
+    await set_build_title_input(test_build_title)
+
+    await click_save_build_button()
 }
 
 describe('Builds', () => {
@@ -90,13 +110,8 @@ describe('Builds', () => {
     }, 20000)
 
     test('Test save build', async () => {
-        const logged_in_user = await UserModel.findOne({ 'username': TEST_USERNAME })
-        await expect(logged_in_user.username).toBe(TEST_USERNAME)
-        await BuildModel.deleteMany({ 'title': TEST_BUILD_TITLE, 'user': logged_in_user.id })
-
-        await set_build_title_input(TEST_BUILD_TITLE)
-
-        await click_save_build_button()
+        const WIPE_BUILDS = true
+        await save_build_util(TEST_USERNAME, TEST_BUILD_TITLE, WIPE_BUILDS)
 
         const user_dropdown_button = await page.$('#user-dropdown-button')
         await expect(user_dropdown_button).not.toBeNull()
@@ -131,6 +146,38 @@ describe('Builds', () => {
 
         await expect(build).toBeNull()
     }, 20000)
+
+    test('Test budget < $200', async () => {
+        await navigate_to_builds_util()
+
+        const budget_input = await page.$('.budget-input')
+        await expect(budget_input).not.toBeNull()
+        await budget_input.click({clickCount: 3})
+        for (const char of '199') {
+            await page.keyboard.press(char)
+        }
+        await click_generate_builds_util()
+        await check_message_util('Budget must be at least $200!')
+    })
+
+    test('Test empty multi-select field', async () => {
+        await navigate_to_builds_util()
+
+        const multi_select_clear = await page.$('.css-120dh41-MuiSvgIcon-root')
+        await multi_select_clear.click()
+
+        await click_generate_builds_util()
+        await check_message_util('Please ensure all fields are filled!')
+    })
+
+    test('Test saving duplicate name', async () => {
+        // Wipe builds true
+        await save_build_util(TEST_USERNAME, TEST_BUILD_TITLE, true)
+        // Wipe builds false
+        await save_build_util(TEST_USERNAME, TEST_BUILD_TITLE, false)
+
+        await check_message_util(`Build name ${TEST_BUILD_TITLE} already used!`)
+    }, timeout=15000)
 
     afterAll( async () => {
         await UserModel.deleteMany({ 'username': TEST_USERNAME })

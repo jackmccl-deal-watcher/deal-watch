@@ -27,6 +27,7 @@ const EvaluatePart = () => {
                     break
                 case 'error':
                     setMessage(response.message)
+                    setLoading(false)
                     break
             }
         } catch (error) {
@@ -70,7 +71,7 @@ const EvaluatePart = () => {
         <div className='evaluatepart'>
             <ComponentPartForm handlePartEvaluation={getPartEvaluation}/>
             <div className='loading'>{ loading ? <LoadingScreen/> : null}</div>
-            <p className='evaluatepart-message'>{message}</p>
+            <p id='message'>{message}</p>
             <div className='evaluation'>
                 { !loading && evaluationData.X_Y_Points && evaluationData.M_A_Points ?
                     <div className='evaluation-results'>

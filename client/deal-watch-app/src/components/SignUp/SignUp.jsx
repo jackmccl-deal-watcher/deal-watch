@@ -44,7 +44,7 @@ const Signup = () => {
                     <p>Password:</p>
                     <input id='signup-password-input' type='password' name='password' value={password} onChange={updatePassword}></input>
                     <button id='signup-form-submit-button' className='signup-button'>Signup</button>
-                    { message ? <p>{message}</p> : null}
+                    { message ? <p id='message'>{message}</p> : null}
                 </form>
             </div>
         </div>

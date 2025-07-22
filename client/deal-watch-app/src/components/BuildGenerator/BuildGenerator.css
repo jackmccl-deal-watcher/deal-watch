@@ -11,3 +11,8 @@
 .budget-input {
     margin-bottom: 20px;
 }
+
+#message {
+    font-size: 20px;
+    padding-bottom: 30px;
+}

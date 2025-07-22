@@ -7,8 +7,11 @@ const delay = (time) => {
     });
 }
 
-const signup_test_util = async (username, password) => {
-    await UserModel.deleteMany({ 'username': username })
+const signup_test_util = async (username, password, wipe_user=true) => {
+    if (wipe_user) {
+        await UserModel.deleteMany({ 'username': username })
+    }
+    await page.waitForSelector('#signup-button')
     const signup_button = await page.$('#signup-button')
     await expect(signup_button).not.toBeNull()
     await signup_button.click()
@@ -26,13 +29,14 @@ const signup_test_util = async (username, password) => {
     await signup_password_input.type(password)
 
     await signup_form_submit_button.click()
-    await page.waitForNavigation({ waitUntil: 'networkidle0' })
-
-    const user_dropdown_button = page.$('#user-dropdown-button')
-    await expect(user_dropdown_button).not.toBeNull()
-
-    const logged_in_username = await page.$eval('#user-dropdown-button', button => button.textContent);
-    await expect(logged_in_username).toBe(username)
+    
+    await delay(500)
 }
 
-module.exports = { delay, signup_test_util }
+const check_message_util = async (correct_message) => {
+    await page.waitForSelector('#message')
+    const actual_message = await page.$eval('#message', message_div => message_div.textContent);
+    await expect(actual_message).toBe(correct_message)
+}
+
+module.exports = { delay, signup_test_util, check_message_util }

@@ -1,4 +1,3 @@
-const { userAllocations500 } = require("../../tests/builds/test_builds")
 const { MODE } = require('./BuildConstants')
 const { recommendBuild } = require("./BuildRecommender")
 const { addPartListingsToBuild } = require("./PartListing")
@@ -13,7 +12,5 @@ const generateBuilds = async (userAllocations) => {
     }
     return builds
 }
-
-generateBuilds(userAllocations500)
 
 module.exports = { generateBuilds }

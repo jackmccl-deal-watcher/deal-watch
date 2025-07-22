@@ -5,46 +5,52 @@ const { getPerformanceAllocations } = require('../../modules/builds/BuildModes.j
 const { userAllocations500, test_cpus, test_videocards, test_motherboards, test_memorys, test_hard_drives, test_power_supplys, test_cases } = require("./test_builds.js")
 
 const numberAllocationTester = (test_allocations, parts, component_type) => {
-    for (let spec_type of Object.keys(test_allocations)) {
-        let mode = MODE.BALANCED
-        if (spec_type === ComponentSpecs.PCPP_PRICE) {
-            mode = MODE.BUDGET
-        }
-        const allocations = test_allocations[spec_type]
-        const sortedParts = [...parts]
-        sortedParts.sort((a, b) => generalComparator(a, b, allocations, component_type, mode))
-        if (spec_type === ComponentSpecs.COLOR) {
-            const resultColor = sortedParts[sortedParts.length-1].model.split(' ')[1]
-            expect(test_allocations[spec_type]['case'][ComponentSpecs.COLOR]['colors']).toContain(resultColor)
-        } else if (sortedParts[sortedParts.length-1].model === spec_type) {
-            expect(sortedParts[sortedParts.length-1].model).toBe(spec_type)
-        }
+        for (let spec_type of Object.keys(test_allocations)) {
+            test(`Test ${component_type} ${spec_type} rating system`, async () => {
+            let mode = MODE.BALANCED
+            if (spec_type === ComponentSpecs.PCPP_PRICE) {
+                mode = MODE.BUDGET
+            }
+            const allocations = test_allocations[spec_type]
+            const sortedParts = [...parts]
+            sortedParts.sort((a, b) => generalComparator(a, b, allocations, component_type, mode))
+            if (spec_type === ComponentSpecs.COLOR) {
+                const resultColor = sortedParts[sortedParts.length-1].model.split(' ')[1]
+                expect(test_allocations[spec_type]['case'][ComponentSpecs.COLOR]['colors']).toContain(resultColor)
+            } else if (sortedParts[sortedParts.length-1].model === spec_type) {
+                expect(sortedParts[sortedParts.length-1].model).toBe(spec_type)
+            }
+        })
     }
 }
 
 const calcSlidingQualityRatingTester = (test_allocations, test_ratings, parts, component_type) => {
     for (let spec_type of Object.keys(test_allocations)) {
-        const allocations = test_allocations[spec_type]
-        const ratings = test_ratings[spec_type]
-        const sortedParts = [...parts]
-        sortedParts.sort((a, b) => generalComparator(a, b, allocations, component_type, MODE.BALANCED))
-        for (let part_index in sortedParts) {
-            part_index = Number(part_index)
-            if(part_index === 0) {
-                continue
+        test(`Test ${component_type} ${spec_type} sliding quality rating`, async () => {
+            const allocations = test_allocations[spec_type]
+            const ratings = test_ratings[spec_type]
+            const sortedParts = [...parts]
+            sortedParts.sort((a, b) => generalComparator(a, b, allocations, component_type, MODE.BALANCED))
+            for (let part_index in sortedParts) {
+                part_index = Number(part_index)
+                if(part_index === 0) {
+                    continue
+                }
+                const part_rating = sortedParts[part_index][spec_type]
+                const part_rating_index = ratings.indexOf(part_rating)
+                expect(part_rating_index).toBeGreaterThan(-1)
+                const prev_part_rating = sortedParts[part_index-1][spec_type]
+                const prev_part_rating_index = ratings.indexOf(prev_part_rating)
+                expect(prev_part_rating_index).toBeGreaterThan(-1)
+                if (sortedParts[part_rating_index]['model'] !== 'form_factor') {
+                    expect(prev_part_rating_index).toBeLessThanOrEqual(part_rating_index)
+                }
             }
-            const part_rating = sortedParts[part_index][spec_type]
-            const part_rating_index = ratings.indexOf(part_rating)
-            expect(part_rating_index).toBeGreaterThan(-1)
-            const prev_part_rating = sortedParts[part_index-1][spec_type]
-            const prev_part_rating_index = ratings.indexOf(prev_part_rating)
-            expect(prev_part_rating_index).toBeGreaterThan(-1)
-            expect(prev_part_rating_index > part_rating_index && sortedParts[part_rating_index]['model'] !== 'form_factor').toBe(false)
-        }
+        })
     }
 }
 
-test('tests cpu build part rating system', () => {
+describe('Test cpu build part rating system', () => {
     const cpu_number_test_allocations = {
         cores: {
             cpu: {
@@ -79,11 +85,11 @@ test('tests cpu build part rating system', () => {
             }
         },
     };
-
     numberAllocationTester(cpu_number_test_allocations, test_cpus, ComponentTypes.CPU);
 });
 
-test('tests videocard build part rating system', () => {
+// Videocard Test
+describe('Test videocard build part rating system', () => {
     const videocard_number_test_allocations = {
         vram: {
             'video-card': {
@@ -118,11 +124,11 @@ test('tests videocard build part rating system', () => {
             }
         },
     };
-
     numberAllocationTester(videocard_number_test_allocations, test_videocards, ComponentTypes.VIDEOCARD);
 });
 
-test('tests motherboard build part rating system', () => {
+// Motherboard Test
+describe('Test motherboard build part rating system', () => {
     const motherboard_number_test_allocations = {
         ram_slots: {
             motherboard: {
@@ -173,7 +179,8 @@ test('tests motherboard build part rating system', () => {
     numberAllocationTester(motherboard_number_test_allocations, test_motherboards, ComponentTypes.MOTHERBOARD);
 });
 
-test('tests memory build part rating system', () => {
+// Memory Test
+describe('Test memory build part rating system', () => {
     const memory_number_test_allocations = {
         speed: {
             memory: {
@@ -214,7 +221,8 @@ test('tests memory build part rating system', () => {
     calcSlidingQualityRatingTester(memory_module_type_test_allocations, RATINGS, test_memorys, ComponentTypes.MEMORY);
 });
 
-test('tests hard drive build part rating system', () => {
+// Hard drive Test
+describe('Test hard drive build part rating system', () => {
     const hard_drive_number_test_allocations = {
         capacity: {
             'hard-drive': {
@@ -244,7 +252,8 @@ test('tests hard drive build part rating system', () => {
     calcSlidingQualityRatingTester(hard_drive_storage_type_test_allocations, RATINGS, test_hard_drives, ComponentTypes.HARD_DRIVE);
 });
 
-test('tests power supply build part rating system', () => {
+// Power supply Test
+describe('Test power supply build part rating system', () => {
     const power_supply_number_test_allocations = {
         wattage: {
             'power-supply': {
@@ -298,7 +307,8 @@ test('tests power supply build part rating system', () => {
     calcSlidingQualityRatingTester(power_supply_efficiency_rating_and_modular_test_allocations, RATINGS, test_power_supplys, ComponentTypes.POWER_SUPPLY);
 });
 
-test('tests case build part rating system', () => {
+// Case Test
+describe('Test case build part rating system', () => {
     const case_number_test_allocations = {
         form_factor: {
             case: {
@@ -348,7 +358,7 @@ test('tests case build part rating system', () => {
     numberAllocationTester(case_number_test_allocations, test_cases, ComponentTypes.CASE);
 });
 
-test('tests getPerformanceAllocations function', () => {
+test('Test getPerformanceAllocations function', () => {
     const componentAllocations = {...userAllocations500['components']}
     const performanceAllocations = getPerformanceAllocations(componentAllocations, 0.2)
     for (let component_key of Object.keys(componentAllocations)) {
