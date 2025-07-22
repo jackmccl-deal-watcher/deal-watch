@@ -51,10 +51,10 @@ const getRecentlySoldListings = async (keyword, day_limit, listing_limit, loggin
                 }
                 // Skip listing if it's more than 3 months old
                 // If less than a full page of listings, could be related listings, only include title matches
-                if (ebayDateToJSDate(ebay_sold_date) < ((new Date()).getTime() - TIME_LIMIT_IN_MILLISECONDS)) {
+                if (ebayDateToJSDate(ebay_sold_date) < (Date.now() - TIME_LIMIT_IN_MILLISECONDS)) {
                     stale_listing_count += 1
                 }
-                if (!(ebayDateToJSDate(ebay_sold_date) < ((new Date()).getTime() - TIME_LIMIT_IN_MILLISECONDS))
+                if (!(ebayDateToJSDate(ebay_sold_date) < (Date.now() - TIME_LIMIT_IN_MILLISECONDS))
                         && !(isNaN(listing_data.sold_price))
                         && (next_page_btn.length > 0 || title.includes(keyword))) {
                     recentlySoldListingsData.push(listing_data)

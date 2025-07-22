@@ -18,7 +18,7 @@ const calcQuartileInfo = (listings) => {
 const removeInterPriceOutliers = (comparable_parts) => {
     let listings = []
     comparable_parts.forEach( (comparable_part) => {
-        comparable_part.listing_data.map( (listing) => {
+        comparable_part.listing_data.forEach( (listing) => {
             listings.push(listing)
         })
     })

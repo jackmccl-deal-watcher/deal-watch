@@ -3,27 +3,31 @@ const updatePrices = require("../../modules/builds/PopulatePrices")
 const { sortBySoldDate } = require("./EbayListingUtils")
 const { getRecentlySoldListings } = require("./EbayScraper")
 
-const LISTING_DAY_AGE_LIMIT = 90
-const LISTING_MS_AGE_LIMIT = LISTING_DAY_AGE_LIMIT * 24 * 60 * 60 * 1000
-const MAX_LISTING_LIMIT = 500
-const LOGGING = false
 const MS_IN_A_DAY = 24 * 60 * 60 * 1000
 
-const UNCOMMON_STALE_CACHE_TIME_REQUIREMENT = 7 * 24 * 60 * 60 * 1000
-const COMMON_STALE_CACHE_TIME_REQUIREMENT = 1 * 24 * 60 * 60 * 1000
+const LISTING_DAY_AGE_LIMIT = 90
+const LISTING_MS_AGE_LIMIT = LISTING_DAY_AGE_LIMIT * MS_IN_A_DAY
+const MAX_LISTING_LIMIT = 500
+const LOGGING = false
+
+const UNCOMMON_STALE_CACHE_TIME_REQUIREMENT = 7 * MS_IN_A_DAY
+const COMMON_STALE_CACHE_TIME_REQUIREMENT = 1 * MS_IN_A_DAY
 
 const handleListings = async (part) => {
     const model = ModelTypesEnum[part.type]
+    if (!model) {
+        return []
+    }
     const partDocument = await model.findOne({type: part.type, model: part.model, brand: part.brand})
     let cachedListingData = partDocument.recently_sold_listings
     let cachedListingDataDate = partDocument.recently_sold_listings_date
     const keyword = part.brand + ' ' + part.model
     let recentlySoldListings = []
-    if (!cachedListingData || cachedListingData.length < 5
-        && new Date(cachedListingDataDate) > new Date().getTime() - UNCOMMON_STALE_CACHE_TIME_REQUIREMENT) {
+    if ((!cachedListingData || cachedListingData.length < 5)
+        && (new Date(cachedListingDataDate) > (Date.now() - UNCOMMON_STALE_CACHE_TIME_REQUIREMENT))) {
         return cachedListingData || []
     } else if (cachedListingDataDate 
-                && new Date(cachedListingDataDate) > new Date().getTime() - COMMON_STALE_CACHE_TIME_REQUIREMENT) {
+                && (new Date(cachedListingDataDate) > (Date.now() - COMMON_STALE_CACHE_TIME_REQUIREMENT))) {
         return cachedListingData
     }
 
@@ -34,7 +38,7 @@ const handleListings = async (part) => {
         const cachedListingDataSortedBySoldDate = sortBySoldDate(cachedListingData)
         const mostRecentCachedSoldDate = cachedListingDataSortedBySoldDate[0].sold_date
 
-        const RELATIVE_LISTING_DAY_AGE_LIMIT = (new Date().getTime() - new Date(mostRecentCachedSoldDate).getTime()) / MS_IN_A_DAY
+        const RELATIVE_LISTING_DAY_AGE_LIMIT = (Date.now() - new Date(mostRecentCachedSoldDate).getTime()) / MS_IN_A_DAY
         recentlySoldListings = await getRecentlySoldListings(keyword, RELATIVE_LISTING_DAY_AGE_LIMIT, MAX_LISTING_LIMIT, LOGGING)
     }
 
@@ -51,7 +55,7 @@ const handleListings = async (part) => {
         return []
     }
 
-    const allFreshListings = allListings.filter( (listing) => new Date(listing.sold_date).getTime() >= new Date().getTime() - LISTING_MS_AGE_LIMIT)
+    const allFreshListings = allListings.filter( (listing) => new Date(listing.sold_date).getTime() >= Date.now() - LISTING_MS_AGE_LIMIT)
 
     const addedTitles = new Set()
     const allFreshListingsNoDuplicates = allFreshListings.filter( (listing) => {
