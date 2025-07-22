@@ -23,9 +23,20 @@ const generateClientAccessToken = async () => {
     }
 }
 
-const getListings = async (keyword, limit) => {
+const getListings = async (keyword, limit, category) => {
     const clientAccessToken = await generateClientAccessToken()
-    const response = await fetch(`${EBAY_API_BROWSE_URL}/item_summary/search?q=${keyword}&limit=${limit}&category_ids=58058`, {
+    const response = await fetch(`${EBAY_API_BROWSE_URL}/item_summary/search?q=${keyword}&limit=${limit}&category_ids=${category}&fieldgroups=EXTENDED`, {
+        method: 'GET',
+        headers: {
+            'Authorization': `Bearer ${clientAccessToken}`
+        }
+    })
+    return await response.json()
+}
+
+const getItem = async (itemHref) => {
+    const clientAccessToken = await generateClientAccessToken()
+    const response = await fetch(itemHref, {
         method: 'GET',
         headers: {
             'Authorization': `Bearer ${clientAccessToken}`
@@ -45,4 +56,4 @@ const checkRateLimit = async (api) => {
     return await response.json()
 }
 
-module.exports = { getListings, checkRateLimit }
+module.exports = { getListings, getItem, checkRateLimit }

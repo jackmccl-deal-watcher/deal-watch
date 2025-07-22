@@ -14,8 +14,9 @@ const getPriceRange = (part) => {
 }
 
 const getPartListing = async (part) => {
+    const COMPUTER_CATEGORY_CODE = 58058
     const keyword = encodeURI(`${part.brand} ${part.model}`)
-    const listingsData = await getListings(keyword, LISTING_LIMIT)
+    const listingsData = await getListings(keyword, LISTING_LIMIT, COMPUTER_CATEGORY_CODE)
     if (!(listingsData?.itemSummaries?.length)) {
         return false
     }
