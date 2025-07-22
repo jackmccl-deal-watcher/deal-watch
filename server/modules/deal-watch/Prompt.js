@@ -1,3 +1,5 @@
+const LISTING_PROPERTIES = require("./ListingPropertiesEnum")
+
 const ASSESS_PC_LISTING_PROMPT = `Your a PC expert who is well versed in computer components, their specs, and identifying what type of component they are.
 Given a desktop PC listing, you will pick out the component corresponding to each type in the following JSON object format:
 {
@@ -46,8 +48,8 @@ Here's the title and description for you to assess:
 `
 
 const makeListingPrompt = async (listing) => {
-    const listing_title = listing.title
-    const listing_description = listing.shortDescription
+    const listing_title = listing[LISTING_PROPERTIES.TITLE]
+    const listing_description = listing[LISTING_PROPERTIES.SHORT_DESCRIPTION]
     const prompt = ASSESS_PC_LISTING_PROMPT + `Title: ${listing_title} \nListing Description: ${listing_description}`
     return prompt
 }
