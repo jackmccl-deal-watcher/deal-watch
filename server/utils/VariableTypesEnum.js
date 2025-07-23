@@ -3,6 +3,7 @@ const VARIABLE_TYPES = Object.freeze({
     STRING: 'string',
     OBJECT: 'object',
     DICT: 'dict',
+    OBJECT: 'object',
 })
 
 module.exports = VARIABLE_TYPES

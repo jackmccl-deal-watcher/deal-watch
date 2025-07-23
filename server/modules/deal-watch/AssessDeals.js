@@ -51,20 +51,25 @@ const assessListing = async (listing) => {
     let definedComponentsCombinedWeight = 0
     const listingEstimatedValue = await Object.entries(listing[LISTING_PROPERTIES.COMPONENTS_DICT]).reduce( async (accumulator_promise, [component_type, component_info]) => {
         const accumulator = await accumulator_promise
-        if (!component_info || typeof component_info === VARIABLE_TYPES.NUMBER) {
+        if (component_info === null || component_info === 'null' || !(typeof component_info === VARIABLE_TYPES.STRING || typeof component_info === VARIABLE_TYPES.OBJECT)) {
             return accumulator + 0
         } else {
-            const estimatedComponentTypeValue = await (Array.isArray(component_info) ? component_info : [component_info]).reduce( async (accumulator_promise, singular_component_info) => {
+            const estimatedComponentTypeValue = await (Array.isArray(component_info) ? component_info : [component_info]).reduce( async (accumulator_promise, singular_component_info, index) => {
                 const accumulator = await accumulator_promise
                 const estimatedComponentValue = await estimateComponentValue(singular_component_info)
-                return accumulator + singular_component_info
+                const singularComponentValueDict = {
+                        [LISTING_PROPERTIES.MODEL]: singular_component_info,
+                        [LISTING_PROPERTIES.ESTIMATED_VALUE]: Math.round(estimatedComponentValue * 100) / 100
+                    }
+                if (Array.isArray(component_info)) {
+                    listing[LISTING_PROPERTIES.COMPONENTS_DICT][component_type][index] = singularComponentValueDict
+                } else {
+                    listing[LISTING_PROPERTIES.COMPONENTS_DICT][component_type] = singularComponentValueDict
+                }
+                return accumulator + estimatedComponentValue
             }, 0)
             if (estimatedComponentTypeValue > 0) {
                 definedComponentsCombinedWeight += COMPONENT_VALUE_WEIGHTS[component_type]
-                listing[LISTING_PROPERTIES.COMPONENTS_DICT][component_type] = {
-                    [LISTING_PROPERTIES.MODEL]: component_info,
-                    [LISTING_PROPERTIES.ESTIMATED_VALUE]: Math.round(estimatedComponentTypeValue * 100) / 100
-                }
             } else {
                 listing[LISTING_PROPERTIES.COMPONENTS_DICT][component_type] = null
             }
@@ -72,6 +77,7 @@ const assessListing = async (listing) => {
         }
     }, 0)
     const definedComponentsValue = listingListedValue*definedComponentsCombinedWeight
+    console.log(listing)
     return {...listing, [LISTING_PROPERTIES.DEFINED_VALUE]: Math.round(definedComponentsValue * 100) / 100, [LISTING_PROPERTIES.ASSESSED_VALUE]: Math.round(listingEstimatedValue * 100) / 100, [LISTING_PROPERTIES.DEAL]: listingEstimatedValue > definedComponentsValue}
 }
 
@@ -84,9 +90,8 @@ const assessDeals = async () => {
             const listingDict = await extractComponentsFromListing(listing)
             if (listingDict[LISTING_PROPERTIES.COMPONENTS_DICT][LISTING_PROPERTIES.NUM_DEFINED] >= MIN_NUM_DEFINED_COMPONENT_MODELS) {
                 const assessedPCListing = await assessListing(listingDict)
-                const deal = new DealModel(assessedPCListing)
-                await deal.save()
-                console.log(deal)
+                // const deal = new DealModel(assessedPCListing)
+                // await deal.save()
                 assessedPCListings.push(assessedPCListing)
             }
         } catch (error) {
