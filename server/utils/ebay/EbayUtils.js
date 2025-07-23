@@ -1,5 +1,6 @@
 const { json } = require('body-parser')
-const EbayAuthToken = require('ebay-oauth-nodejs-client')
+const EbayAuthToken = require('ebay-oauth-nodejs-client');
+const { validateStringInput, validateNumberInput } = require('../ValidateInput');
 require('dotenv').config({
     path: `${__dirname}/../../.env`
 })
@@ -23,37 +24,54 @@ const generateClientAccessToken = async () => {
     }
 }
 
-const getListings = async (keyword, limit, category) => {
-    const clientAccessToken = await generateClientAccessToken()
-    const response = await fetch(`${EBAY_API_BROWSE_URL}/item_summary/search?q=${keyword}&limit=${limit}&category_ids=${category}&fieldgroups=EXTENDED`, {
-        method: 'GET',
-        headers: {
-            'Authorization': `Bearer ${clientAccessToken}`
-        }
-    })
-    return await response.json()
+const getEbayListings = async (keyword, limit, category) => {
+    try {
+        validateStringInput(keyword, Object.keys(keyword)[0])
+        validateNumberInput(limit, Object.keys(limit)[0])
+        validateStringInput(category, Object.keys(category)[0])
+        const clientAccessToken = await generateClientAccessToken()
+        const response = await fetch(`${EBAY_API_BROWSE_URL}/item_summary/search?q=${keyword}&limit=${limit}&category_ids=${category}&fieldgroups=EXTENDED`, {
+            method: 'GET',
+            headers: {
+                'Authorization': `Bearer ${clientAccessToken}`
+            }
+        })
+        return await response.json()
+    } catch (error) {
+        console.error(error)
+    }
 }
 
-const getItem = async (itemHref) => {
-    const clientAccessToken = await generateClientAccessToken()
-    const response = await fetch(itemHref, {
-        method: 'GET',
-        headers: {
-            'Authorization': `Bearer ${clientAccessToken}`
-        }
-    })
-    return await response.json()
+const getEbayItem = async (itemHref) => {
+    try {
+        validateStringInput(itemHref, Object.keys(itemHref)[0])
+        const clientAccessToken = await generateClientAccessToken()
+        const response = await fetch(itemHref, {
+            method: 'GET',
+            headers: {
+                'Authorization': `Bearer ${clientAccessToken}`
+            }
+        })
+        return await response.json()
+    } catch (error) {
+        console.error(error)
+    }
 }
 
 const checkRateLimit = async (api) => {
-    const clientAccessToken = await generateClientAccessToken()
-    const response = await fetch(`https://api.ebay.com/developer/analytics/v1_beta/rate_limit/?api_name=${api}`, {
-        method: 'GET',
-        headers: {
-            'Authorization': `Bearer ${clientAccessToken}`
-        }
-    })
-    return await response.json()
+    try {
+        validateStringInput(api, Object.keys(api)[0])
+        const clientAccessToken = await generateClientAccessToken()
+        const response = await fetch(`https://api.ebay.com/developer/analytics/v1_beta/rate_limit/?api_name=${api}`, {
+            method: 'GET',
+            headers: {
+                'Authorization': `Bearer ${clientAccessToken}`
+            }
+        })
+        return await response.json()
+    } catch (error) {
+        console.error(error)
+    }
 }
 
-module.exports = { getListings, getItem, checkRateLimit }
+module.exports = { getEbayListings, getEbayItem, checkRateLimit }

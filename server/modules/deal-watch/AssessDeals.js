@@ -28,7 +28,6 @@ const assessDeals = async () => {
     for (const listing of mostRecentPCListings) {
         try {
             const listingDict = await assessListing(listing)
-            console.log(listingDict)
             if (listingDict[LISTING_PROPERTIES.COMPONENTS_DICT][LISTING_PROPERTIES.NUM_DEFINED] >= MIN_NUM_DEFINED_COMPONENT_MODELS) {
                 assessedPCListings.push(listingDict)
             }
