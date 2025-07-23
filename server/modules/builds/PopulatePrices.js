@@ -1,4 +1,31 @@
-const { MODELS, LISTING_DAY_AGE_LIMIT, MAX_LISTING_LIMIT, LOGGING } = require('./BuildConstants.js')
+const { MODELS } = require('./BuildConstants.js')
+const { removeIntraPriceOutliers } = require('../parts/EvaluatePartUtils.js')
+
+const THIRTY_DAYS_IN_MS = 30 * 24 * 60 * 60 * 1000
+
+const MINIMUM_THIRTY_DAY_LISTINGS = 4
+
+const updatePrices = async (partDocument, listingData) => {
+    const thirtyDaysListingData = listingData.filter( (listing) => new Date(listing.sold_date).getTime() >= Date.now() - THIRTY_DAYS_IN_MS)
+    if (thirtyDaysListingData.length < MINIMUM_THIRTY_DAY_LISTINGS) {
+        partDocument.thirty_day_average = -1
+        partDocument.thirty_day_time = Date.now()
+        partDocument.thirty_day_listing_count = listingData.length
+        await partDocument.save()
+        return
+    }
+    const listingDataPriceOutliersRemoved = removeIntraPriceOutliers(listingData)
+    const price_sum = listings.reduce((accumulator, listing) => accumulator + listing.sold_price, 0);
+    let thirty_day_average = -1
+    if (listingDataPriceOutliersRemoved.length > 0) {
+        thirty_day_average = Math.round(price_sum / listings.length * 100) / 100
+    }
+    partDocument.thirty_day_average = thirty_day_average
+    partDocument.thirty_day_time = Date.now()
+    partDocument.thirty_day_listing_count = listingDataPriceOutliersRemoved.length
+    await partDocument.save()
+    return listingDataPriceOutliersRemoved.length
+}
 
 const populatePrices = async (models, prev_listing_limit) => {
     for(let model of models) {
@@ -7,41 +34,16 @@ const populatePrices = async (models, prev_listing_limit) => {
         let total_listing_count = 0
         const parts = await model.find()
         for (let part of parts) {
-            if(part.thirty_day_time !== 0) {
-                continue
-            }
             if (!(part.thirty_day_listing_count >= prev_listing_limit)) {
                 continue
             }
             part_count += 1
-            const keyword = part.brand + ' ' + part.model
-            const listingData = await getRecentlySoldListings(keyword, LISTING_DAY_AGE_LIMIT, MAX_LISTING_LIMIT, LOGGING)
-            if (listingData.length < 4) {
-                part.thirty_day_average = -1
-                part.thirty_day_time = new Date().getTime()
-                part.thirty_day_listing_count = listingData.length
-                await part.save()
-                continue
-            }
-            const listingDataPriceOutliersRemoved = removeIntraPriceOutliers(listingData)
-            let price_sum = 0
-            let price_count = 0
-            listingDataPriceOutliersRemoved.forEach( (listing) => {
-                price_sum += listing.sold_price
-                price_count += 1
-            })
-            let thirty_day_average = 0
-            if (listingDataPriceOutliersRemoved.length > 0) {
-                thirty_day_average = Math.round(price_sum / price_count * 100) / 100
-            }
-            part.thirty_day_average = thirty_day_average
-            part.thirty_day_time = new Date().getTime()
-            part.thirty_day_listing_count = listingDataPriceOutliersRemoved.length
-            await part.save()
-            total_listing_count += listingDataPriceOutliersRemoved.length
+            const listingData = await handleListings(part)
+            const listingDataOutliersRemovedLength = await updatePrices(part, listingData)
+            total_listing_count += listingDataOutliersRemovedLength
         }
         console.log(`Finished populating ${model.collection.collectionName} with ${part_count} parts and ${total_listing_count} listings`)
     }
 }
 
-populatePrices(MODELS, 0)
+module.exports = updatePrices
