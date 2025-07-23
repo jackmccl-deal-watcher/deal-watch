@@ -15,10 +15,10 @@ const updatePrices = async (partDocument, listingData) => {
         return
     }
     const listingDataPriceOutliersRemoved = removeIntraPriceOutliers(listingData)
-    const price_sum = listings.reduce((accumulator, listing) => accumulator + listing.sold_price, 0);
+    const price_sum = listingData.reduce((accumulator, listing) => accumulator + listing.sold_price, 0);
     let thirty_day_average = -1
     if (listingDataPriceOutliersRemoved.length > 0) {
-        thirty_day_average = Math.round(price_sum / listings.length * 100) / 100
+        thirty_day_average = Math.round(price_sum / listingData.length * 100) / 100
     }
     partDocument.thirty_day_average = thirty_day_average
     partDocument.thirty_day_time = Date.now()
