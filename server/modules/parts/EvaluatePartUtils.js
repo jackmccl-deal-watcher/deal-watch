@@ -22,7 +22,7 @@ const removeInterPriceOutliers = (comparable_parts) => {
         const listingsOutliersRemoved = comparable_part.listing_data.filter( (listing) => {
             return !(listing.sold_price > upper_quartile_price + 1.5 * interquartile_range || listing.sold_price < lower_quartile_price - 1.5 * interquartile_range)
         })
-        return {...comparable_part, [listing_data]: listingsOutliersRemoved}
+        return {...comparable_part, listing_data: listingsOutliersRemoved}
     })
 
     return comparablePartsOutlierListingsRemoved
