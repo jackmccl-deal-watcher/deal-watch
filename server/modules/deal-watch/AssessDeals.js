@@ -57,9 +57,9 @@ const assessListing = async (listing) => {
         if (!component_info || typeof component_info === VARIABLE_TYPES.NUMBER) {
             return accumulator + 0
         } else {
-            definedComponentsCombinedWeight += COMPONENT_VALUE_WEIGHTS[component_type]
             const estimatedComponentValue = await estimateComponentValue(component_info)
             if (estimatedComponentValue > 0) {
+                definedComponentsCombinedWeight += COMPONENT_VALUE_WEIGHTS[component_type]
                 listing[LISTING_PROPERTIES.COMPONENTS_DICT][component_type] = {
                     [LISTING_PROPERTIES.MODEL]: component_info,
                     [LISTING_PROPERTIES.ESTIMATED_VALUE]: estimatedComponentValue
