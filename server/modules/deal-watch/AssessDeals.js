@@ -56,7 +56,12 @@ const assessListing = async (listing) => {
             return accumulator + 0
         } else {
             definedComponentsCombinedWeight += COMPONENT_VALUE_WEIGHTS[component_type]
-            return accumulator + await estimateComponentValue(component_info)
+            const estimatedComponentValue = await estimateComponentValue(component_info)
+            listing[LISTING_PROPERTIES.COMPONENTS_DICT][component_type] = {
+                'model': component_info,
+                'estimated_value': estimatedComponentValue
+            }
+            return accumulator + estimatedComponentValue
         }
     }, 0)
     const definedComponentsValue = listingListedValue*definedComponentsCombinedWeight
