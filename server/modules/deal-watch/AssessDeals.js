@@ -1,6 +1,7 @@
 const { getRecentlySoldListings } = require("../../utils/ebay/EbayScraper")
 const fetchGeminiResponse = require("../../utils/gemini/GeminiUtils")
 const { removeIntraPriceOutliers } = require("../parts/EvaluatePartUtils")
+const COMPONENT_VALUE_WEIGHTS = require("./ComponentValueWeights")
 const getPCListings = require("./FindPCListings")
 const LISTING_PROPERTIES = require("./ListingPropertiesEnum")
 const { makeListingPrompt } = require("./Prompt")
@@ -12,7 +13,6 @@ const DAY_LIMIT = 30
 const LISTING_LIMIT = 30
 const LOGGING = false
 
-// Takes a listing, passes it to an LLM, 
 const extractComponentsFromListing = async (listing) => {
     const prompt = await makeListingPrompt(listing)
     const componentsDictString = await fetchGeminiResponse(prompt)
@@ -28,27 +28,39 @@ const extractComponentsFromListing = async (listing) => {
 }
 
 const estimateComponentValue = async (component_info) => {
-    const recentlySoldListings = await getRecentlySoldListings(component_info, DAY_LIMIT, LISTING_LIMIT, LOGGING)
-    const recentlySoldListingsOutliersRemoved = removeIntraPriceOutliers(recentlySoldListings)
-    if (recentlySoldListingsOutliersRemoved.length < MIN_LISTINGS_TO_EVALUATE) {
-        return 0
-    } else {
-        return (recentlySoldListingsOutliersRemoved.reduce( (accumulator, listing) => {
-            return accumulator + listing[LISTING_PROPERTIES.PRICE][LISTING_PROPERTIES.VALUE]
-        }) / recentlySoldListingsOutliersRemoved.length)
-    }
+    const componentValue = await (Array.isArray(component_info) ? component_info : [component_info]).reduce( async (accumulator_promise, singular_component_info) => {
+        const accumulator = await accumulator_promise
+        const recentlySoldListings = await getRecentlySoldListings(singular_component_info, DAY_LIMIT, LISTING_LIMIT, LOGGING)
+        if (recentlySoldListings.length < MIN_LISTINGS_TO_EVALUATE) {
+            return accumulator + 0
+        }
+        const recentlySoldListingsOutliersRemoved = removeIntraPriceOutliers(recentlySoldListings)
+        if (recentlySoldListingsOutliersRemoved.length < MIN_LISTINGS_TO_EVALUATE) {
+            return accumulator + 0
+        } else {
+            const listingAverageValue = (recentlySoldListingsOutliersRemoved.reduce( (accumulator, listing) => {
+                return accumulator + listing[LISTING_PROPERTIES.SOLD_PRICE]
+            }, 0) / recentlySoldListingsOutliersRemoved.length)
+            return accumulator + listingAverageValue
+        }
+    }, 0)
+    return componentValue
 }
 
 const assessListing = async (listing) => {
-    const listing_listed_value = listing[LISTING_PROPERTIES.PRICE][LISTING_PROPERTIES.VALUE]
-    const listing_estimate_value = Object.values(listing[LISTING_PROPERTIES.COMPONENTS_DICT]).reduce( async (accumulator, component_info) => {
-        if (!component_info) {
+    const listingListedValue = listing[LISTING_PROPERTIES.PRICE]
+    let definedComponentsCombinedWeight = 0
+    const listingEstimatedValue = await Object.entries(listing[LISTING_PROPERTIES.COMPONENTS_DICT]).reduce( async (accumulator_promise, [component_type, component_info]) => {
+        const accumulator = await accumulator_promise
+        if (!component_info || typeof component_info === 'number') {
             return accumulator + 0
         } else {
+            definedComponentsCombinedWeight += COMPONENT_VALUE_WEIGHTS[component_type]
             return accumulator + await estimateComponentValue(component_info)
         }
     }, 0)
-    return {...listing, [LISTING_PROPERTIES.DEAL]: listing_estimate_value > listing_listed_value}
+    const definedComponentsValue = listingListedValue*definedComponentsCombinedWeight
+    return {...listing, [LISTING_PROPERTIES.DEFINED_VALUE]: definedComponentsValue, [LISTING_PROPERTIES.ASSESSED_VALUE]: Math.round(listingEstimatedValue * 100) / 100, [LISTING_PROPERTIES.DEAL]: listingEstimatedValue > definedComponentsValue}
 }
 
 const assessDeals = async () => {
@@ -66,7 +78,7 @@ const assessDeals = async () => {
             console.error(error)
         }
     }
-
+    console.log(assessedPCListings)
     return assessedPCListings
 }
 

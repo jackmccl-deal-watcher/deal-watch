@@ -10,6 +10,9 @@ const LISTING_PROPERTIES = Object.freeze({
     ITEM_SUMMARIES: 'itemSummaries',
     COMPONENTS_DICT: 'component_dict',
     NUM_DEFINED: 'num_defined',
+    DEFINED_VALUE: 'defined_value',
+    ASSESSED_VALUE: 'assessed_value',
+    SOLD_PRICE: 'sold_price',
     DEAL: 'deal',
 });
 
