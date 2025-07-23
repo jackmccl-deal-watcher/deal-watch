@@ -1,4 +1,4 @@
-const { getListings } = require("../../utils/ebay/EbayUtils")
+const { getListings } = require("../../utils/ebay/EbayAPIUtils")
 const { ComponentSpecs } = require("./BuildConstants")
 
 const LISTING_LIMIT = 20
