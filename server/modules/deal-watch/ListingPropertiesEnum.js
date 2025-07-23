@@ -14,6 +14,8 @@ const LISTING_PROPERTIES = Object.freeze({
     ASSESSED_VALUE: 'assessed_value',
     SOLD_PRICE: 'sold_price',
     DEAL: 'deal',
+    MODEL: 'model',
+    ESTIMATED_VALUE: 'estimated_value',
 });
 
 module.exports = LISTING_PROPERTIES

@@ -1,5 +1,6 @@
 const { calcMixedRating } = require('./BuildUtils.js')
 const { ComponentSpecs, COMPARED_KEYS, PERFORMANCE_PRIORITIES } = require('./BuildConstants.js')
+const VARIABLE_TYPES = require('../../utils/VariableTypesEnum.js')
 
 const calcPriceRating = (a, b, priceAllocation) => {
     let a_price = 0
@@ -36,10 +37,10 @@ const getPerformanceAllocations = (componentAllocations, performanceAllocation) 
         }
         for (let key of componentPropertyKeys) {
             switch (typeof componentDict[key]) {
-                case 'number':
+                case VARIABLE_TYPES.NUMBER:
                     componentDict[key] *= (1-performanceAllocation)
                     break
-                case 'dict':
+                case VARIABLE_TYPES.DICT:
                     componentDict[key]['allocation'] *= (1-performanceAllocation)
                     break
             }

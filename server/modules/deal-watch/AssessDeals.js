@@ -1,5 +1,6 @@
 const { getRecentlySoldListings } = require("../../utils/ebay/EbayScraper")
 const fetchGeminiResponse = require("../../utils/gemini/GeminiUtils")
+const VARIABLE_TYPES = require("../../utils/VariableTypesEnum")
 const { removeIntraPriceOutliers } = require("../parts/EvaluatePartUtils")
 const COMPONENT_VALUE_WEIGHTS = require("./ComponentValueWeights")
 const getPCListings = require("./FindPCListings")
@@ -53,15 +54,15 @@ const assessListing = async (listing) => {
     let definedComponentsCombinedWeight = 0
     const listingEstimatedValue = await Object.entries(listing[LISTING_PROPERTIES.COMPONENTS_DICT]).reduce( async (accumulator_promise, [component_type, component_info]) => {
         const accumulator = await accumulator_promise
-        if (!component_info || typeof component_info === 'number') {
+        if (!component_info || typeof component_info === VARIABLE_TYPES.NUMBER) {
             return accumulator + 0
         } else {
             definedComponentsCombinedWeight += COMPONENT_VALUE_WEIGHTS[component_type]
             const estimatedComponentValue = await estimateComponentValue(component_info)
             if (estimatedComponentValue > 0) {
                 listing[LISTING_PROPERTIES.COMPONENTS_DICT][component_type] = {
-                    'model': component_info,
-                    'estimated_value': estimatedComponentValue
+                    [LISTING_PROPERTIES.MODEL]: component_info,
+                    [LISTING_PROPERTIES.ESTIMATED_VALUE]: estimatedComponentValue
                 }
             } else {
                 listing[LISTING_PROPERTIES.COMPONENTS_DICT][component_type] = null
