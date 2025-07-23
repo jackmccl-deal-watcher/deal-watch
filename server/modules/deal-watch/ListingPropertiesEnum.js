@@ -10,6 +10,7 @@ const LISTING_PROPERTIES = Object.freeze({
     ITEM_SUMMARIES: 'itemSummaries',
     COMPONENTS_DICT: 'component_dict',
     NUM_DEFINED: 'num_defined',
+    DEAL: 'deal',
 });
 
 module.exports = LISTING_PROPERTIES
