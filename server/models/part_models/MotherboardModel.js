@@ -1,4 +1,5 @@
 const mongoose = require('../../Mongoose.js')
+const RecentlySoldListingSchema = require('./RecentlySoldListing.js')
 
 const MotherboardSchema = new mongoose.Schema({
     type: String,
@@ -12,6 +13,8 @@ const MotherboardSchema = new mongoose.Schema({
     thirty_day_time: Number,
     thirty_day_listing_count: Number,
     pcpp_price: Number,
+    recently_sold_listings: [RecentlySoldListingSchema],
+    recently_sold_listings_date: Date,
 })
 
 const MotherboardModel = mongoose.model('Motherboard', MotherboardSchema, 'motherboard')
