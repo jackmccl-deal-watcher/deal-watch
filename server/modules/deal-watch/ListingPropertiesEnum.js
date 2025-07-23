@@ -8,7 +8,7 @@ const LISTING_PROPERTIES = Object.freeze({
     LONG_DESCRIPTION: 'description',
     DESCRIPTION: 'description',
     ITEM_SUMMARIES: 'itemSummaries',
-    COMPONENTS_DICT: 'component_dict',
+    COMPONENTS_DICT: 'components_dict',
     NUM_DEFINED: 'num_defined',
     DEFINED_VALUE: 'defined_value',
     ASSESSED_VALUE: 'assessed_value',
