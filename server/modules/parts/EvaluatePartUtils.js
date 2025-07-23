@@ -16,20 +16,13 @@ const calcQuartileInfo = (listings) => {
 }
 
 const removeInterPriceOutliers = (comparable_parts) => {
-    let listings = []
-    comparable_parts.forEach( (comparable_part) => {
-        comparable_part.listing_data.forEach( (listing) => {
-            listings.push(listing)
-        })
-    })
+    const listings = comparable_parts.flatMap(part => part.listing_data);
     const { lower_quartile_price, upper_quartile_price, interquartile_range } = calcQuartileInfo(listings)
     const comparablePartsOutlierListingsRemoved = comparable_parts.map( (comparable_part) => {
-        let copy_comparable_part = comparable_part
         const listingsOutliersRemoved = comparable_part.listing_data.filter( (listing) => {
             return !(listing.sold_price > upper_quartile_price + 1.5 * interquartile_range || listing.sold_price < lower_quartile_price - 1.5 * interquartile_range)
         })
-        copy_comparable_part.listing_data = listingsOutliersRemoved
-        return copy_comparable_part
+        return {...comparable_part, [listing_data]: listingsOutliersRemoved}
     })
 
     return comparablePartsOutlierListingsRemoved

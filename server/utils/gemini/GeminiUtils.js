@@ -1,4 +1,5 @@
-const { GoogleGenAI } = require("@google/genai")
+const { GoogleGenAI } = require("@google/genai");
+const { validateStringInput } = require("../ValidateInput");
 require('dotenv').config({ path: require('find-config')('.env') })
 
 const ai = new GoogleGenAI({ apiKey: process.env.GEMINI_API_KEY});
