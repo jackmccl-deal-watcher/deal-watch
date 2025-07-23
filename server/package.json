@@ -1,5 +1,6 @@
 {
   "dependencies": {
+    "@google/genai": "^1.10.0",
     "argon2": "^0.43.0",
     "body-parser": "^2.2.0",
     "cors": "^2.8.5",
