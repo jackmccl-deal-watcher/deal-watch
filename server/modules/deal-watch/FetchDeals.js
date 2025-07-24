@@ -6,7 +6,8 @@ const fetchDeals = async (min_budget, max_budget) => {
         $and: [
             { price: {$gte: min_budget} },
             { price: {$lte: max_budget} },
-            { [components_dict.num_defined]: {$gte: MIN_NUM_DEFINED_COMPONENT_MODELS}}
+            { 'components_dict.num_defined': {$gte: MIN_NUM_DEFINED_COMPONENT_MODELS}},
+            { deal: true },
         ]
     })
     return dealsInBudget

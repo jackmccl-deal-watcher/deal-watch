@@ -4,6 +4,7 @@ import { evaluatePart } from '../../utils/ApiUtils'
 import ComponentPartForm from './ComponentPartForm';
 import EvaluationScatterChart from './EvaluationScatterChart';
 import LoadingScreen from '../LoadingScreen/LoadingScreen';
+import { convertPriceToDollar } from '../../utils/Currency';
 
 const EvaluatePart = () => {
     const [evaluationData, setEvaluationData] = useState([])
@@ -41,13 +42,6 @@ const EvaluatePart = () => {
             calcThirtyDayTrend()
         }
     }, [evaluationData])
-
-    const convertPriceToDollar = (price) => {
-        return new Intl.NumberFormat('en-us', {
-            style: 'currency',
-            currency: 'USD'
-        }).format(price)
-    }
 
     const calcMarketValue = () => {
         setMarketValue(convertPriceToDollar(evaluationData.M_A_Points.data[0].y))

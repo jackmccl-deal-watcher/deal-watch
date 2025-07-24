@@ -11,6 +11,7 @@ import BuildGenerator from './components/BuildGenerator/BuildGenerator.jsx'
 import DisplayBuilds from './components/DisplayBuilds/DisplayBuilds.jsx'
 import LoadingScreen from './components/LoadingScreen/LoadingScreen.jsx'
 import SavedBuilds from './components/DisplayBuilds/SavedBuilds.jsx'
+import DealWatch from './components/DealWatch/DealWatch.jsx'
 
 function App() {
 
@@ -27,6 +28,7 @@ function App() {
             <Route path='/builds/generator' element={<BuildGenerator/>} />
             <Route path='/builds/display' element={<DisplayBuilds/>} />
             <Route path='/builds/saved' element={<SavedBuilds/>} />
+            <Route path='/deal-watch' element={<DealWatch/>} />
             <Route path='/loading' element={<LoadingScreen/>} />
             <Route path='*' element={<NoMatch/>} />
           </Routes>

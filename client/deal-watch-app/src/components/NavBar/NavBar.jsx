@@ -28,6 +28,7 @@ const NavBar = () => {
                 <a href='/'>Home</a>
                 <a id='parts-page-link' href='/parts'>Parts</a>
                 <a id='builds-page-link' href='/builds/generator'>Builds</a>
+                <a id='deal-watch-page-link' href='/deal-watch'>Deal Watch</a>
             </div>
             <div className='navbar-user'>
                 { user ? 

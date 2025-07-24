@@ -1,6 +1,7 @@
 import './EvaluatePart.css'
 import { cheerfulFiestaPalette, ScatterChart } from '@mui/x-charts';
 import { useScatterSeries, useXScale, useYScale } from '@mui/x-charts/hooks';
+import { convertPriceToDollar } from '../../utils/Currency';
 
 // LinkPoints function from MUIX example
 function LinkPoints({ seriesId, close }) {
@@ -49,13 +50,6 @@ const EvaluationScatterChart = ({ evaluationData }) => {
             return X_Y_Point
         })
         return fixedPoints
-    }
-
-    const convertPriceToDollar = (price) => {
-        return new Intl.NumberFormat('en-us', {
-            style: 'currency',
-            currency: 'USD'
-        }).format(price)
     }
 
     const convertDateToMonthDay = (date) => {
