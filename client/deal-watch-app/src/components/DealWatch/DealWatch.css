@@ -12,4 +12,6 @@
     max-width: 90%;
     justify-self: center;
     margin-top: 30px;
+    flex-wrap: wrap;
+    padding-bottom: 30px;
 }
