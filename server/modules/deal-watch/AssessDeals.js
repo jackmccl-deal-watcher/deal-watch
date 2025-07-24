@@ -3,9 +3,6 @@ const fetchGeminiResponse = require("../../utils/gemini/GeminiUtils")
 const VARIABLE_TYPES = require("../../utils/VariableTypesEnum")
 const { removeIntraPriceOutliers } = require("../parts/EvaluatePartUtils")
 const COMPONENT_VALUE_WEIGHTS = require("./ComponentValueWeights")
-const VARIABLE_TYPES = require("../../utils/VariableTypesEnum")
-const { removeIntraPriceOutliers } = require("../parts/EvaluatePartUtils")
-const COMPONENT_VALUE_WEIGHTS = require("./ComponentValueWeights")
 const getPCListings = require("./FindPCListings")
 const LISTING_PROPERTIES = require("./ListingPropertiesEnum")
 const { makeListingPrompt } = require("./Prompt")
@@ -16,12 +13,7 @@ const MIN_LISTINGS_TO_EVALUATE = 4
 const DAY_LIMIT = 30
 const LISTING_LIMIT = 30
 const LOGGING = false
-const MIN_LISTINGS_TO_EVALUATE = 4
-const DAY_LIMIT = 30
-const LISTING_LIMIT = 30
-const LOGGING = false
 
-const extractComponentsFromListing = async (listing) => {
 const extractComponentsFromListing = async (listing) => {
     const prompt = await makeListingPrompt(listing)
     const componentsDictString = await fetchGeminiResponse(prompt)
@@ -89,7 +81,6 @@ const assessDeals = async () => {
     const mostRecentPCListings = PCListings.slice(0, NUM_DEALS_TO_ASSESS)
     for (const listing of mostRecentPCListings) {
         try {
-            const listingDict = await extractComponentsFromListing(listing)
             const listingDict = await extractComponentsFromListing(listing)
             if (listingDict[LISTING_PROPERTIES.COMPONENTS_DICT][LISTING_PROPERTIES.NUM_DEFINED] >= MIN_NUM_DEFINED_COMPONENT_MODELS) {
                 const assessedPCListing = await assessListing(listingDict)
