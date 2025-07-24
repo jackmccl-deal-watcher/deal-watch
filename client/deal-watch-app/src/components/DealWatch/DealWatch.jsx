@@ -7,7 +7,6 @@ import Deal from "./Deal"
 import LoadingScreen from "../LoadingScreen/LoadingScreen"
 import { useEffect } from "react"
 
-
 const DealWatch = () => {
     const [deals, setDeals] = useState([])
     const [minBudget, setMinBudget] = useState(100)
