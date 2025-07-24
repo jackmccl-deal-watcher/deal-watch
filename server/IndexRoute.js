@@ -6,6 +6,7 @@ const session = require('express-session')
 const mongoose = require('./Mongoose.js')
 const { ErrorMiddleware } = require('./middleware/ErrorMiddleware.js')
 require('dotenv').config()
+const runDealWatch = require('./modules/deal-watch/DealWatch.js')
 const cron = require('node-cron');
 
 const SESSION_MAX_AGE = 1000 * 60 * 5
@@ -47,8 +48,11 @@ const PartsRoutes = require('./routes/PartsRoutes.js')
 app.use('/api/parts', PartsRoutes)
 
 const BuildsRoutes = require('./routes/BuildsRoutes.js')
-const runDealWatch = require('./modules/deal-watch/DealWatch.js')
 app.use('/api/builds', BuildsRoutes)
+
+const DealWatchRoutes = require('./routes/DealWatchRoutes.js')
+app.use('/api/deal-watch', DealWatchRoutes)
+
 
 app.use(ErrorMiddleware)
 
@@ -74,7 +78,7 @@ app.get('/', (req, res, next) => {
 })
 
 // Run cron job every 30 minutes
-cron.schedule('30 * * * *', async() => {
+cron.schedule('1 * * * *', async() => {
     await runDealWatch()
 })
 
