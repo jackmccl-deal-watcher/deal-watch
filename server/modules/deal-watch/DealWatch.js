@@ -35,7 +35,7 @@ const removeDuplicateListings = async (newListings) => {
         oldListingData[listing[LISTING_PROPERTIES.ITEM_ID]][LISTING_PROPERTIES.PRICE] = listing[LISTING_PROPERTIES.PRICE]
     })
     return newListings.filter( (newListing) => {
-        return !(oldListingData?.[newListing[LISTING_PROPERTIES.ITEM_ID]]?.[LISTING_PROPERTIES.PRICE] === Number(newListing[LISTING_PROPERTIES.PRICE][LISTING_PROPERTIES.VALUE]))
+        return !(newListing[LISTING_PROPERTIES.ITEM_ID] in oldListingData) || (oldListingData?.[newListing[LISTING_PROPERTIES.ITEM_ID]]?.[LISTING_PROPERTIES.PRICE] !== Number(newListing[LISTING_PROPERTIES.PRICE][LISTING_PROPERTIES.VALUE]))
     })
 }
 
