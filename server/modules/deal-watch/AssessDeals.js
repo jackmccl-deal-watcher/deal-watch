@@ -3,6 +3,9 @@ const fetchGeminiResponse = require("../../utils/gemini/GeminiUtils")
 const VARIABLE_TYPES = require("../../utils/VariableTypesEnum")
 const { removeIntraPriceOutliers } = require("../parts/EvaluatePartUtils")
 const COMPONENT_VALUE_WEIGHTS = require("./ComponentValueWeights")
+const VARIABLE_TYPES = require("../../utils/VariableTypesEnum")
+const { removeIntraPriceOutliers } = require("../parts/EvaluatePartUtils")
+const COMPONENT_VALUE_WEIGHTS = require("./ComponentValueWeights")
 const getPCListings = require("./FindPCListings")
 const LISTING_PROPERTIES = require("./ListingPropertiesEnum")
 const { makeListingPrompt } = require("./Prompt")
@@ -13,7 +16,12 @@ const MIN_LISTINGS_TO_EVALUATE = 4
 const DAY_LIMIT = 30
 const LISTING_LIMIT = 30
 const LOGGING = false
+const MIN_LISTINGS_TO_EVALUATE = 4
+const DAY_LIMIT = 30
+const LISTING_LIMIT = 30
+const LOGGING = false
 
+const extractComponentsFromListing = async (listing) => {
 const extractComponentsFromListing = async (listing) => {
     const prompt = await makeListingPrompt(listing)
     const componentsDictString = await fetchGeminiResponse(prompt)
@@ -21,8 +29,9 @@ const extractComponentsFromListing = async (listing) => {
     const listingDict = {
         [LISTING_PROPERTIES.TITLE]: listing[LISTING_PROPERTIES.TITLE],
         [LISTING_PROPERTIES.DESCRIPTION]: listing[LISTING_PROPERTIES.SHORT_DESCRIPTION],
-        [LISTING_PROPERTIES.PRICE]: listing[LISTING_PROPERTIES.PRICE][LISTING_PROPERTIES.VALUE],
+        [LISTING_PROPERTIES.PRICE]: Number(listing[LISTING_PROPERTIES.PRICE][LISTING_PROPERTIES.VALUE]),
         [LISTING_PROPERTIES.WEB_URL]: listing[LISTING_PROPERTIES.WEB_URL],
+        [LISTING_PROPERTIES.ITEM_URL]: listing[LISTING_PROPERTIES.ITEM_URL],
         [LISTING_PROPERTIES.ITEM_URL]: listing[LISTING_PROPERTIES.ITEM_URL],
         [LISTING_PROPERTIES.COMPONENTS_DICT]: componentsDict,
     }
@@ -80,6 +89,7 @@ const assessDeals = async () => {
     const mostRecentPCListings = PCListings.slice(0, NUM_DEALS_TO_ASSESS)
     for (const listing of mostRecentPCListings) {
         try {
+            const listingDict = await extractComponentsFromListing(listing)
             const listingDict = await extractComponentsFromListing(listing)
             if (listingDict[LISTING_PROPERTIES.COMPONENTS_DICT][LISTING_PROPERTIES.NUM_DEFINED] >= MIN_NUM_DEFINED_COMPONENT_MODELS) {
                 const assessedPCListing = await assessListing(listingDict)

@@ -65,7 +65,7 @@ const handleListings = async (part) => {
     })
 
     partDocument.recently_sold_listings = allFreshListingsNoDuplicates
-    await partDocument.save()
+    await partDocument.updateOne({model: partDocument.model})
     await updatePrices(partDocument, allFreshListingsNoDuplicates)
     return allFreshListingsNoDuplicates
 }
