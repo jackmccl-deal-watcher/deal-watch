@@ -1,4 +1,5 @@
 const LISTING_PROPERTIES = Object.freeze({
+    ITEM_ID: 'itemId',
     TITLE: 'title',
     PRICE: 'price',
     VALUE: 'value',

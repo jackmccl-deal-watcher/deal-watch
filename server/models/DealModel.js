@@ -8,6 +8,7 @@ const componentInfoSchema = new mongoose.Schema({
 })
 
 const DealSchema = new mongoose.Schema({
+    [LISTING_PROPERTIES.ITEM_ID]: String,
     [LISTING_PROPERTIES.TITLE]: String,
     [LISTING_PROPERTIES.DESCRIPTION]: String,
     [LISTING_PROPERTIES.PRICE]: Number,
@@ -20,7 +21,7 @@ const DealSchema = new mongoose.Schema({
             [ComponentTypes.CPU]: { type: componentInfoSchema, default: null },
             [ComponentTypes.VIDEOCARD]: { type: componentInfoSchema, default: null },
             [ComponentTypes.MOTHERBOARD]: { type: componentInfoSchema, default: null },
-            [ComponentTypes.MEMORY]: { type: componentInfoSchema, default: null },
+            [ComponentTypes.MEMORY]: { type: [componentInfoSchema], default: null },
             [ComponentTypes.HARD_DRIVE]: { type: componentInfoSchema, default: null },
             [ComponentTypes.POWER_SUPPLY]: { type: componentInfoSchema, default: null },
             [ComponentTypes.CASE]: { type: componentInfoSchema, default: null },
