@@ -23,7 +23,6 @@ const DealWatch = () => {
     }
 
     const fetchAndProcessDeals = async () => {
-        console.log(minBudget > maxBudget)
         if (minBudget > maxBudget) {
             setMessage('Minimum budget must be less than maximum budget!')
             setDeals([])
