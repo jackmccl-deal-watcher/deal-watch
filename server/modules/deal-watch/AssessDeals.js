@@ -34,11 +34,11 @@ const estimateComponentValue = async (component_info) => {
         const accumulator = await accumulator_promise
         const recentlySoldListings = await getRecentlySoldListings(singular_component_info, DAY_LIMIT, LISTING_LIMIT, LOGGING)
         if (recentlySoldListings.length < MIN_LISTINGS_TO_EVALUATE) {
-            return accumulator + 0
+            return accumulator
         }
         const recentlySoldListingsOutliersRemoved = removeIntraPriceOutliers(recentlySoldListings)
         if (recentlySoldListingsOutliersRemoved.length < MIN_LISTINGS_TO_EVALUATE) {
-            return accumulator + 0
+            return accumulator
         } else {
             const listingAverageValue = (recentlySoldListingsOutliersRemoved.reduce( (accumulator, listing) => {
                 return accumulator + listing[LISTING_PROPERTIES.SOLD_PRICE]
@@ -55,7 +55,7 @@ const assessListing = async (listing) => {
     const listingEstimatedValue = await Object.entries(listing[LISTING_PROPERTIES.COMPONENTS_DICT]).reduce( async (accumulator_promise, [component_type, component_info]) => {
         const accumulator = await accumulator_promise
         if (!component_info || typeof component_info === VARIABLE_TYPES.NUMBER) {
-            return accumulator + 0
+            return accumulator
         } else {
             const estimatedComponentValue = await estimateComponentValue(component_info)
             if (estimatedComponentValue > 0) {
