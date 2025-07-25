@@ -1,11 +1,13 @@
 const express = require('express')
 const { evaluatePart } = require('../modules/parts/EvaluatePart')
 const { makeGraphData } = require('../modules/parts/EvaluationGraphs')
+const { clearCachedEbayData } = require('../utils/ebay/EbayCaching')
 
 const router = express.Router()
 
 router.post('/evaluate_part', async (req, res, next) => {
     try {
+        await clearCachedEbayData()
         const part = req.body
         const evaluation = await evaluatePart(part)
         const evaluationWithGraphData = makeGraphData(evaluation)
