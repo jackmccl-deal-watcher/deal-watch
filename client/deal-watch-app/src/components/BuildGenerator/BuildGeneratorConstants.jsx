@@ -195,16 +195,19 @@ export const POWER_SUPPLY_FORM_FACTORS = [
 
 export const FORM_CONFIG = {
     [ComponentTypes.CPU]: {
+        color: 'green',
         component_type: ComponentTypes.CPU,
         component_name: "CPU",
         main_specs: [{ key: CPU_PROPERTIES.CORES, tag: 'Cores' }, { key: CPU_PROPERTIES.BASE_CLOCK, tag: 'Base Clock' }, { key: CPU_PROPERTIES.BOOST_CLOCK, tag: 'Boost Clock' }],
     },
     [ComponentTypes.VIDEOCARD]: {
+        color: 'red',
         component_type: ComponentTypes.VIDEOCARD,
         component_name: "VideoCard",
         main_specs: [{ key: VIDEOCARD_PROPERTIES.VRAM, tag: 'Vram' }, { key: VIDEOCARD_PROPERTIES.BASE_CLOCK, tag: 'Base Clock' }, { key: VIDEOCARD_PROPERTIES.BOOST_CLOCK, tag: 'Boost Clock' }],
     },
     [ComponentTypes.MOTHERBOARD]: {
+        color: 'violet',
         component_type: ComponentTypes.MOTHERBOARD,
         component_name: "Motherboard",
         main_specs: [{ key: MOTHERBOARD_PROPERTIES.RAM_SLOTS, tag: 'Ram Slots' }, { key: MOTHERBOARD_PROPERTIES.MAX_RAM, tag: 'Max Ram' }],
@@ -226,16 +229,19 @@ export const FORM_CONFIG = {
         }
     },
     [ComponentTypes.MEMORY]: {
+        color: 'orange',
         component_type: ComponentTypes.MEMORY,
         component_name: "Memory",
         main_specs: [{ key: MEMORY_PROPERTIES.SPEED, tag: 'Speed' }, { key: MEMORY_PROPERTIES.TOTAL_SIZE, tag: 'Total Size' }, { key: MEMORY_PROPERTIES.MODULE_TYPE, tag: 'Module Type' }],
     },
     [ComponentTypes.HARD_DRIVE]: {
+        color: 'darkgoldenrod',
         component_type: ComponentTypes.HARD_DRIVE,
         component_name: "Hard Drive",
         main_specs: [{ key: HARD_DRIVE_PROPERTIES.CAPACITY, tag: 'Capacity' }, { key: HARD_DRIVE_PROPERTIES.STORAGE_TYPE, tag: 'Storage Type' }],
     },
     [ComponentTypes.POWER_SUPPLY]: {
+        color: 'darkblue',
         component_type: ComponentTypes.POWER_SUPPLY,
         component_name: "Power Supply",
         main_specs: [{ key: POWER_SUPPLY_PROPERTIES.WATTAGE, tag: 'Wattage' }, { key: POWER_SUPPLY_PROPERTIES.EFFICIENCY_RATING, tag: 'Efficiency Rating' }, { key: POWER_SUPPLY_PROPERTIES.MODULAR, tag: 'Modularity' }],
@@ -250,6 +256,7 @@ export const FORM_CONFIG = {
         }
     },
     [ComponentTypes.CASE]: {
+        color: 'coral',
         component_type: ComponentTypes.CASE,
         component_name: "Case",
         main_specs: [{ key: CASE_PROPERTIES.INTERNAL_BAYS, tag: 'Internal Bays' }, { key: CASE_PROPERTIES.COLOR, tag: 'Color' }],

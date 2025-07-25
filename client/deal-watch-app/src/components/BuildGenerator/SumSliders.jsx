@@ -6,9 +6,8 @@ import { getSliderLabelText } from "./BuildComponentForms/BuildFormUtils";
 import ToolTipText from "../ToolTip/ToolTipText";
 import { TOOL_TIPCS_DICT } from "../../enums/ComponentToolTipsEnum";
 
-const SumSliders = ({ specs, component_type, handleUpdatePoints }) => {
+const SumSliders = ({ color, specs, component_type, handleUpdatePoints }) => {
     const [pointsDict, setPointsDict] = useState({})
-
     const balancePoints = ({ newValue, spec_type, setPointsDict }) => {
         let newPointsDict = {}
         setPointsDict(prevDict => {
@@ -58,7 +57,7 @@ const SumSliders = ({ specs, component_type, handleUpdatePoints }) => {
         return (
             <div key={spec.key} className='sum-slider-div'>
                 <div className='sum-slider-title'> <ToolTipText main_text={`${spec.tag}: ${getSliderLabelText(pointsDict[spec.key])}`} tool_tip={TOOL_TIPCS_DICT[component_type][spec.key]}/></div>
-                <Slider min={SPEC_ALLOCATION_MINIMUM} max={SPEC_ALLOCATION_MAXIMUM} step={0.01} valueLabelDisplay='auto' valueLabelFormat={getSliderLabelText(pointsDict[spec.key])} value={pointsDict[spec.key]} onChange={(e, newValue) => updatePointsDict({ spec, newValue })}></Slider>
+                <Slider sx={{color: color}}min={SPEC_ALLOCATION_MINIMUM} max={SPEC_ALLOCATION_MAXIMUM} step={0.01} valueLabelDisplay='auto' valueLabelFormat={getSliderLabelText(pointsDict[spec.key])} value={pointsDict[spec.key]} onChange={(e, newValue) => updatePointsDict({ spec, newValue })}></Slider>
             </div>
         )
     }
