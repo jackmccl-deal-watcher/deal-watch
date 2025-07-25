@@ -24,3 +24,7 @@
     border: solid black 4px;
     max-width: 500px
 }
+
+.build-title {
+    margin-top: 15px
+}
