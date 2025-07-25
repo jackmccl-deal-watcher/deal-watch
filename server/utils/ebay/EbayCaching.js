@@ -13,21 +13,6 @@ const LOGGING = false
 const UNCOMMON_STALE_CACHE_TIME_REQUIREMENT = 7 * MS_IN_A_DAY
 const COMMON_STALE_CACHE_TIME_REQUIREMENT = 1 * MS_IN_A_DAY
 
-const clearCachedEbayData = async () => {
-    console.log(`Clearing cached Ebay data!`)
-    let num_parts = 0
-    for (let model of Object.values(ModelTypesEnum)) {
-        const parts = await model.find({})
-        for (let part of parts) {
-            part.recently_sold_listings = []
-            part.recently_sold_listings_date = 0
-            await part.save()
-            num_parts += 1
-        }
-    }
-    console.log(`Cached Ebay data cleared for ${num_parts} parts!`)
-}
-
 const handleListings = async (part) => {
     const model = ModelTypesEnum[part.type]
     if (!model) {
@@ -85,4 +70,4 @@ const handleListings = async (part) => {
     return allFreshListingsNoDuplicates
 }
 
-module.exports = { clearCachedEbayData, handleListings }
+module.exports = { handleListings }
