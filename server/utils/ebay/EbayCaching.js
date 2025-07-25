@@ -38,7 +38,7 @@ const handleListings = async (part) => {
         const cachedListingDataSortedBySoldDate = sortBySoldDate(cachedListingData)
         const mostRecentCachedSoldDate = cachedListingDataSortedBySoldDate[0].sold_date
 
-        const RELATIVE_LISTING_DAY_AGE_LIMIT = (Date.now() - new Date(mostRecentCachedSoldDate).getTime()) / MS_IN_A_DAY
+        const RELATIVE_LISTING_DAY_AGE_LIMIT = (Date.now() - ((new Date(mostRecentCachedSoldDate)).getTime())) / MS_IN_A_DAY
         recentlySoldListings = await getRecentlySoldListings(keyword, RELATIVE_LISTING_DAY_AGE_LIMIT, MAX_LISTING_LIMIT, LOGGING)
     }
 
@@ -55,7 +55,7 @@ const handleListings = async (part) => {
         return []
     }
 
-    const allFreshListings = allListings.filter( (listing) => new Date(listing.sold_date).getTime() >= Date.now() - LISTING_MS_AGE_LIMIT)
+    const allFreshListings = allListings.filter( (listing) => ((new Date(listing.sold_date)).getTime()) >= (Date.now() - LISTING_MS_AGE_LIMIT))
 
     const addedTitles = new Set()
     const allFreshListingsNoDuplicates = allFreshListings.filter( (listing) => {
@@ -65,7 +65,7 @@ const handleListings = async (part) => {
     })
 
     partDocument.recently_sold_listings = allFreshListingsNoDuplicates
-    await partDocument.save()
+    await model.updateOne({model: partDocument.model})
     await updatePrices(partDocument, allFreshListingsNoDuplicates)
     return allFreshListingsNoDuplicates
 }
