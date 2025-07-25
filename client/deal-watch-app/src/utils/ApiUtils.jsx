@@ -125,8 +125,6 @@ export const fetchSavedBuilds = async () => {
 }
 
 export const fetchDeals = async (min_budget, max_budget) => {
-    console.log(min_budget)
-    console.log(max_budget)
     try {
         const response = await fetch(`${API_URL}/deal-watch/display-deals?min_budget=${min_budget}&max_budget=${max_budget}`, {
             method: 'GET',
