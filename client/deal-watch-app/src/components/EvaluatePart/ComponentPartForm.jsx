@@ -12,6 +12,7 @@ import HardDrivePartForm from './ComponentForms/HardDrivePartForm';
 import PowerSupplyPartForm from './ComponentForms/PowerSupplyPartForm';
 import CasePartForm from './ComponentForms/CasePartForm';
 import './ComponentPartForm.css'
+import ComponentTitles from '../../enums/ComponentTitlesEnum';
 
 
 const ComponentPartForm = ({ handlePartEvaluation }) => {
@@ -43,13 +44,13 @@ const ComponentPartForm = ({ handlePartEvaluation }) => {
                     value={componentType}
                     onChange={(e) => setComponentType(e.target.value)}
                 >
-                    <MenuItem id='component-form-cpu' value={ComponentTypes.CPU}>{ComponentTypes.CPU}</MenuItem>
-                    <MenuItem id='component-form-video-card' value={ComponentTypes.VIDEOCARD}>{ComponentTypes.VIDEOCARD}</MenuItem>
-                    <MenuItem id='component-form-motherboard' value={ComponentTypes.MOTHERBOARD}>{ComponentTypes.MOTHERBOARD}</MenuItem>
-                    <MenuItem id='component-form-memory' value={ComponentTypes.MEMORY}>{ComponentTypes.MEMORY}</MenuItem>
-                    <MenuItem id='component-form-hard-drive' value={ComponentTypes.HARD_DRIVE}>{ComponentTypes.HARD_DRIVE}</MenuItem>
-                    <MenuItem id='component-form-power-supply' value={ComponentTypes.POWER_SUPPLY}>{ComponentTypes.POWER_SUPPLY}</MenuItem>
-                    <MenuItem id='component-form-case' value={ComponentTypes.CASE}>{ComponentTypes.CASE}</MenuItem>
+                    <MenuItem id='component-form-cpu' value={ComponentTypes.CPU}>{ComponentTitles.CPU}</MenuItem>
+                    <MenuItem id='component-form-video-card' value={ComponentTypes.VIDEOCARD}>{ComponentTitles.VIDEOCARD}</MenuItem>
+                    <MenuItem id='component-form-motherboard' value={ComponentTypes.MOTHERBOARD}>{ComponentTitles.MOTHERBOARD}</MenuItem>
+                    <MenuItem id='component-form-memory' value={ComponentTypes.MEMORY}>{ComponentTitles.MEMORY}</MenuItem>
+                    <MenuItem id='component-form-hard-drive' value={ComponentTypes.HARD_DRIVE}>{ComponentTitles.HARD_DRIVE}</MenuItem>
+                    <MenuItem id='component-form-power-supply' value={ComponentTypes.POWER_SUPPLY}>{ComponentTitles.POWER_SUPPLY}</MenuItem>
+                    <MenuItem id='component-form-case' value={ComponentTypes.CASE}>{ComponentTitles.CASE}</MenuItem>
                 </Select>
             </FormControl>
             <div className='evaluate-part-component-form'>

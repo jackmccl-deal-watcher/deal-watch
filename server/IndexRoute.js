@@ -9,18 +9,19 @@ require('dotenv').config()
 const runDealWatch = require('./modules/deal-watch/DealWatch.js')
 const cron = require('node-cron');
 
-const SESSION_MAX_AGE = 1000 * 60 * 5
+const SESSION_MAX_AGE = 60 * 60 * 1000
 
 let sessionConfig = {
     name: 'sessionId',
     secret: process.env.SESSION_SECRET,
     cookie: {
-    maxAge: SESSION_MAX_AGE,
-    secure: process.env.RENDER ? true : false,
-    httpOnly: false,
-},
+        maxAge: SESSION_MAX_AGE,
+        secure: process.env.RENDER ? true : false,
+        httpOnly: false,
+    },
     resave: false,
     saveUninitialized: false,
+    rolling: true,
 }
 
 const app = express()

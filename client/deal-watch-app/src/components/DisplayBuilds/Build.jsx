@@ -124,7 +124,7 @@ const Build = ({build}) => {
             return(
                 <div className='save-builds-control'>
                         <TextField className='save-build-textfield' slotProps={{'htmlInput': {'className': `save-builds-title-input`}}} label="Build Title" variant="standard" value={title} disabled />
-                        <button onClick={handleToggleSaveBuild} className='save-builds-button'>Un-save Build</button>
+                        <button onClick={handleToggleSaveBuild} className='save-builds-button'>Edit Build</button>
                         <div id='message'>{message}</div>
                 </div>
             )

@@ -2,9 +2,7 @@ const DealModel = require("../../models/DealModel")
 const { getRecentlySoldListings } = require("../../utils/ebay/EbayScraper")
 const fetchGeminiResponse = require("../../utils/gemini/GeminiUtils")
 const VARIABLE_TYPES = require("../../utils/VariableTypesEnum")
-const { removeIntraPriceOutliers } = require("../parts/EvaluatePartUtils")
 const COMPONENT_VALUE_WEIGHTS = require("./ComponentValueWeights")
-const getPCListings = require("./FindPCListings")
 const LISTING_PROPERTIES = require("./ListingPropertiesEnum")
 const { makeListingPrompt } = require("./Prompt")
 const { MIN_NUM_DEFINED_COMPONENT_MODELS, MIN_LISTINGS_TO_EVALUATE, DAY_LIMIT, LISTING_LIMIT, LOGGING } = require('./DealWatchConstants')
@@ -17,6 +15,7 @@ const extractComponentsFromListing = async (listing) => {
         [LISTING_PROPERTIES.ITEM_ID]: listing[LISTING_PROPERTIES.ITEM_ID],
         [LISTING_PROPERTIES.TITLE]: listing[LISTING_PROPERTIES.TITLE],
         [LISTING_PROPERTIES.DESCRIPTION]: listing[LISTING_PROPERTIES.SHORT_DESCRIPTION],
+        [LISTING_PROPERTIES.PRICE]: Number(listing[LISTING_PROPERTIES.PRICE][LISTING_PROPERTIES.VALUE]),
         [LISTING_PROPERTIES.PRICE]: Number(listing[LISTING_PROPERTIES.PRICE][LISTING_PROPERTIES.VALUE]),
         [LISTING_PROPERTIES.WEB_URL]: listing[LISTING_PROPERTIES.WEB_URL],
         [LISTING_PROPERTIES.ITEM_URL]: listing[LISTING_PROPERTIES.ITEM_URL],
