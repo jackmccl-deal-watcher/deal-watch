@@ -13,7 +13,7 @@
 .tool-tip {
     visibility: hidden;
     z-index: 1;
-    position: relative;
+    position: absolute;
     transform: translateY(-100%);
     margin-top: -40px;
     background-color: #F5F5F5;

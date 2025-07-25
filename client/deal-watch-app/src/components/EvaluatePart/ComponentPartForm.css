@@ -1,11 +1,22 @@
 .evaluate-part-component-form {
     margin-top: 15px;
+    width: 500px;
+}
+
+.component-part-form {
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+}
+
+#component-part-form-type-selector {
+    margin-top: 30px;
+    width: 150px;
 }
 
 .component-form-submit-button {
     margin-top: 15px;
-}
-
-.evaluatepart {
-    margin-top: 50px;
+    width: 150px;
+    height: 50px;
 }

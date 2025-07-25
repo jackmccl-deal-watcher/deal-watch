@@ -1,4 +1,5 @@
 import CircularProgress from '@mui/material/CircularProgress';
+import './LoadingScreen.css'
 
 const LoadingScreen = ({message}) => {
     return(

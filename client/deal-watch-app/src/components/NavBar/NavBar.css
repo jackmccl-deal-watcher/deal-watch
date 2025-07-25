@@ -1,13 +1,48 @@
-.navbar {
+.navbar-div {
     position: relative;
     top: 0;
-    width: 90%;
+    width: 100%;
+    display: flex;
+    flex-direction: row;
+    height: 100px;
+    justify-self: center;
+    margin-left: 20px;
+    margin-right: 20px;
+    border-bottom-left-radius: 20px;
+    border-bottom-right-radius: 20px;
+    border-bottom: solid grey 3px;
+    justify-content: center;
+    background-color: #26293b;
+}
+.navbar {
+    width: 95%;
     display: flex;
     flex-direction: row;
     height: 50px;
-    padding: 20px;
+    justify-self: center;
+    margin: 20px;
+    border-radius: 9px;
+    padding-top: 5px;
+    padding-left: 25px;
+    padding-right: 25px;
 }
 
+.navbar > * > a, .navbar > * > * > a {
+    color: white;
+    font-size: 20px;
+    border: #f1f1f1 solid 2px;
+    padding: 6px;
+    border-radius: 9px;
+    transition: transform 0.2s ease-in-out, box-shadow 0.3s ease-in-out;
+    text-decoration: none;
+}
+
+.navbar > * > a:hover, .navbar > * > * > a:hover {
+    transform: scale(1.2);
+    color: #26293b;
+    background-color: white;
+    text-decoration: none;
+}
 
 .navbar-pages {
     display: flex;
@@ -23,6 +58,11 @@
     margin-left: auto;
     position: relative;
     right: 0;
+    gap: 45px;
+}
+
+.navbar-user > * > a {
+    margin-left: 30px;
 }
 
 .navbar-user-loggedout {

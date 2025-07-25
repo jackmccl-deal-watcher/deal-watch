@@ -33,6 +33,7 @@ function App() {
             <Route path='*' element={<NoMatch/>} />
           </Routes>
         </BrowserRouter>
+        <footer>By Jack McClure @ MetaU 2025</footer>
       </UserProvider>
     </div>
   )
