@@ -58,7 +58,7 @@ const SumSliders = ({ specs, component_type, handleUpdatePoints }) => {
         return (
             <div key={spec.key} className='sum-slider-div'>
                 <div className='sum-slider-title'> <ToolTipText main_text={`${spec.tag}: ${getSliderLabelText(pointsDict[spec.key])}`} tool_tip={TOOL_TIPCS_DICT[component_type][spec.key]}/></div>
-                <Slider min={SPEC_ALLOCATION_MINIMUM} max={SPEC_ALLOCATION_MAXIMUM} step={0.01} valueLabelDisplay='auto' valueLabelFormat={getSliderLabelText} value={pointsDict[spec.key]} onChange={(e, newValue) => updatePointsDict({ spec, newValue })}></Slider>
+                <Slider min={SPEC_ALLOCATION_MINIMUM} max={SPEC_ALLOCATION_MAXIMUM} step={0.01} valueLabelDisplay='auto' valueLabelFormat={getSliderLabelText(pointsDict[spec.key])} value={pointsDict[spec.key]} onChange={(e, newValue) => updatePointsDict({ spec, newValue })}></Slider>
             </div>
         )
     }
