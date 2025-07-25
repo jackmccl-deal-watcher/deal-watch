@@ -7,12 +7,7 @@ const COMPONENT_VALUE_WEIGHTS = require("./ComponentValueWeights")
 const getPCListings = require("./FindPCListings")
 const LISTING_PROPERTIES = require("./ListingPropertiesEnum")
 const { makeListingPrompt } = require("./Prompt")
-
-const MIN_NUM_DEFINED_COMPONENT_MODELS = 3
-const MIN_LISTINGS_TO_EVALUATE = 4
-const DAY_LIMIT = 30
-const LISTING_LIMIT = 30
-const LOGGING = false
+const { MIN_NUM_DEFINED_COMPONENT_MODELS, MIN_LISTINGS_TO_EVALUATE, DAY_LIMIT, LISTING_LIMIT, LOGGING } = require('./DealWatchConstants')
 
 const extractComponentsFromListing = async (listing) => {
     const prompt = await makeListingPrompt(listing)

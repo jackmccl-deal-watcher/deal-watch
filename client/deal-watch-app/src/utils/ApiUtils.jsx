@@ -123,3 +123,15 @@ export const fetchSavedBuilds = async () => {
         console.error(error)
     }
 }
+
+export const fetchDeals = async (min_budget, max_budget) => {
+    try {
+        const response = await fetch(`${API_URL}/deal-watch/display-deals?min_budget=${min_budget}&max_budget=${max_budget}`, {
+            method: 'GET',
+            credentials: 'include',
+        });
+        return await response.json()
+    } catch (error) {
+        console.error(error)
+    }
+}

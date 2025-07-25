@@ -1,0 +1,18 @@
+.deal-watch-budget {
+    display: flex;
+    flex-direction: row;
+    gap: 30px;
+    justify-content: center;
+}
+
+.deal-watch-deals {
+    display: flex;
+    flex-direction: row;
+    gap: 100px;
+    max-width: 90%;
+    justify-self: center;
+    justify-content: center;
+    margin-top: 30px;
+    flex-wrap: wrap;
+    padding-bottom: 30px;
+}
