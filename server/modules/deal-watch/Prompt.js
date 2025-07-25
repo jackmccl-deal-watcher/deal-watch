@@ -4,38 +4,35 @@ const ASSESS_PC_LISTING_PROMPT = `Your a PC expert who is well versed in compute
 Given a desktop PC listing, you will pick out the component corresponding to each type in the following JSON object format:
 {
     "num_defined": number of components defined,
-    "cpu": "component info",
-    "video-card": "component info",
-    "motherboard": "component info",
-    "memory": "component info",
-    "hard-drives": ["component info", "component info"]
-    "power-supply": "component info",
-    "case": "component info",
+    "cpu": "CPU component info",
+    "video-card": "GPU component info",
+    "motherboard": "Motherboard component info",
+    "memory": "RAM Memory component info",
+    "hard-drives": ["HDD/SDD component info", "HDD/SDD component info"]
+    "power-supply": "PSU component info",
 }
 
 
 Example 1:
 {
     "num_defined": 7,
-    "cpu": "AMD Ryzen 7 5700X",
-    "video-card": "Gigabyte GeForce RTX 2070 Windforce 8G Graphics Card",
-    "motherboard": "ASUS Prime X570-P Ryzen 3 AM4 with PCIe Gen4, Dual M.2 HDMI, SATA 6GB/s USB 3.2 Gen 2 ATX Motherboard",
-    "memory": "CORSAIR - VENGEANCE RGB 32GB (2x16GB) DDR5 6000MHz C36 UDIMM Desktop Memory - White",
-    "hard-drives": ["Crucial - P310 2TB Internal SSD PCIe Gen 4 x4 NVMe M.2", "Seagate BarraCuda ST20000DM001 2TB 7200 RPM 512MB Cache SATA 6.0Gb/s 3.5" Internal Hard Drive Bare Drive"]
-    "power-supply": "HX1500i Fully Modular Ultra-Low Noise Platinum ATX 1500 Watt PC Power Supply",
-    "case": "Lian Li 011 Dynamic EVO RGB Gaming Case (White)",
+    "cpu": "CPU AMD Ryzen 7 5700X",
+    "video-card": "GPU Gigabyte GeForce RTX 2070 Windforce 8G Graphics Card",
+    "motherboard": "Motherboard ASUS Prime X570-P Ryzen 3 AM4 with PCIe Gen4, Dual M.2 HDMI, SATA 6GB/s USB 3.2 Gen 2 ATX",
+    "memory": "RAM Memory CORSAIR - VENGEANCE RGB 32GB (2x16GB) DDR5 6000MHz C36 UDIMM Desktop Memory - White",
+    "hard-drives": ["SSD Crucial - P310 2TB Internal SSD PCIe Gen 4 x4 NVMe M.2", "HDD Seagate BarraCuda ST20000DM001 2TB 7200 RPM 512MB Cache SATA 6.0Gb/s 3.5" Internal Hard Drive Bare Drive"]
+    "power-supply": "PSU HX1500i Fully Modular Ultra-Low Noise Platinum ATX 1500 Watt PC Power Supply",
 }
 
 Example 2:
 {
     "num_defined": 7,
-    "cpu": "Intel i7",
-    "video-card": "GeForce 1070",
-    "motherboard": "MSI B650 Tomohawk Motherboard",
-    "memory": "32 GB",
-    "hard-drive": ["500 gb SSD", "1 TB HDD"]
-    "power-supply": "650 Watts",
-    "case": "White ATX Mid Tower",
+    "cpu": "CPU Intel i7",
+    "video-card": "GPU GeForce 1070",
+    "motherboard": "null",
+    "memory": "RAM Memory 32 GB",
+    "hard-drive": ["SSD 500 gb SSD", "HDD 1 TB HDD"]
+    "power-supply": "PSU 650 Watts",
 }
 
 For memory, do not put "of Ram", just the size of ram, speed, and module type (DDR4, DDR3, etc.) if available.

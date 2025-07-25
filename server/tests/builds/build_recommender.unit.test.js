@@ -3,6 +3,7 @@ const { PERFORMANCE_PRIORITIES, COMPARED_KEYS, MODE, ComponentSpecs, RATINGS} = 
 const { generalComparator } = require("../../modules/builds/BuildRecommender.js")
 const { getPerformanceAllocations } = require('../../modules/builds/BuildModes.js')
 const { userAllocations500, test_cpus, test_videocards, test_motherboards, test_memorys, test_hard_drives, test_power_supplys, test_cases } = require("./test_builds.js")
+const VARIABLE_TYPES = require("../../utils/VariableTypesEnum.js")
 
 const numberAllocationTester = (test_allocations, parts, component_type) => {
         for (let spec_type of Object.keys(test_allocations)) {
@@ -369,11 +370,11 @@ test('Test getPerformanceAllocations function', () => {
             let originalAllocation = 0
             let performanceAllocation = 0
             switch (typeof originalComponentDict[key]) {
-                case 'number':
+                case VARIABLE_TYPES.NUMBER:
                     originalAllocation = originalComponentDict[key]
                     performanceAllocation = performanceComponentDict[key]
                     break
-                case 'dict':
+                case VARIABLE_TYPES.DICT:
                     originalAllocation = originalComponentDict[key]['allocation']
                     performanceAllocation = performanceComponentDict[key]['allocation']
                     break

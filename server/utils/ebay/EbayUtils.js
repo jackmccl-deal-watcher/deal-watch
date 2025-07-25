@@ -26,9 +26,9 @@ const generateClientAccessToken = async () => {
 
 const getEbayListings = async (keyword, limit, category) => {
     try {
-        validateStringInput(keyword, Object.keys(keyword)[0])
-        validateNumberInput(limit, Object.keys(limit)[0])
-        validateStringInput(category, Object.keys(category)[0])
+        validateStringInput(keyword, Object.keys({keyword})[0])
+        validateNumberInput(limit, Object.keys({limit})[0])
+        validateNumberInput(category, Object.keys({category})[0])
         const clientAccessToken = await generateClientAccessToken()
         const response = await fetch(`${EBAY_API_BROWSE_URL}/item_summary/search?q=${keyword}&limit=${limit}&category_ids=${category}&fieldgroups=EXTENDED`, {
             method: 'GET',
@@ -44,7 +44,7 @@ const getEbayListings = async (keyword, limit, category) => {
 
 const getEbayItem = async (itemHref) => {
     try {
-        validateStringInput(itemHref, Object.keys(itemHref)[0])
+        validateStringInput(itemHref, Object.keys({itemHref})[0])
         const clientAccessToken = await generateClientAccessToken()
         const response = await fetch(itemHref, {
             method: 'GET',
@@ -60,7 +60,7 @@ const getEbayItem = async (itemHref) => {
 
 const checkRateLimit = async (api) => {
     try {
-        validateStringInput(api, Object.keys(api)[0])
+        validateStringInput(api, Object.keys({api})[0])
         const clientAccessToken = await generateClientAccessToken()
         const response = await fetch(`https://api.ebay.com/developer/analytics/v1_beta/rate_limit/?api_name=${api}`, {
             method: 'GET',

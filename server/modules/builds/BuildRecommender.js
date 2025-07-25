@@ -2,6 +2,7 @@ const { ComponentSpecs, MODULARITIES, MODULE_TYPES, STORAGE_TYPES, EFFICIENCY_RA
 const { fetchPartsInBudget } = require('./FetchParts.js')
 const { calcMixedRating } = require('./BuildUtils.js')
 const { calcRatingWithPrice, getPerformanceAllocations } = require('./BuildModes.js')
+const VARIABLE_TYPES = require('../../utils/VariableTypesEnum.js')
 
 const calcPartColorScore = (part, color_index, color_preferences) => {
     let part_color_rating = 0
@@ -78,10 +79,10 @@ const generalComparator = (a, b, componentAllocations, component_key, mode) => {
                 break
             default:
                 switch (typeof a[key]) {
-                    case ('number'): 
+                    case (VARIABLE_TYPES.NUMBER): 
                         rating += calcMixedRating(a[key], b[key], allocation)
                         break
-                    case ('string'):
+                    case (VARIABLE_TYPES.STRING):
                         // form_factor or socket, allocation is the form_factor/socket value inputed by user as preference
                         if (a[key] === allocation) {
                             rating += 1000
