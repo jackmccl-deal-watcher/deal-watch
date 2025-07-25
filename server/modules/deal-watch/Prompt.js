@@ -36,6 +36,8 @@ Example 2:
 }
 
 For memory, do not put "of Ram", just the size of ram, speed, and module type (DDR4, DDR3, etc.) if available.
+Do not repeat SSD or HDD in the hard drive models.
+Do not increase num_defined multiple times for multiple hard-drive models.
 For case, if a specific model isn't given, only don't put null if a color and/or a size are given like in example 2.
 If you're uncertain about a component, put null instead of 'component info', and don't count it towards num_defined accordingly.
 Note that sometimes if enough spec detail is given but not a specific model (like in example 2), then you can put the spec.
