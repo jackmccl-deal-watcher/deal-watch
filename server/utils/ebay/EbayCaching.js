@@ -21,8 +21,6 @@ const handleListings = async (part) => {
     const partDocument = await model.findOne({type: part.type, model: part.model, brand: part.brand})
     let cachedListingData = partDocument.recently_sold_listings
     let cachedListingDataDate = partDocument.recently_sold_listings_date
-    cachedListingData = []
-    cachedListingDataDate = 0
     const keyword = part.brand + ' ' + part.model
     let recentlySoldListings = []
     if ((!cachedListingData || cachedListingData.length < 5)
