@@ -2,7 +2,7 @@ import SumSliders from '../SumSliders'
 import OptionsDropdown from '../../EvaluatePart/ComponentForms/OptionsDropdown'
 import { CASE_PROPERTIES } from '../../../enums/ComponentPropertiesEnums'
 import Slider from '@mui/material/Slider';
-import { COMPONENT_ALLOCATION_MAXIMUM, COMPONENT_ALLOCATION_MINIMUM } from '../BuildGeneratorConstants'
+import { COMPONENT_ALLOCATION_MAXIMUM, COMPONENT_ALLOCATION_MINIMUM, SLIDER_COLORS } from '../BuildGeneratorConstants'
 import MultiSelect from './MultiSelect'
 import { getSliderLabelText } from './BuildFormUtils'
 import { useEffect, useState } from 'react';
@@ -72,7 +72,7 @@ const ComponentBuildForm = ({ component_data, handleUpdateAllocations, allocatio
             { component_data && allocations?.[component_data.component_type]?.[ComponentSpecs.ALLOCATION] ?
                 <div className='build-form-container'>
                     <div className='build-form-component-type'><ToolTipText main_text={`${component_data.component_name}: ${getSliderLabelText(allocations[component_data.component_type][ComponentSpecs.ALLOCATION])}`} tool_tip={TOOL_TIPCS_DICT[component_data.component_type][component_data.component_type]}/></div>
-                    <Slider sx={{color: "blue"}} min={COMPONENT_ALLOCATION_MINIMUM} max={COMPONENT_ALLOCATION_MAXIMUM} step={0.01} valueLabelDisplay='auto' valueLabelFormat={getSliderLabelText(allocations[component_data.component_type][ComponentSpecs.ALLOCATION])} value={allocations[component_data.component_type][ComponentSpecs.ALLOCATION]} onChange={(e, newValue) => handleUpdateAllocations(component_data.component_type, {[ComponentSpecs.ALLOCATION]: newValue} )}></Slider>
+                    <Slider sx={{color: SLIDER_COLORS.BLUE}} min={COMPONENT_ALLOCATION_MINIMUM} max={COMPONENT_ALLOCATION_MAXIMUM} step={0.01} valueLabelDisplay='auto' valueLabelFormat={getSliderLabelText(allocations[component_data.component_type][ComponentSpecs.ALLOCATION])} value={allocations[component_data.component_type][ComponentSpecs.ALLOCATION]} onChange={(e, newValue) => handleUpdateAllocations(component_data.component_type, {[ComponentSpecs.ALLOCATION]: newValue} )}></Slider>
                     <SumSliders color={component_data.color} specs={component_data.main_specs} component_type={component_data.component_type} handleUpdatePoints={handleUpdatePoints}/>
                     { component_data.special_specs && Object.values(component_data.special_specs).map( ( special_spec ) => {
                         if (special_spec.type === CASE_PROPERTIES.COLOR) {
