@@ -25,6 +25,7 @@ const extractComponentsFromListing = async (listing) => {
         [LISTING_PROPERTIES.PRICE]: Number(listing[LISTING_PROPERTIES.PRICE][LISTING_PROPERTIES.VALUE]),
         [LISTING_PROPERTIES.WEB_URL]: listing[LISTING_PROPERTIES.WEB_URL],
         [LISTING_PROPERTIES.ITEM_URL]: listing[LISTING_PROPERTIES.ITEM_URL],
+        [LISTING_PROPERTIES.ITEM_URL]: listing[LISTING_PROPERTIES.ITEM_URL],
         [LISTING_PROPERTIES.COMPONENTS_DICT]: componentsDict,
     }
     return listingDict
