@@ -24,10 +24,10 @@ const handleListings = async (part) => {
     const keyword = part.brand + ' ' + part.model
     let recentlySoldListings = []
     if ((!cachedListingData || cachedListingData.length < 5)
-        && (new Date(cachedListingDataDate) > (Date.now() - UNCOMMON_STALE_CACHE_TIME_REQUIREMENT))) {
+        && ((new Date(cachedListingDataDate)) > (Date.now() - UNCOMMON_STALE_CACHE_TIME_REQUIREMENT))) {
         return cachedListingData || []
     } else if (cachedListingDataDate 
-                && (new Date(cachedListingDataDate) > (Date.now() - COMMON_STALE_CACHE_TIME_REQUIREMENT))) {
+                && ((new Date(cachedListingDataDate)) > (Date.now() - COMMON_STALE_CACHE_TIME_REQUIREMENT))) {
         return cachedListingData
     }
 
@@ -38,7 +38,7 @@ const handleListings = async (part) => {
         const cachedListingDataSortedBySoldDate = sortBySoldDate(cachedListingData)
         const mostRecentCachedSoldDate = cachedListingDataSortedBySoldDate[0].sold_date
 
-        const RELATIVE_LISTING_DAY_AGE_LIMIT = (Date.now() - new Date(mostRecentCachedSoldDate).getTime()) / MS_IN_A_DAY
+        const RELATIVE_LISTING_DAY_AGE_LIMIT = (Date.now() - (new Date(mostRecentCachedSoldDate)).getTime()) / MS_IN_A_DAY
         recentlySoldListings = await getRecentlySoldListings(keyword, RELATIVE_LISTING_DAY_AGE_LIMIT, MAX_LISTING_LIMIT, LOGGING)
     }
 
@@ -55,7 +55,7 @@ const handleListings = async (part) => {
         return []
     }
 
-    const allFreshListings = allListings.filter( (listing) => new Date(listing.sold_date).getTime() >= Date.now() - LISTING_MS_AGE_LIMIT)
+    const allFreshListings = allListings.filter( (listing) => (new Date(listing.sold_date)).getTime() >= (Date.now() - LISTING_MS_AGE_LIMIT))
 
     const addedTitles = new Set()
     const allFreshListingsNoDuplicates = allFreshListings.filter( (listing) => {
