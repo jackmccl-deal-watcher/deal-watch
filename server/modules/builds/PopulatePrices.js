@@ -6,7 +6,7 @@ const THIRTY_DAYS_IN_MS = 30 * 24 * 60 * 60 * 1000
 const MINIMUM_THIRTY_DAY_LISTINGS = 4
 
 const updatePrices = async (partDocument, listingData) => {
-    const thirtyDaysListingData = listingData.filter( (listing) => new Date(listing.sold_date).getTime() >= Date.now() - THIRTY_DAYS_IN_MS)
+    const thirtyDaysListingData = listingData.filter( (listing) => (new Date(listing.sold_date)).getTime() >= (Date.now() - THIRTY_DAYS_IN_MS))
     if (thirtyDaysListingData.length < MINIMUM_THIRTY_DAY_LISTINGS) {
         partDocument.thirty_day_average = -1
         partDocument.thirty_day_time = Date.now()
