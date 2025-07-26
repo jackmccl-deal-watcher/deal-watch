@@ -3,6 +3,7 @@
     flex-direction: row;
     gap: 30px;
     justify-content: center;
+    margin-top: 30px;
 }
 
 .deal-watch-deals {

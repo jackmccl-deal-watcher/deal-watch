@@ -20,9 +20,13 @@
 }
 
 .build {
+    display: flex;
+    flex-direction: column;
     border-radius: 9px;
     border: solid black 4px;
-    max-width: 500px
+    max-width: 500px;
+    margin-top: 30px;
+    margin-bottom: 30px;
 }
 
 .build-title {

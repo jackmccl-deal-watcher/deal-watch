@@ -23,29 +23,31 @@ const NavBar = () => {
     }
 
     return(
-        <div className='navbar'>
-            <div className='navbar-pages'>
-                <a href='/'>Home</a>
-                <a id='parts-page-link' href='/parts'>Parts</a>
-                <a id='builds-page-link' href='/builds/generator'>Builds</a>
-                <a id='deal-watch-page-link' href='/deal-watch'>Deal Watch</a>
-            </div>
-            <div className='navbar-user'>
-                { user ? 
-                <div id='navbar-user-loggedin' className='dropdown'>
-                    <button id='user-dropdown-button' onClick={toggleUserDropdown} className="dropdown-button">{user}</button>
-                    { showUserDropdown ?
-                    <div id="user-dropdown-options" className="dropdown-content">
-                        <a id='user-saved-builds-button' href="/builds/saved">Saved Builds</a>
-                        <a id='user-logout-button' onClick={handleLogout}>Logout</a>
-                    </div>
-                    : null }
+        <div className='navbar-div'>
+            <div className='navbar'>
+                <div className='navbar-pages'>
+                    <a href='/'>Home</a>
+                    <a id='parts-page-link' href='/parts'>Part Evaluator</a>
+                    <a id='builds-page-link' href='/builds/generator'>Build Generator</a>
+                    <a id='deal-watch-page-link' href='/deal-watch'>Deal Watch</a>
                 </div>
-                : 
-                <div className='navbar-user-loggedout'>
-                    <a id='login-button' href='/login'>Login</a>
-                    <a id='signup-button' href='/signup'>Sign Up</a>
-                </div> }
+                <div className='navbar-user'>
+                    { user ? 
+                    <div id='navbar-user-loggedin' className='dropdown'>
+                        <button id='user-dropdown-button' onClick={toggleUserDropdown} className="dropdown-button">{user}</button>
+                        { showUserDropdown ?
+                        <div id="user-dropdown-options" className="dropdown-content">
+                            <a id='user-saved-builds-button' href="/builds/saved">Saved Builds</a>
+                            <a id='user-logout-button' onClick={handleLogout}>Logout</a>
+                        </div>
+                        : null }
+                    </div>
+                    : 
+                    <div className='navbar-user-loggedout'>
+                        <a id='login-button' href='/login'>Login</a>
+                        <a id='signup-button' href='/signup'>Sign Up</a>
+                    </div> }
+                </div>
             </div>
         </div>
     )
