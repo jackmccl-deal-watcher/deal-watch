@@ -19,7 +19,7 @@
 .app > div:not(.navbar-div) {
   padding-top: .1px;
   width: 100%;
-  max-height: calc(100vh - 104px - 5vh);
+  max-height: calc(100vh - 104px - 75px);
   overflow: scroll;
 }
 
@@ -31,7 +31,7 @@ footer {
   flex-direction: column;
   justify-content: center;
   width: 100%;
-  height: 5%;
+  height: 75px;
   background-color: #26293b;
   color: white;
   border-top: solid grey 3px;
