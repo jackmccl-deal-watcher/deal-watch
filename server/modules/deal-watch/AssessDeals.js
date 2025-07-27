@@ -6,6 +6,7 @@ const COMPONENT_VALUE_WEIGHTS = require("./ComponentValueWeights")
 const LISTING_PROPERTIES = require("./ListingPropertiesEnum")
 const { makeListingPrompt } = require("./Prompt")
 const { MIN_NUM_DEFINED_COMPONENT_MODELS, MIN_LISTINGS_TO_EVALUATE, DAY_LIMIT, LISTING_LIMIT, LOGGING } = require('./DealWatchConstants')
+const { removeIntraPriceOutliers } = require("../parts/EvaluatePartUtils")
 
 const extractComponentsFromListing = async (listing) => {
     const prompt = await makeListingPrompt(listing)
