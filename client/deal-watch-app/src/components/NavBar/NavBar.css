@@ -25,6 +25,7 @@
     padding-top: 5px;
     padding-left: 25px;
     padding-right: 25px;
+    overflow: auto;
 }
 
 .navbar > * > a, .navbar > * > * > a {
@@ -35,6 +36,7 @@
     border-radius: 9px;
     transition: transform 0.2s ease-in-out, box-shadow 0.3s ease-in-out;
     text-decoration: none;
+    text-wrap: nowrap;
 }
 
 .navbar > * > a:hover, .navbar > * > * > a:hover {
