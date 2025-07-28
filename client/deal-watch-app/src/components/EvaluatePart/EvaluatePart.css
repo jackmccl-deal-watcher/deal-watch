@@ -1,11 +1,15 @@
 .evaluatepart {
-    max-width: 90%;
     justify-self: center;
 }
 
 .evaluatepart-message {
     margin-top: 30px;
     margin-bottom: 10px;
+}
+
+.evaluation {
+    max-width: 90%;
+    justify-self: center;
 }
 
 .loading {
