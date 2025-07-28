@@ -2,12 +2,6 @@ const BuildModel = require('../models/BuildModel.js')
 const { BuildSaveError } = require('../errors/BuildsErrors.js')
 const UserModel = require('../models/UserModel.js')
 
-// Returns user by username, otherwise returns null
-// const getUser = async (username) => {
-//     let user = await UserModel.findOne({ 'username': username }, 'username password')
-//     return user
-// }
-
 // Saves build, throws error if build name already taken or logged in user not found
 const saveBuild = async (build, user) => {
     if (!build.title) {
