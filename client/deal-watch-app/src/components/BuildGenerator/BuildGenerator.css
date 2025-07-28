@@ -20,7 +20,10 @@
 
 .build-gen-forms {
     max-width: 95%;
-    overflow: auto;
-    padding-left: 50px;
+    padding-left: 15px;
     padding-right: 15px;
+}
+
+.build-form-container {
+    padding: 15px;
 }
