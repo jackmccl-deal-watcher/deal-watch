@@ -1,5 +1,6 @@
 .evaluatepart {
     justify-self: center;
+    overflow: auto;
 }
 
 .evaluatepart-message {
