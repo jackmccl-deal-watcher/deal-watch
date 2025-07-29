@@ -27,6 +27,7 @@
     max-width: 500px;
     margin-top: 30px;
     margin-bottom: 30px;
+    overflow: auto;
 }
 
 .build-title {

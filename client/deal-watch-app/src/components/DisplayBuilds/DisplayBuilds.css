@@ -6,4 +6,8 @@
     padding: 20px;
     flex-wrap: wrap;
     height: 100%;
+    overflow: auto;
+    max-width: 98%;
+    overflow-x: scroll;
+    justify-self: center
 }

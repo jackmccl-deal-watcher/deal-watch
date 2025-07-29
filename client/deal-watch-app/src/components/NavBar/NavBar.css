@@ -18,13 +18,15 @@
     width: 95%;
     display: flex;
     flex-direction: row;
-    height: 50px;
+    height: 60px;
     justify-self: center;
     margin: 20px;
+    margin-top: 15px;
     border-radius: 9px;
     padding-top: 5px;
     padding-left: 25px;
     padding-right: 25px;
+    overflow: auto;
 }
 
 .navbar > * > a, .navbar > * > * > a {
@@ -35,6 +37,7 @@
     border-radius: 9px;
     transition: transform 0.2s ease-in-out, box-shadow 0.3s ease-in-out;
     text-decoration: none;
+    text-wrap: nowrap;
 }
 
 .navbar > * > a:hover, .navbar > * > * > a:hover {
@@ -50,6 +53,17 @@
     gap: 45px;
     align-items: center;
     text-decoration: underline;
+    width: 100%;
+    max-width: calc(100vw - 250px);
+    overflow: auto;
+}
+
+#home-page-link {
+    margin-left: 15px;
+}
+
+#deal-watch-page-link {
+    margin-right: 15px;
 }
 
 .navbar-user {
@@ -90,14 +104,22 @@
 
 /* The container <div> - needed to position the dropdown content */
 .dropdown {
-    position: relative;
+    position: fixed;
+    top: 0;
+    right: 0;
+    margin-top: 30px;
+    margin-right: 30px;
     display: inline-block;
 }
 
 /* Dropdown Content (Hidden by Default) */
 .dropdown-content {
+    position: fixed;
+    top: 0;
+    right: 0;
+    margin-top: 68px;
+    margin-right: 25px;
     display: block;
-    position: absolute;
     background-color: #f1f1f1;
     min-width: 160px;
     box-shadow: 0px 8px 16px 0px rgba(0,0,0,0.2);
