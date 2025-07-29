@@ -22,7 +22,7 @@ export const getCapacityLabelText = (value) => {
         scaledValue = scaledValue / (2 ** 10)
     }
 
-    return `${scaledValue} ${units[unitIndex]}`
+    return `${Math.round(scaledValue * 100) / 100} ${units[unitIndex]}`
 }
 
 const HardDrivePartForm = ({ handlePartEvaluation }) => {

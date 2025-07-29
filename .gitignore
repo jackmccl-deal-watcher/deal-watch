@@ -5,3 +5,4 @@ client/deal-watch-app/node_modules/
 client/deal-watch-app/.env
 server/.env
 node_modules
+server/data

@@ -1,4 +1,3 @@
-import { getCapacityLabelText } from "../EvaluatePart/ComponentForms/HardDrivePartForm";
 import { ComponentSpecs, LABELS_DICT } from "./BuildConstants"
 import './Build.css'
 import { useUser } from "../UserProvider/UserProvider";
@@ -18,6 +17,25 @@ const Build = ({build}) => {
     const [saved, setSaved] = useState(initially_saved)
     const [message, setMessage] = useState('')
     let build_price = 0
+
+    const displayCapacity = (value) => {
+        const units = [
+            'B', 
+            'KB', 
+            'MB', 
+            'GB', 
+            'TB'
+        ]
+
+        let unitIndex = 0
+        let scaledValue = value
+        while (scaledValue >= 1000 && unitIndex < units.length-1) {
+            unitIndex += 1
+            scaledValue = scaledValue / (1000)
+        }
+
+        return `${Math.round(scaledValue * 100) / 100} ${units[unitIndex]}`
+    }
 
     const displaySpecValue = (spec, value) => {
         switch (typeof value) {
@@ -46,7 +64,7 @@ const Build = ({build}) => {
                     case ComponentSpecs.MAX_RAM:
                         return `${Math.round(value / 1000000000 * 100) / 100} GBs`
                     case ComponentSpecs.CAPACITY:
-                        return getCapacityLabelText(value)
+                        return displayCapacity(value)
                     default:
                         return
                 }
