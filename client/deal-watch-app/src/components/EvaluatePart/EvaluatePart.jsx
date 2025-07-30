@@ -49,7 +49,7 @@ const EvaluatePart = () => {
 
     const calcThirtyDayTrend = () => {
         const nowPrice = evaluationData.M_A_Points.data[0].y
-        const priceThirtyDaysAgo = evaluationData.M_A_Points.data[29].y
+        const priceThirtyDaysAgo = evaluationData.M_A_Points.data[evaluationData.M_A_Points.data.length - 1].y
         const thirtyDayTrendAmount = nowPrice-priceThirtyDaysAgo
         const thirtyDayTrendString = convertPriceToDollar(nowPrice-priceThirtyDaysAgo)
         if (thirtyDayTrendAmount >= 0) {
