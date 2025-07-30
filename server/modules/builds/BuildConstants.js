@@ -69,10 +69,10 @@ const MODULE_TYPES = [
     "DDR2", 
     "DDR3", 
     "DDR4",
+    "DDR5"
 ]
 const STORAGE_TYPES = [
     "HDD", 
-    "Hybrid", 
     "SSD",
 ]
 

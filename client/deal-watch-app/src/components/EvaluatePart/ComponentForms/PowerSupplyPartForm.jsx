@@ -7,14 +7,11 @@ import ComponentTypes from '../../../enums/ComponentTypesEnum';
 import ToolTipText from '../../ToolTip/ToolTipText';
 
 const PowerSupplyPartForm = ({ handlePartEvaluation }) => {
-    const FORM_FACTORS = [ 
-        'ATX', 
-        'BTX', 
-        'Flex ATX', 
-        'Micro ATX', 
-        'Mini ITX', 
-        'SFX', 
-        'TFX'
+    const FORM_FACTORS = [
+        "ATX", 
+        "SFX", 
+        "TFX", 
+        "Flex ATX"
     ]
     const EFFICIENCY_RATINGS = [
         '80+',

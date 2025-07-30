@@ -11,7 +11,8 @@ const MemoryPartForm = ({ handlePartEvaluation }) => {
         'DDR', 
         'DDR2', 
         'DDR3', 
-        'DDR4' 
+        'DDR4',
+        'DDR5',
     ]
 
     const [speed, setSpeed] = useState(2400000000)

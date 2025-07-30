@@ -72,4 +72,5 @@ export const LABELS_DICT = {
     [ComponentSpecs.WATTAGE]: 'Wattage',
     [ComponentSpecs.MODULAR]: 'Modular',
     [ComponentSpecs.COLOR]: "Color",
+    [ComponentSpecs.CAPACITY]: "Capacity",
 };
