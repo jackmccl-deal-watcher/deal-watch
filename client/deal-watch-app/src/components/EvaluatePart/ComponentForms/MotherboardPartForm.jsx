@@ -34,7 +34,7 @@ const MotherboardPartForm = ({ handlePartEvaluation }) => {
         "EATX",
     ]
     const [ramSlots, setRamSlots] = useState(4)
-    const [maxRam, setMaxRam] = useState(7)
+    const [maxRam, setMaxRam] = useState(8)
     const [socket, setSocket] = useState('AM5')
     const [formFactor, setFormFactor] = useState('ATX')
 
