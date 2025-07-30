@@ -27,6 +27,7 @@ const fetchPartsInBudget = async (userAllocations, budget_margin) => {
         })
         partsDict[component_key] = partsInBudget
     }
+    console.log(partsDict)
     return partsDict
 }
 
