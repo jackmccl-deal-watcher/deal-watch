@@ -37,7 +37,6 @@ const getComparableCPUs = async (cpu, margin) => {
             { boost_clock: {$gte: comparableBoostClockLow} },
         ]
     } )
-
     return comparableCPUs
 }
 

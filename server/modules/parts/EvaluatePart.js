@@ -59,7 +59,6 @@ const evaluatePart = async (part) => {
     if (comparablePartsWithListingDataPromises.length === 0) {
         throw new PartEvaluationError(`No comparable parts with enough listing data!`)
     }
-
     const comparablePartsWithListingData = (await Promise.all(comparablePartsWithListingDataPromises)).filter(value => value !== undefined)
 
     if (comparablePartsWithListingData.length === 0) {

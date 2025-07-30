@@ -15,6 +15,8 @@ MODULE_TYPES = {
 }
 
 EFFICIENCY_RATINGS = {
+    None: '80+',
+    'plus': '80+',
     'bronze': '80+ Bronze',
     'silver': '80+ Silver',
     'gold': '80+ Gold',
@@ -173,6 +175,7 @@ def populate_memorys():
     for memory in memory_data:
         if isinstance(memory['speed'], (int, float)):
             continue
+
         memory['brand'], memory['model'] = getBrandAndModel(memory)
 
         memory_doc = {
@@ -180,9 +183,10 @@ def populate_memorys():
             "model": memory['model'],
             "brand": memory['brand'],
             "module_type": MODULE_TYPES[memory['speed'][0]],
+            "speed": mega_to_base(memory['speed'][1]),
             "number_of_modules": memory['modules'][0],
-            "module_size": memory['modules'][1],
-            "total_size": float(memory['modules'][0] * memory['modules'][1]),
+            "module_size": giga_to_base(memory['modules'][1]),
+            "total_size": float(memory['modules'][0] * giga_to_base(memory['modules'][1])),
             "first_word_latency": memory['first_word_latency'],
             "cas_timing": memory['cas_latency'],
             "thirty_day_average": 0,
@@ -195,7 +199,7 @@ def populate_memorys():
         if memory['price_per_gb']:
             memory_doc["price_per_gb"] = float(memory['price_per_gb'])
         else:
-            memory_doc["price_per_gb"] = 'N/A'
+            memory_doc["price_per_gb"] = float(-1)
 
         memory_count += 1
         memory_collection.replace_one(filter={"model": memory['model']}, replacement=memory_doc, upsert=True)
@@ -216,8 +220,7 @@ def populate_hard_drives():
             "model": hard_drive['model'],
             "brand": hard_drive['brand'],
             "capacity": giga_to_base(hard_drive['capacity']),
-            "storage_type": hard_drive['type'],
-            "form_factor": hard_drive['form_factor'],
+            "form_factor": str(hard_drive['form_factor']),
             "interface": hard_drive['interface'],
             "thirty_day_average": 0,
             "thirty_day_time": 0,
@@ -226,10 +229,16 @@ def populate_hard_drives():
 
         hard_drive_doc['pcpp_price'] = getPCPPPrice(hard_drive)
 
+        if not isinstance(hard_drive['type'], str):
+            hard_drive_doc['storage_type'] = 'HDD'
+        else:
+            hard_drive_doc['storage_type'] = 'SSD'
+
+
         if hard_drive['price_per_gb']:
             hard_drive_doc["price_per_gb"] = float(hard_drive['price_per_gb'])
         else:
-            hard_drive_doc["price_per_gb"] = 'N/A'
+            hard_drive_doc["price_per_gb"] = float(-1)
 
         if hard_drive['cache']:
             hard_drive_doc["cache"] = hard_drive['cache']
@@ -249,9 +258,6 @@ def populate_power_supplys():
     power_supply_count = 0
 
     for power_supply in power_supply_data:
-        if not power_supply['efficiency']:
-            continue
-
         power_supply['brand'], power_supply['model'] = getBrandAndModel(power_supply)
 
         power_supply_doc = {
@@ -260,13 +266,18 @@ def populate_power_supplys():
             "brand": power_supply['brand'],
             "form_factor": power_supply['type'],
             "wattage": power_supply['wattage'],
-            "modular": power_supply['modular'],
+            "efficiency_rating": EFFICIENCY_RATINGS[power_supply['efficiency']],
             "thirty_day_average": 0,
             "thirty_day_time": 0,
             "thirty_day_listing_count": 0,
         }
 
         power_supply_doc['pcpp_price'] = getPCPPPrice(power_supply)
+
+        if power_supply['modular'] == 'Full' or power_supply['modular'] == 'Semi':
+            power_supply_doc['modular'] = power_supply['modular']
+        else:
+            power_supply_doc['modular'] = 'No'
 
         power_supply_count += 1
         power_supply_collection.replace_one(filter={"model": power_supply['model']}, replacement=power_supply_doc, upsert=True)
