@@ -35,7 +35,7 @@ const MotherboardPartForm = ({ handlePartEvaluation }) => {
     ]
     const [ramSlots, setRamSlots] = useState(4)
     const [maxRam, setMaxRam] = useState(7)
-    const [socket, setSocket] = useState('LGA1151')
+    const [socket, setSocket] = useState('AM5')
     const [formFactor, setFormFactor] = useState('ATX')
 
     const getRamSlotsLabelText = (ram_slots) => {
