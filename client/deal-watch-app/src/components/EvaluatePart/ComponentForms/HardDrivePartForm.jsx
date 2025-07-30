@@ -58,8 +58,8 @@ const HardDrivePartForm = ({ handlePartEvaluation }) => {
 
     const [capacity, setCapacity] = useState(40)
     const [storageType, setStorageType] = useState('SSD')
-    const [formFactor, setFormFactor] = useState('2.5')
-    const [hardDriveInterface, setHardDriveInterface] = useState('SATA 6.0 Gb/s')
+    const [formFactor, setFormFactor] = useState('M.2-2280')
+    const [hardDriveInterface, setHardDriveInterface] = useState('M.2 PCIe 4.0 X4')
 
     function calcCapacity(value) {
         return 2 ** value;

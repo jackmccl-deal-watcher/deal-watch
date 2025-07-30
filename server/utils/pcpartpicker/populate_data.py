@@ -63,7 +63,11 @@ def populate_cpus():
     cpu_count = 0
 
     for cpu in cpu_data:
+        if not cpu['core_count'] or not cpu['core_clock']:
+            continue
+
         cpu['brand'], cpu['model'] = getBrandAndModel(cpu)
+
         cpu_doc = {
             "type": "cpu",
             "model": cpu['model'],
@@ -72,7 +76,7 @@ def populate_cpus():
             "base_clock": giga_to_base(cpu['core_clock']),
             'boost_clock': 0,
             'integrated_graphics': 'none',
-            "thirty_day_average": 0,
+            "thirty_day_average": -1,
             "thirty_day_time": 0,
             "thirty_day_listing_count": 0,
         }
@@ -104,6 +108,9 @@ def populate_video_cards():
 
 
     for videocard in videocard_data:
+        if not videocard['memory'] or not videocard['core_clock']:
+            continue
+
         videocard['brand'], videocard['model'] = getBrandAndModel(videocard)
 
         videocard_doc = {
@@ -112,7 +119,7 @@ def populate_video_cards():
             "brand": videocard['brand'],
             "chipset": videocard['chipset'],
             "vram": giga_to_base(videocard['memory']),
-            "thirty_day_average": 0,
+            "thirty_day_average": -1,
             "thirty_day_time": 0,
             "thirty_day_listing_count": 0,
         }
@@ -129,7 +136,7 @@ def populate_video_cards():
         if videocard['boost_clock']:
             videocard_doc["boost_clock"] = mega_to_base(videocard['boost_clock'])
         else:
-            videocard_doc["boost_clock"] = mega_to_base(videocard_doc["base_clock"])
+            videocard_doc["boost_clock"] = mega_to_base(videocard["core_clock"])
 
         videocard_count += 1
         videocard_collection.replace_one(filter={"model": videocard['model']}, replacement=videocard_doc, upsert=True)
@@ -154,7 +161,7 @@ def populate_motherboards():
             "form_factor": motherboard['form_factor'],
             "ram_slots": motherboard['memory_slots'],
             "max_ram": giga_to_base(motherboard['max_memory']),
-            "thirty_day_average": 0,
+            "thirty_day_average": -1,
             "thirty_day_time": 0,
             "thirty_day_listing_count": 0,
         }
@@ -189,7 +196,7 @@ def populate_memorys():
             "total_size": float(memory['modules'][0] * giga_to_base(memory['modules'][1])),
             "first_word_latency": memory['first_word_latency'],
             "cas_timing": memory['cas_latency'],
-            "thirty_day_average": 0,
+            "thirty_day_average": -1,
             "thirty_day_time": 0,
             "thirty_day_listing_count": 0,
         }
@@ -222,7 +229,7 @@ def populate_hard_drives():
             "capacity": giga_to_base(hard_drive['capacity']),
             "form_factor": str(hard_drive['form_factor']),
             "interface": hard_drive['interface'],
-            "thirty_day_average": 0,
+            "thirty_day_average": -1,
             "thirty_day_time": 0,
             "thirty_day_listing_count": 0,
         }
@@ -267,7 +274,7 @@ def populate_power_supplys():
             "form_factor": power_supply['type'],
             "wattage": power_supply['wattage'],
             "efficiency_rating": EFFICIENCY_RATINGS[power_supply['efficiency']],
-            "thirty_day_average": 0,
+            "thirty_day_average": -1,
             "thirty_day_time": 0,
             "thirty_day_listing_count": 0,
         }
@@ -300,7 +307,7 @@ def populate_cases():
             "form_factor": case['type'],
             "color": case['color'],
             "internal_bays": case['internal_35_bays'],
-            "thirty_day_average": 0,
+            "thirty_day_average": -1,
             "thirty_day_time": 0,
             "thirty_day_listing_count": 0,
         }
